@@ -26,7 +26,8 @@ const Config = {
   bankName: 'Vietcombank',
   bankDepartment: 'Đống Đa',
 
-
+  goolge_vision_url : 'https://vision.googleapis.com/v1/images:annotate?key=',
+  goolge_vision_key : 'AIzaSyCaUOcN_e1BcQQFRzGMj1DB905mzNbWtqA' //vietbrotherjav
 };
 
 

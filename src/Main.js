@@ -16,7 +16,7 @@ import Homepage from './page/Homepage';
 import Search from './page/Search';
 import Cart from './page/Cart';
 import WishList from './page/WishList';
-import Map from './page/Map';
+// import Map from './page/Map';
 import Newsletter from './page/Newsletter';
 import Contact from './page/Contact';
 import Category from './page/Category';
@@ -32,6 +32,9 @@ import WooCommerceAPI from './WooCommerce/WooCommerceAPI';
 import OrderItem from "./component/OrderItem";
 import Orders from "./page/Orders";
 import Config from "./Config";
+
+import Camera from "./component/Camera/Camera";
+import Verify from "./component/Verify/Verify";
 
 export default class Main extends Component {
 
@@ -79,7 +82,7 @@ export default class Main extends Component {
             <Scene key="search" component={Search} modal hideNavBar />
             <Scene key="cart" component={Cart} modal hideNavBar />
             <Scene key="wishlist" component={WishList} modal hideNavBar />
-            <Scene key="map" component={Map} modal hideNavBar />
+            {/*<Scene key="map" component={Map} modal hideNavBar />*/}
             <Scene key="contact" component={Contact} modal hideNavBar />
             <Scene key="newsletter" component={Newsletter} modal hideNavBar />
             <Scene key="category" component={Category} hideNavBar />
@@ -91,6 +94,9 @@ export default class Main extends Component {
             <Scene key="orders" component={Orders} hideNavBar />
             <Scene key="orderItem" component={OrderItem} hideNavBar />
             <Scene key="profile" component={Profile} hideNavBar />
+
+            <Scene key="camera" component={Camera} hideNavBar />
+            <Scene key="verify" component={Verify} hideNavBar />
           </Scene>
         </Router>
       </Root>

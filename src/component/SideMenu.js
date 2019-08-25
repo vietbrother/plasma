@@ -187,12 +187,13 @@ export default class SideMenu extends Component {
                         </List>
                     </View>
                     <View style={styles.line}/>
-                    <View style={{paddingRight: 15, paddingLeft: 15, paddingBottom: 15}}>
+                    <View style={{paddingRight: 15, paddingLeft: 15, paddingBottom: 15, textAlign: 'center',
+                        width: '100%',}}>
                         <Text> <Icon style={{fontSize: 18}} name={'ios-call'}/> Hotline : <Text style={{
                             color: "#c0392b",
                             fontSize: 20,
                         }}>{Config.hotline}</Text></Text>
-                        <Text style={{fontSize: 16, fontWeight: '200', color: Config.colorBold}}>PLASMA © 2019</Text>
+                        <Text style={{fontSize: 14, fontWeight: '200',paddingTop: 10, color: Config.colorBold}}>PLASMA © 2019</Text>
                     </View>
                 </View>
             );
@@ -432,7 +433,7 @@ const menusSecondaryItems = [
     {
         id: 11,
         title: 'Thiết bị',
-        icon: 'ios-cube',
+        icon: 'md-pint',
         key: 'product'
     },
     {
@@ -444,7 +445,7 @@ const menusSecondaryItems = [
     {
         id: 13,
         title: 'Quản lý đơn hàng',
-        icon: 'ios-basket',
+        icon: 'ios-paper',
         key: 'orders'
     },
 

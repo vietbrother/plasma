@@ -80,3 +80,5 @@ To contribute your changes to the main repository, create a pull request from yo
 
 > note
 - gen unique key={new Date().valueOf()} to re-render menu
+
+- react-native link react-native-fs
