@@ -32,6 +32,7 @@ import CategoryRootBlock from '../component/CategoryRootBlock';
 import Colors from "../Colors";
 import Config from "../Config";
 import Product from '../component/Product';
+import Camera from '../component/Camera/Camera';
 
 
 export default class Home extends Component {
@@ -134,7 +135,7 @@ export default class Home extends Component {
                                 fetchData={'1'}
                                 sessionLoginKey={this.props.sessionLoginKey}>
                     <Container>
-                        <Navbar left={left} right={right} title={Config.title}/>
+                        <Navbar left={left} right={right} title={Config.titleHome}/>
                         <Content>
                             <View style={styles.titleView}>
                                 <Text style={styles.title}> DANH MỤC SẢN PHẨM </Text>
@@ -145,10 +146,8 @@ export default class Home extends Component {
                                 <Text style={styles.title}> SẢN PHẨM NỔI BẬT </Text>
                             </View>
                             {/*{this.renderFeatureProducts()}*/}
+                            <Camera></Camera>
 
-                            <Button onPress={() => Actions.camera()}>
-                                <Icon name='ios-camera'/>
-                            </Button>
                         </Content>
                     </Container>
                 </SideMenuDrawer>);

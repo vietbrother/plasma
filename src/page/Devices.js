@@ -59,32 +59,7 @@ export default class Devices extends Component {
                             onPress={() => Linking.openURL('http://www.facebook.com/').catch(err => console.error('An error occurred', err))}>
                             Fanpage : http://www.facebook.com/onni</Text>
                     </Item>
-                    {/*<Item>*/}
-                    {/*<Icon active name='ios-person-outline'/>*/}
-                    {/*<Input placeholder='Tên' onChangeText={(text) => this.setState({name: text})}/>*/}
-                    {/*</Item>*/}
-                    {/*<Item>*/}
-                    {/*<Icon active name='ios-mail-outline'/>*/}
-                    {/*<Input placeholder='Email' onChangeText={(text) => this.setState({email: text})}/>*/}
-                    {/*</Item>*/}
-                    {/*<Item>*/}
-                    {/*<Icon active name='ios-filing-outline'/>*/}
-                    {/*<Input placeholder='Tiêu đề' onChangeText={(text) => this.setState({subject: text})}/>*/}
-                    {/*</Item>*/}
-                    {/*<Item>*/}
-                    {/*<Icon active name='ios-paper-outline' style={{marginTop: -20}}/>*/}
-                    {/*<Input*/}
-                    {/*placeholder='Nội dung'*/}
-                    {/*multiline={true}*/}
-                    {/*style={{height: 100, marginTop: -20}}*/}
-                    {/*onChangeText={(text) => this.setState({message: text})}/>*/}
-                    {/*</Item>*/}
-                    {/*<View style={{alignItems: 'center'}}>*/}
-                    {/*<Button onPress={() => this.send()}*/}
-                    {/*style={{backgroundColor: Colors.navbarBackgroundColor, marginTop: 20}}>*/}
-                    {/*<Text style={{color: '#fdfdfd'}}> Gửi </Text>*/}
-                    {/*</Button>*/}
-                    {/*</View>*/}
+
                 </View>
             </Container>
         );

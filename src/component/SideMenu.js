@@ -170,7 +170,7 @@ export default class SideMenu extends Component {
 
                             >
                                 <Body>
-                                <Text style={{color: Colors.navbarBackgroundColor}}>Trang chủ</Text>
+                                <Text style={{color: Colors.navbarBackgroundColor}}>{Config.titleHome}</Text>
                                 </Body>
                                 {/*<Right>*/}
                                 {/*<Icon name="ios-arrow-forward"/>*/}
@@ -189,11 +189,11 @@ export default class SideMenu extends Component {
                     <View style={styles.line}/>
                     <View style={{paddingRight: 15, paddingLeft: 15, paddingBottom: 15, textAlign: 'center',
                         width: '100%',}}>
-                        <Text> <Icon style={{fontSize: 18}} name={'ios-call'}/> Hotline : <Text style={{
+                        <Text> <Icon style={{fontSize: 18}} name={'ios-call'}/> {Config.titleHotline} <Text style={{
                             color: "#c0392b",
                             fontSize: 20,
                         }}>{Config.hotline}</Text></Text>
-                        <Text style={{fontSize: 14, fontWeight: '200',paddingTop: 10, color: Config.colorBold}}>PLASMA © 2019</Text>
+                        <Text style={{fontSize: 14, fontWeight: '200',paddingTop: 10, color: Config.colorBold}}>{Config.titleCopyRight}</Text>
                     </View>
                 </View>
             );
@@ -371,7 +371,7 @@ export default class SideMenu extends Component {
                     <Icon style={{fontSize: 18}} name={'ios-log-in'}/>
                 </Left>
                 <Body style={{marginLeft: -15}}>
-                <Text style={{fontSize: 16}}>Đăng nhập</Text>
+                <Text style={{fontSize: 16}}>{Config.btnLogin}</Text>
                 </Body>
             </ListItem>
         );
@@ -432,38 +432,38 @@ const menusSecondaryItems = [
     // },
     {
         id: 11,
-        title: 'Thiết bị',
+        title: Config.titleMngtDevices,
         icon: 'md-pint',
         key: 'product'
     },
     {
         id: 12,
-        title: 'Khách hàng',
+        title: Config.titleMngtCustomers,
         icon: 'ios-people',
         key: 'orders'
     },
     {
         id: 13,
-        title: 'Quản lý đơn hàng',
+        title: Config.titleMngtOrders,
         icon: 'ios-paper',
         key: 'orders'
     },
 
     {
         id: 14,
-        title: 'Thống kê',
+        title: Config.titleMngtStatistics,
         icon: 'ios-podium',
         key: 'profile'
     },
     {
         id: 15,
-        title: 'Tài khoản',
+        title: Config.titleMngtProfile,
         icon: 'ios-contact',
         key: 'profile'
     },
     {
         id: 16,
-        title: 'Đăng xuất',
+        title: Config.btnLogout,
         icon: 'ios-log-out',
         key: 'login'
     },

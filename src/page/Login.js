@@ -103,7 +103,7 @@ export default class Login extends Component {
                                 textAlign: 'center',
                                 width: '100%',
                                 color: Config.colorBold
-                            }}>Plasma<Text style={{fontWeight: '200', color: Config.colorThin}}>MED</Text> </Text>
+                            }}>{Config.titleCompany}<Text style={{fontWeight: '200', color: Config.colorThin}}>{Config.titleCompanySub}</Text> </Text>
                             {/*<Text style={{fontSize: 18, textAlign: 'left', width: '100%', color: '#687373'}}>Thực*/}
                                 {/*phẩm*/}
                                 {/*sạch*/}
@@ -128,7 +128,7 @@ export default class Login extends Component {
                         <View style={{alignItems: 'center', width: '100%'}}>
                             <Button onPress={() => this.login()}
                                     style={styles.buttonLogin}>
-                                <Text style={{color: '#fdfdfd'}}> Đăng nhập </Text>
+                                <Text style={{color: '#fdfdfd'}}> {Config.btnLogin} </Text>
                             </Button>
                         </View>
                         {/*<View style={{alignItems: 'center', width: '100%'}}>*/}
@@ -138,7 +138,7 @@ export default class Login extends Component {
                             {/*</Button>*/}
                         {/*</View>*/}
 
-                        <Text style={{fontSize: 16, fontWeight: '200', color: Config.colorBold, paddingTop: 100,}}>Bản quyền thuộc về Plasma © 2019</Text>
+                        <Text style={{fontSize: 16, fontWeight: '200', color: Config.colorBold, paddingTop: 100,}}>Bản quyền thuộc về {Config.titleCopyRight}</Text>
                     </View>
                 </ScrollView>
 

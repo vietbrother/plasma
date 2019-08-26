@@ -26,30 +26,12 @@ const Config = {
   bankName: 'Vietcombank',
   bankDepartment: 'Đống Đa',
 
-  goolge_vision_url : 'https://vision.googleapis.com/v1/images:annotate?key=',
-  goolge_vision_key : 'AIzaSyCaUOcN_e1BcQQFRzGMj1DB905mzNbWtqA', //vietbrotherjav
-
-  //title
   titleCompany : 'Plasma',
   titleCompanySub : 'MED',
-  titleHome : 'Trang chủ',
-  titleMngtDevices : 'Quản lý thiết bị',
-  titleMngtOrders : 'Đơn hàng',
-  titleMngtCustomers : 'Khách hàng',
-  titleMngtStatistics : 'Thống kê',
-  titleMngtProfile : 'Tài khoản',
-  titleHotline: 'Hotline :',
+  mngtDevicesTitle : 'Quản lý thiết bị',
 
-  titleCopyRight: 'Plasma © 2019',
-
-  //button
-  btnLogin: 'Đăng nhập',
-  btnLogout: 'Đăng xuất',
-  btnCamera: 'Chụp ảnh',
-
-  //error
-  err_login : 'Tên đăng nhập hoặc mật khẩu không đúng'
-
+  goolge_vision_url : 'https://vision.googleapis.com/v1/images:annotate?key=',
+  goolge_vision_key : 'AIzaSyCaUOcN_e1BcQQFRzGMj1DB905mzNbWtqA' //vietbrotherjav
 };
 
 
@@ -61,12 +43,3 @@ function wp (percentage) {
   return Math.round(value);
 }
 
-const slideHeight = viewportHeight * 0.36;
-const slideWidth = wp(80);
-const itemHorizontalMargin = wp(2);
-
-export const sliderWidth = viewportWidth;
-export const itemWidth = slideWidth + itemHorizontalMargin * 2;
-
-const entryBorderRadius = 8;
-export default Config;

@@ -8,75 +8,114 @@ import {
   StyleSheet,
   Dimensions
 } from "react-native";
-import Camera from "react-native-camera";
 
-export default class TakePhoto extends Component {
-  constructor() {
-    super();
-    this.state = {
-      photo: null
-    };
-  }
-  static navigationOptions = {
-    title: "Camera",
-    header: null
-  };
+// import Camera from "react-native-camera";
+import { RNCamera } from 'react-native-camera';
 
-  navBack = () => {
-    this.props.navigation.goBack()
-  }
+import Config from "../../Config";
+
+export default class Camera extends Component {
 
   takePicture = async () => {
-    const { navigate, state } = this.props.navigation;
-
     try {
-      const cameraData = await this.camera.capture();
-
-      navigate('Verify', Object.assign({}, { homeKey: state.key }, cameraData))
+      const data = await this.camera.takePictureAsync();
+      console.log('Path to image: ' + data.uri);
+    } catch (err) {
+       console.log('err: ', err);
     }
-
-    catch(err) {
-      console.error({ err });
-    }
-  }
+  };
 
   render() {
-    const { Aspect, CaptureTarget, Orientation } = Camera.constants;
-
     return (
-      <View>
-        <Camera
-          ref={cam => {
-            this.camera = cam;
-          }}
-          style={ styles.cam }
-          aspect={ Aspect.fill }
-          captureTarget={ CaptureTarget.disk }
-          Orientation={ Orientation.auto }
-          onFocusChanged={ e => {} }
-          onZoomChanged={ e => {} }>
-          <View style={ styles.bottomBar }> 
-
-            <TouchableOpacity style={ [styles.goBackBtn, styles.Btn] } onPress={ this.navBack }>
-              {/*<Image source={require("../../../assets/home2.png")}*/}
-                  {/*style={ styles.icon } />*/}
-              <Text style={ styles.btnTxt }>Home</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={ this.takePicture }>
-              <View style={ styles.camBtn } />
-            </TouchableOpacity>
-
-            <TouchableOpacity style={ [styles.submitBtn, styles.Btn] } />
-            
-          </View>
-        </Camera>
-      </View>
+        <View style={styles.container}>
+          <RNCamera
+              ref={cam => {
+                this.camera = cam;
+              }}
+              style={ styles.cam }
+          >
+            <View style={styles.camBtn}>
+              <TouchableOpacity style={styles.capture} onPress={this.takePicture}>
+                <Icon name='ios-camera'/>
+                <Text>{Config.btnCamera}</Text>
+              </TouchableOpacity>
+            </View>
+          </RNCamera>
+        </View>
     );
   }
+  //
+  // constructor() {
+  //   super();
+  //   this.state = {
+  //     photo: null
+  //   };
+  // }
+  // static navigationOptions = {
+  //   title: "Camera",
+  //   header: null
+  // };
+  //
+  // navBack = () => {
+  //   this.props.navigation.goBack()
+  // }
+  //
+  // takePicture = async () => {
+  //   const { navigate, state } = this.props.navigation;
+  //
+  //   try {
+  //     const cameraData = await this.camera.capture();
+  //
+  //     navigate('Verify', Object.assign({}, { homeKey: state.key }, cameraData))
+  //   }
+  //
+  //   catch(err) {
+  //     console.error({ err });
+  //   }
+  // }
+  //
+  // render() {
+  //   const { Aspect, CaptureTarget, Orientation } = Camera.constants;
+  //
+  //   return (
+  //     <View>
+  //       <Camera
+  //         ref={cam => {
+  //           this.camera = cam;
+  //         }}
+  //         style={ styles.cam }
+  //         aspect={ Aspect.fill }
+  //         captureTarget={ CaptureTarget.disk }
+  //         Orientation={ Orientation.auto }
+  //         onFocusChanged={ e => {} }
+  //         onZoomChanged={ e => {} }>
+  //         <View style={ styles.bottomBar }>
+  //
+  //           <TouchableOpacity style={ [styles.goBackBtn, styles.Btn] } onPress={ this.navBack }>
+  //             {/*<Image source={require("../../../assets/home2.png")}*/}
+  //                 {/*style={ styles.icon } />*/}
+  //             <Text style={ styles.btnTxt }>Home</Text>
+  //           </TouchableOpacity>
+  //
+  //           <TouchableOpacity onPress={ this.takePicture }>
+  //             <View style={ styles.camBtn } />
+  //           </TouchableOpacity>
+  //
+  //           <TouchableOpacity style={ [styles.submitBtn, styles.Btn] } />
+  //
+  //         </View>
+  //       </Camera>
+  //     </View>
+  //   );
+  // }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 10,
+    backgroundColor: '#000',
+  },
   cam: {
     justifyContent: "flex-end",
     alignItems: "center",
