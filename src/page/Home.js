@@ -146,7 +146,9 @@ export default class Home extends Component {
                                 <Text style={styles.title}> SẢN PHẨM NỔI BẬT </Text>
                             </View>
                             {/*{this.renderFeatureProducts()}*/}
-                            <Camera></Camera>
+                            <Button onPress={() => Actions.camera()} transparent>
+                                <Icon name='ios-camera' style={{color: 'green'}} />
+                            </Button>
 
                         </Content>
                     </Container>

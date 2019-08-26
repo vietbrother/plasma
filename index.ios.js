@@ -6,4 +6,4 @@
 import { AppRegistry } from 'react-native';
 import Main from './src/Main';
 
-AppRegistry.registerComponent('Shop', () => Main);
+AppRegistry.registerComponent('Plasma', () => Main);

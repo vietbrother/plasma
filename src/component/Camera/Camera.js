@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Dimensions
 } from "react-native";
+import { Icon } from 'native-base';
 
 // import Camera from "react-native-camera";
 import { RNCamera } from 'react-native-camera';
@@ -35,9 +36,9 @@ export default class Camera extends Component {
               style={ styles.cam }
           >
             <View style={styles.camBtn}>
-              <TouchableOpacity style={styles.capture} onPress={this.takePicture}>
+              <TouchableOpacity onPress={this.takePicture}>
                 <Icon name='ios-camera'/>
-                <Text>{Config.btnCamera}</Text>
+                {/*<Text>{Config.btnCamera}</Text>*/}
               </TouchableOpacity>
             </View>
           </RNCamera>
@@ -113,8 +114,8 @@ export default class Camera extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 10,
-    backgroundColor: '#000',
+    // paddingBottom: 10,
+    // backgroundColor: '#000',
   },
   cam: {
     justifyContent: "flex-end",
@@ -133,13 +134,14 @@ const styles = StyleSheet.create({
   },
 
   camBtn: {
-    height: 50,
-    width: 50,
-    borderRadius: 25,
-    borderWidth: 1.3,
+    // height: 50,
+    // width: 50,
+    borderRadius: 50,
+    // borderWidth: 1.3,
     borderColor: "#d6d7da",
-    marginLeft:12,
-    marginTop: 15
+    // marginLeft:12,
+    // marginTop: 15,
+    paddingBottom: 50,
   },
 
   Btn: {
