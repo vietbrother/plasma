@@ -147,8 +147,13 @@ export default class Home extends Component {
                             </View>
                             {/*{this.renderFeatureProducts()}*/}
                             <Button onPress={() => Actions.camera()} transparent>
-                                <Icon name='ios-camera' style={{color: 'green'}} />
+                                <Icon name='ios-camera' style={{color: 'green'}}/>
                             </Button>
+                            <View style={styles.container}>
+                                <Image source={require(this.props.capturePhotoPath)}
+                                       style={styles.capturePhoto}/>
+                                <Text>{this.props.textDetect}</Text>
+                            </View>
 
                         </Content>
                     </Container>
@@ -254,6 +259,14 @@ const styles = StyleSheet.create({
         height: 120,
         borderRadius: 10,
         marginRight: 5,
+        borderColor: '#dfe3ee',
+        borderWidth: 0.5
+    },
+    capturePhoto: {
+        width: 120,
+        height: 120,
+        borderRadius: 10,
+        // marginRight: 5,
         borderColor: '#dfe3ee',
         borderWidth: 0.5
     },

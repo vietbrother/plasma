@@ -15,6 +15,8 @@ import {
 import RNFS from 'react-native-fs';
 // import Spinner from 'react-native-spinkit';
 import Config from "../../Config";
+import {Icon} from 'native-base';
+import {Actions} from 'react-native-router-flux';
 
 export default class TakePhoto extends Component {
   constructor() {
@@ -41,11 +43,13 @@ export default class TakePhoto extends Component {
 
     const cleanedData = JSON.parse(data._bodyText).responses[0].fullTextAnnotation.text;
 
-    this.props.navigation.navigate('ImageResult', {
-      path: cleanedData,
-      homeKey: this.props.navigation.state.params.homeKey,
-      cameraKey: this.props.navigation.state.key
-    })
+    Actions.home({textDetect: cleanedData, capturePhotoPath : this.props.pictureData.uri});
+    //
+    // this.props.navigation.navigate('ImageResult', {
+    //   path: cleanedData,
+    //   homeKey: this.props.navigation.state.params.homeKey,
+    //   cameraKey: this.props.navigation.state.key
+    // })
   }
 
   async usePhoto(imgPath) {
@@ -82,7 +86,8 @@ export default class TakePhoto extends Component {
 
     //from cameraRoll assets-library://asset/asset.JPG?id=729F50DA-9627-42A9-802D-69B22C9EECD2&ext=JPG
 
-    const imgPath = this.props.navigation.state.params.path
+    // const imgPath = this.props.navigation.state.params.path;
+    const imgPath =     this.props.pictureData.uri;
 
     try {
       const readInfo = await RNFS.readFile(imgPath, 'base64');
@@ -96,9 +101,9 @@ export default class TakePhoto extends Component {
 
   render() {
     
-    console.log('key in verify', this.props.navigation.state.params.homeKey)
+    // console.log('key in verify', this.props.navigation.state.params.homeKey)
 
-    const { state, goBack } = this.props.navigation;
+    // const { state, goBack } = this.props.navigation;
 
     return (
       <View>
@@ -117,16 +122,18 @@ export default class TakePhoto extends Component {
 
           <View style={ styles.bottomBar }> 
 
-            <TouchableOpacity style={ [styles.goBackBtn, styles.Btn] } onPress={ () => goBack() }>
+            <TouchableOpacity style={ [styles.goBackBtn, styles.Btn] } onPress={ () => Actions.pop() }>
               {/*<Image source={require("../../../assets/left-arrow.png")}*/}
                   {/*style={ styles.icon } />*/}
-              <Text style={ styles.btnTxt }>Go Back</Text>
+              <Icon name='ios-camera'/>
+              <Text style={ styles.btnTxt }>Quay lại</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={ [styles.submitBtn, styles.Btn] } onPress={ this.convertImg.bind(this) }>
               {/*<Image source={require("../../../assets/send.png")}*/}
                     {/*style={ styles.icon } />*/}
-              <Text style={ styles.btnTxt }>Use Photo</Text>
+              <Icon name='ios-arrow-back'/>
+              <Text style={ styles.btnTxt }>Dùng ảnh</Text>
             </TouchableOpacity>
             
           </View>
