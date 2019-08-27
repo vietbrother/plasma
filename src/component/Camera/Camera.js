@@ -22,7 +22,7 @@ export default class Camera extends Component {
         try {
             const data = await this.camera.takePictureAsync();
             console.log('Path to image: ' + data.uri);
-            Actions.verify({pictureData: data});
+            Actions.verify({captureData: data});
         } catch (err) {
             console.log('err: ', err);
         }
@@ -36,6 +36,7 @@ export default class Camera extends Component {
                         this.camera = cam;
                     }}
                     style={styles.cam}
+                    captureAudio={false}
                 >
                     <View style={styles.bottomBar}>
                         <TouchableOpacity onPress={this.takePicture}>
@@ -131,22 +132,25 @@ const styles = StyleSheet.create({
 
     bottomBar: {
         alignSelf: 'flex-end',
-        backgroundColor: "rgba(0,0,0,0.7)",
+        backgroundColor: "white",
         flexDirection: 'row',
-        justifyContent: 'space-between',
         height: 80,
-        width: '100%'
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 
     camBtn: {
-        // height: 50,
-        // width: 50,
+        height: 50,
+        width: 50,
         borderRadius: 50,
-        // borderWidth: 1.3,
+        borderWidth: 1.3,
         borderColor: "#d6d7da",
-        // marginLeft:12,
+        //marginLeft:12,
         // marginTop: 15,
-        paddingBottom: 50,
+        marginBottom: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 
     Btn: {

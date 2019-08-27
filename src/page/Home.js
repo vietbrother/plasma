@@ -149,11 +149,7 @@ export default class Home extends Component {
                             <Button onPress={() => Actions.camera()} transparent>
                                 <Icon name='ios-camera' style={{color: 'green'}}/>
                             </Button>
-                            <View style={styles.container}>
-                                <Image source={require(this.props.capturePhotoPath)}
-                                       style={styles.capturePhoto}/>
-                                <Text>{this.props.textDetect}</Text>
-                            </View>
+                            {this.renderPhoto()}
 
                         </Content>
                     </Container>
@@ -164,6 +160,17 @@ export default class Home extends Component {
 
     }
 
+    renderPhoto(){
+        if(this.props.capturePhotoPath != null && this.props.capturePhotoPath != ''){
+            return (
+                <View style={styles.container}>
+                    <Image source={{uri: this.props.capturePhotoPath}} style={styles.capturePhoto}/>
+                    <Text>{this.props.textDetect == null ? '' : this.props.textDetect}</Text>
+                </View>
+            );
+        }
+
+    }
     renderCategories(categories) {
         let cat = [];
         console.log("render category");
