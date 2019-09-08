@@ -3,6 +3,9 @@ package com.plasma;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+import com.imagepicker.ImagePickerPackage;
+import com.reactlibrary.RNTesseractOcrPackage;
 import org.reactnative.camera.RNCameraPackage;
 import cl.json.RNSharePackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
@@ -29,6 +32,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNGestureHandlerPackage(),
+            new ImagePickerPackage(),
+            new RNTesseractOcrPackage(),
                       new RNSharePackage(),
                       new RNFetchBlobPackage(),
                       new RNFSPackage(),

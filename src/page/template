@@ -1,0 +1,118 @@
+{
+   "jsonrpc": "2.0",
+   "method": "call",
+   "params": {
+      "db": "plasmadb",
+      "login": "admin",
+      "password": "1@",
+      "context": {}
+   },
+   "id": "1"
+}
+
+
+
+{
+    "jsonrpc": "2.0",
+    "id": "1",
+    "result": {
+        "session_id": "59bb842272e6e8d0dfc78922b8b0d9f6d39c8c7a",
+        "uid": 1,
+        "is_system": true,
+        "is_superuser": true,
+        "user_context": {
+            "lang": "vi_VN",
+            "tz": "Europe/Brussels",
+            "uid": 1
+        },
+        "db": "plasmadb",
+        "server_version": "11.0-20190903",
+        "server_version_info": [
+            11,
+            0,
+            0,
+            "final",
+            0,
+            ""
+        ],
+        "name": "Administrator",
+        "username": "admin",
+        "company_id": 1,
+        "partner_id": 3,
+        "user_companies": false,
+        "currencies": {
+            "1": {
+                "symbol": "€",
+                "position": "after",
+                "digits": [
+                    69,
+                    2
+                ]
+            },
+            "3": {
+                "symbol": "$",
+                "position": "before",
+                "digits": [
+                    69,
+                    2
+                ]
+            }
+        },
+        "web.base.url": "http://103.94.16.226:8069",
+        "web_tours": []
+    }
+}
+
+
+http://103.94.16.226:8069/web/dataset/call_kw
+{
+   "jsonrpc": "2.0",
+   "method": "call",
+  "model": "res.partner",
+   "params": {
+     "kwargs": {
+       "context": {},
+       "fields":["id","code","stage","warehouse","p_customer","description"],"order":"id","limit":5,"offset":0
+    },
+     "method": "search_read",
+     "model": "p.equipment",
+      "args": [
+      	[]
+    	],
+      "context": {}
+   },
+   "id": "1"
+}
+
+
+-	Model: res.partner
+Model name	res.partner
+Fields dữ liệu	id (int)
+name (string)
+country_id
+comment
+Mô tả	Model thông tin về Profile User, danh sách User của hệ thống.
+-	Model lấy dữ liệu: res.partner
+-	Điều kiện lấy dữ liệu: is_company = false và active = true và customer = true
+
+
+-	Model: p.customer
+Model name	p.customer
+Fields dữ liệu	Id
+name
+address
+Mô tả	Model thông tin về khách hàng.
+
+-	Model: p.equipment
+Model name	p.equipment
+Fields dữ liệu	Id
+code: <mã thiết bị>
+stage: <trạng thái>
+warehouse: <kho>
+p_customer: <khách hàng đang sử dụng>
+description: <thông số kỹ thuật>
+Mô tả	Model thông tin về thiết bị.
++) Trạng thái: STAGE = [(0, 'Không xác định'), (1, 'Vỏ'), (2, 'Tái nạp'), (3, 'Bình tồn'), (4, 'Bình đang sử dụng')]
++) Kho: WAREHOUSE = [(0, 'Không xác định'), (1, 'Kho Công ty'), (2, 'Kho Nhà máy'), (3, 'Kho Khách hàng')]
++) Khách hàng đang sử dụng: Lấy dữ liệu từ model p.customer
+
