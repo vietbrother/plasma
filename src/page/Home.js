@@ -26,7 +26,8 @@ import {
     cardBody,
     Row,
     Grid,
-    Col
+    Col,
+    Item
 } from 'native-base';
 import {Actions} from 'react-native-router-flux';
 
@@ -45,6 +46,7 @@ import Product from '../component/Product';
 import Camera from '../component/Camera/Camera';
 
 import Odoo from '../Odoo';
+import OrderBlock from "./Orders";
 
 export default class Home extends Component {
 
@@ -55,10 +57,12 @@ export default class Home extends Component {
             categories: [],
             products: [],
             isLoading: true,
+            isSearching: true,
             error: null,
             sessionKey: null,
 
             extractedText: "",
+            searchText: '',
         };
     }
 
@@ -96,59 +100,30 @@ export default class Home extends Component {
             // });
             // console.log('finish');
             // console.log(JSON.stringify(fetchData));
+            if (this.props.textDetect != null) {
+                this.setState({isSearching: true, searchText: this.props.textDetect});
 
-            const odoo = new Odoo({
-                host: '103.94.16.226',
-                port: 8069,
-                database: 'plasmadb',
-                username: 'admin',
-                password: '1@'
-            });
 
-            // Connect to Odoo
-            odoo.connect(function (err) {
-                if (err) {
-                    return console.log(err);
-                }
-            });
-
-            var params = {
-                // ids: [1, 2, 3, 4, 5],
-                domain: [ [ 'code', 'like', 'HN05059' ] ],
-                fields: ['id', 'code', 'stage', 'warehouse', 'p_customer', 'description'],
-                order: 'id',
-                limit: 5,
-                offset: 0,
-            }; //params
-            odoo.search_read('p.equipment', params, function (err, products) {
-                if (err) {
-                    return console.log(err);
-                }
-
-                console.log(products);
-                // [
-                //   { list_price: 60, id: 52, name: 'Router R430' },
-                //   { list_price: 62, id: 39, name: 'Headset standard' }
-                // ]
-            }); //search_read
-
+            }
         } catch (err) {
             console.log('error:' + err);
         }
+    }
+
+    _renderImageCamera() {
         if (this.props.capturePhotoPath != null && this.props.capturePhotoPath != '') {
             return (
-                <View style={styles.container}>
+                <View style={styles.image}>
                     <Image source={{uri: this.props.capturePhotoPath}} style={styles.capturePhoto}/>
-                    <Text>{this.props.textDetect == null ? '' : this.props.textDetect}</Text>
+                    {/*<Text>{this.props.textDetect == null ? '' : this.props.textDetect}</Text>*/}
                 </View>
             );
         } else {
             return (
-                <View style={styles.container}>
+                <View>
                 </View>
             );
         }
-
     }
 
     async getSessionKey() {
@@ -167,67 +142,152 @@ export default class Home extends Component {
         }
     }
 
-    // _fetchCategorieData() {
-    //     //Have a try and catch block for catching errors.
-    //     try {
-    //         //this.getSessionKey();
-    //         this.setState({isLoading: true});
-    //         global.WooCommerceAPI.get('products/categories', {
-    //             per_page: 100, status: 'processing', page: 1
-    //         })
-    //             .then(data => {
-    //                 // data will contain the body content from the request
-    //                 console.log("get category");
-    //                 this.setState({categories: data, loading: false});
-    //             })
-    //             .catch(error => {
-    //                 // error will return any errors that occur
-    //                 console.log(error);
-    //                 this.setState({
-    //                     error: error.toString(),
-    //                     isLoading: false
-    //                 });
-    //             });
-    //     } catch (err) {
-    //         console.log("Error fetching data-----------", err);
-    //     }
-    // }
-    //
-    // _fetchProductsData() {
-    //     this.setState({loading: true});
-    //     global.WooCommerceAPI.get('products', {
-    //         featured: true
-    //     })
-    //         .then(data => {
-    //             // console.log("=============================Home Fetch API-----------------");
-    //             // console.log(data);
-    //             this.setState({products: data, loading: false});
-    //         }).catch(error => {
-    //         // error will return any errors that occur
-    //         console.log(error);
-    //     });
-    // }
-    //
+    _renderResult() {
+        if (this.state.products != null && this.state.products.length > 0) {
+            return (
+                <List dataArray={this.state.order.line_items}
+                      renderRow={(item) =>
+                          <ListItem>
+                              <Text>
+                                  <Text style={{}}>Mã bình
+                                      :
+                                      <HTML
+                                          html={this._renderCodeProducts(item.code)}
+                                          classesStyles={{
+                                              fontFamily: 'Roboto',
+                                              color: Colors.navbarBackgroundColor,
+                                              fontSize: 18, fontWeight: 'bold'
+                                          }}
+                                          imagesMaxWidth={Dimensions.get('window').width}/>
+                                  </Text>
+                              </Text>
+                              <Grid>
+                                  <Col size={1}>
+                                      <Text style={{fontWeight: 'bold'}}><Icon name="ios-time"/> Trạng thái :</Text>
+                                  </Col>
+                                  <Col size={3}>
+                                      <Text style={{textAlign: 'center'}}>
+                                          {this._renderStatus(item.stage)}
+                                      </Text>
+                                  </Col>
+                              </Grid>
+                              <Grid>
+                                  <Col size={1}>
+                                      <Text style={{fontWeight: 'bold'}}><Icon name="md-locate"/> Kho :</Text>
+                                  </Col>
+                                  <Col size={3}>
+                                      <Text style={{textAlign: 'center'}}>
+                                          {this._renderWarehouse(item.warehouse)}
+                                      </Text>
+                                  </Col>
+                              </Grid>
 
-    // extractTextFromImage(imagePath) {
-    //     const tessOptions = {
-    //         whitelist: null,
-    //         blacklist: null
-    //     };
-    //     RNTesseractOcr.recognize(imagePath, 'LANG_ENGLISH', tessOptions)
-    //         .then((result) => {
-    //             this.setState({ isLoading: false, extractedText: result });
-    //         })
-    //         .catch((err) => {
-    //             this.setState({ isLoading: false, extractedText: err.message });
-    //         });
-    // }
-    // renderDetectText(){
-    //     this.extractTextFromImage('../images/logo.png');
-    //     return (
-    //         <Text>{this.state.extractedText}</Text>
-    //     );
-    // }
+                              <Grid>
+                                  <Col size={1}>
+                                      <Text style={{fontWeight: 'bold'}}><Icon name="ios-contact"/> Khách hàng :</Text>
+                                  </Col>
+                                  <Col size={3}>
+                                      <Text
+                                          style={{textAlign: 'center'}}>{item.p_customer == null ? '' : item.p_customer.name}</Text>
+                                  </Col>
+
+                              </Grid>
+                          </ListItem>}>
+                </List>
+            );
+        } else {
+            return (
+                <View>
+                    <Text>Không tìm thấy thông tin bình</Text>
+                </View>
+            );
+        }
+    }
+
+    _renderCodeProducts(code) {
+        code.replace(new RegExp(this.state.searchText, "gi"), (match) => `<b>${match}</b>`)
+    }
+
+    _renderStatus(status) {
+        if (status == '0') {
+            return (<Text style={{color: '#ffa505'}}><Icon name="ios-help-circle-outline"/> Không xác định</Text>);
+        } else if (status == '4') {
+            return (<Text style={{color: '#44bc37'}}><Icon name="ios-checkmark-circle"/> Bình đang sử dụng</Text>);
+        } else if (status == '1') {
+            return (<Text style={Config.colorThin}><Icon name="ios-battery-dead"/> Vỏ</Text>);
+        } else if (status == '2') {
+            return (<Text style={{color: '#ff00ff'}}><Icon name="ios-refresh-circle"/> Tái nạp</Text>);
+        } else if (status == '3') {
+            return (<Text style={{color: '#c40521'}}><Icon name="ios-warning"/> Bình tồn</Text>);
+        } else {
+            return (<Text style={{color: '#26619c'}}>{status}</Text>);
+        }
+    }
+
+    _renderWarehouse(warehouse) {
+        if (warehouse == '0') {
+            return (<Text style={Config.mainColor}> Không xác định</Text>);
+        } else if (warehouse == '1') {
+            return (<Text style={Config.mainColor}> Kho công ty</Text>);
+        } else if (warehouse == '2') {
+            return (<Text style={Config.mainColor}> Kho nhà máy</Text>);
+        } else if (warehouse == '3') {
+            return (<Text style={Config.mainColor}> Kho khách hàng</Text>);
+        } else {
+            return (<Text style={Config.mainColor}>{warehouse}</Text>);
+        }
+    }
+
+    search() {
+        let items = [];
+        try {
+            var odoo = new Odoo({
+                host: '103.94.16.226',
+                port: 8069,
+                database: 'plasmadb',
+                username: 'admin',
+                password: '1@'
+            });
+
+            // Connect to Odoo
+            odoo.connect(function (err) {
+                if (err) {
+                    return console.log(err);
+                }
+            });
+
+            var codeDevice = this.state.searchText;
+            var params = {
+                // ids: [1, 2, 3, 4, 5],
+                domain: [['code', 'like', codeDevice]],
+                fields: ['id', 'code', 'stage', 'warehouse', 'p_customer', 'description'],
+                order: 'id',
+                limit: 5,
+                offset: 0,
+            }; //params
+            odoo.search_read('p.equipment', params, function (err, products) {
+                if (err) {
+                    alert(err);
+                    return console.log(err);
+                }
+                console.log(products);
+                this.setState({isSearching: false, products: products});
+
+            }); //search_read
+        } catch (e) {
+
+        }
+        let stateItems = this.state.items;
+        for (var i = 0; i < stateItems.length; i++) {
+            items.push(
+                <Grid key={i}>
+                    <OrderBlock key={stateItems[i].id} order={stateItems[i]}/>
+                </Grid>
+            );
+        }
+        return items;
+    }
+
     render() {
         var left = (
             <Left style={{flex: 1}}>
@@ -255,18 +315,45 @@ export default class Home extends Component {
                     <Container>
                         <Navbar left={left} right={right} title={Config.titleHome}/>
                         <Content>
-                            <View style={styles.titleView}>
-                                <Text style={styles.title}> DANH MỤC SẢN PHẨM </Text>
-                            </View>
+                            {/*<View style={styles.titleView}>*/}
+                            {/*<Text style={styles.title}> DANH MỤC SẢN PHẨM </Text>*/}
+                            {/*</View>*/}
                             {/*{this._renderCategoriesRoot(this.state.categories)}*/}
 
                             <View style={styles.titleView}>
-                                <Text style={styles.title}> SẢN PHẨM NỔI BẬT </Text>
+                                <Text style={styles.title}> TRA CỨU THÔNG TIN BÌNH </Text>
                             </View>
                             {/*{this.renderFeatureProducts()}*/}
                             <Button onPress={() => Actions.camera()} transparent>
                                 <Icon name='ios-camera' style={{color: 'green'}}/>
                             </Button>
+                            {this._renderImageCamera()}
+                            <View style={{
+                                flex: 1,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                paddingLeft: 10,
+                                paddingRight: 10
+                            }}>
+                                <Item>
+                                    <Input
+                                        placeholder="Tìm kiếm bình..."
+                                        value={this.state.searchText}
+                                        onChangeText={(text) => this.setState({searchText: text})}
+                                        onSubmitEditing={() => this.search(this.state.searchText)}
+                                        // style={{marginTop: 9}}
+                                    />
+                                    <Icon name="ios-search" style={Config.mainColor}
+                                          onPress={() => this.search(this.state.searchText)}/>
+                                </Item>
+                                <ActivityIndicator
+                                    animating={this.state.isSearching}
+                                    color={Config.mainColor}
+                                    size="large"
+                                />
+
+                                {this._renderResult()}
+                            </View>
                             {/*{this.renderPhoto()}*/}
                             {/*{this.renderDetectText()}*/}
 
