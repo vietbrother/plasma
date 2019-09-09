@@ -46,7 +46,8 @@ import Product from '../component/Product';
 import Camera from '../component/Camera/Camera';
 
 import Odoo from '../Odoo';
-import OrderBlock from "./Orders";
+import HTML from 'react-native-render-html';
+
 
 export default class Home extends Component {
 
