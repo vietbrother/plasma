@@ -74,6 +74,13 @@ export default class Home extends Component {
         // this.callApi();
         this.getSessionKey();
     }
+    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
+        console.log(nextProps);
+        console.log(nextContext);
+        console.log('componentWillReceiveProps----------------nextProps.textDetect ' + nextProps.textDetect );
+        this.setState({searchText: nextProps.textDetect});
+        this.search(nextProps.textDetect);
+    }
 
     // async callApi() {
     //     try {

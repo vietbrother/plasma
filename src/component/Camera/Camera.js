@@ -45,11 +45,11 @@ export default class Camera extends Component {
                                 {/*<Text>{Config.btnCamera}</Text>*/}
                             </View>
                         </TouchableOpacity>
-                        {/*<TouchableOpacity onPress={()=>{Actions.home({textDetect: 'HN05059', capturePhotoPath: ''});}}>*/}
-                            {/*<View style={styles.camBtn}>*/}
-                                {/*<Text>Test</Text>*/}
-                            {/*</View>*/}
-                        {/*</TouchableOpacity>*/}
+                        <TouchableOpacity onPress={()=>{Actions.home({textDetect: 'HN05059', capturePhotoPath: ''});}}>
+                            <View style={styles.camBtn}>
+                                <Text>Test</Text>
+                            </View>
+                        </TouchableOpacity>
                     </View>
                 </RNCamera>
             </View>
