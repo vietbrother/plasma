@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "plama2019",
+  "private_key_id": "6b5871b12f2dc3d8cdc7047750a70728844a2d00",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCuxqO4LBFapNJy\n6qVLih+ldG9KZzx7g9PIuTeXrUbnUqMvcid+J+VoqzttRPcxBvm39CtrqfwRnnQS\nmW/jWapmoH5BTuaBasUSl4D5uc+yWVv8Y3jabo2bEepNxxoY+D9vyi3C3NUh5neN\ne/VncK7oULoqXFkZwLboBM1gZk2wFFP5LaLxlpfx3lylKhtemWnkfS1bRMfrmFU6\naeqQEsXYVKRHss7F872dMC82vS5T/5ApoLkevqS0NJIlFQ6PwvBhB1I3ZPfqRrkj\n9bZV9mHEOMPwGnm0BU1YUhQLjD5rgAr9wj2eqZ9xAqDKRbzVADZ2Epk02vI37oR1\nNcvwApzbAgMBAAECggEAHJoLTud/S4svmXjG5i7LcQM190IfxsLTFMUi0OKdeNuw\nMuKGjgGvbEqhZgdkQJS4px8BQBRIWQXKTwTnJ5iT50maf8uOs10qtRkwFS4QTEqN\nYCdTLsPqzpbG9kWAAtgVYZD/niUPiAW0SOYhSfVJ2mDjpm0Ic8ty41Nt3LnBOvBD\nYErSm3yaRJmB0n42+IfN2IhP379dT9HBBGi8WWSPIRoreLVE5OJRzngkN6nlzwir\nAvAsEXGrPcJlQQ2Q3TTIfhJCYyq76cSrkRrhz1HqxpCktDytWehEbs4cPZsywjoU\nKl2Zi3gU8d5rQA1QM0YM7BSWiHWVtRSXgqx1C6/l+QKBgQDeVffiNWMgUlPmpoMK\nT2jzyhigCd1DB4+C4CxVD+dTVk5nwrX+I6BuEaJWDqcECooqwUM0W2HxNpR9qWEH\ndlP/cP57RuP3kLjfX6SggP5YDUR54jPMPePi1oWa2H4bdf4WTk+HYFTumNFIEqS0\nGBsnzeEtvM2se3kAwOkyIE6urwKBgQDJPS/oQW91BEBiR090YuGKN464O95Q5g/R\nwHq4Lg+aYMRd6nBgZW3ooALveqwT+Hti4wzKu9NdHuuB16cXq5IVjo68gXvwarnn\n2u8sveTF49e8JzetL1fCOb9qblYkW28jJgmFc+ECbndaVEVYcqec0gYnWCjQVIxR\nz48Vf9xflQKBgEQ5QP0qwKYUXSZzhdZOE7hrFS9Wl4yP71uLik73uFX8L8brGolH\nSV09EAE0Mc+tpEQGVablO6KWyu3cYae2iYPimlQdpqo6wF/aq1uM+X7vY0m7PYW4\noArlJM4lDF1E0ZjqosC5sJYeUmm5Psz8cKjAJg6w1rPMl47Bo0z8WOiFAoGAbZ/E\nWjxTMCaZwC/ii59WB8pOF/SdHerF0ViOQYjt/QYb0qFkiE6YufF4x+ZGmTZyWKMh\nE8uPz5mJZ5kHsDBJiy62eN/8mTI6haBRTElBt79vhVLD1LcGkoqMyLjEelfIyhft\ndeJzP7TXlcB0akNDJX2P1p0C1sJIEkUESAz4CqUCgYAC+/KSpJfAA4XSecdOni5P\nxLHdyj6qBYb4dDpDIWsYVxBuXMTb+3E61rjlSFHDc/wc2FIF8Q0SdJp7nSPelWk9\ndER4TZck9+yj6SfuZzgyGosetkzGLU4mbSla2mYwNf/jKP11AEhKH52I8l6nqrBZ\nRLgpulKEr53bv0RQhbvu9g==\n-----END PRIVATE KEY-----\n",
+  "client_email": "plasma2019@plama2019.iam.gserviceaccount.com",
+  "client_id": "117328607617326824680",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/plasma2019%40plama2019.iam.gserviceaccount.com"
+}

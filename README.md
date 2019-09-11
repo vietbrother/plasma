@@ -58,9 +58,9 @@ gradlew assembleRelease
 ```
 
 
-## Screenshots
+## Reference
 
-Click [here](screenshots/README.md)
+https://github.com/Michaelvilleneuve/react-native-document-scanner
 
 ## Documentation
 
