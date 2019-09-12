@@ -74,10 +74,11 @@ export default class Home extends Component {
         // this.callApi();
         this.getSessionKey();
     }
+
     componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
         console.log(nextProps);
         console.log(nextContext);
-        console.log('componentWillReceiveProps----------------nextProps.textDetect ' + nextProps.textDetect );
+        console.log('componentWillReceiveProps----------------nextProps.textDetect ' + nextProps.textDetect);
         this.setState({searchText: nextProps.textDetect});
         this.search(nextProps.textDetect);
     }
@@ -228,19 +229,30 @@ export default class Home extends Component {
 
     _renderStatus(status) {
         if (status == '0') {
-            return (<Text style={{color: '#ffa505'}}> Không xác định <Icon name="ios-help-circle-outline"
-                                                                           style={styles.icon}/></Text>);
+            return (<Text style={{color: '#ffa505'}}>
+                <Icon name="ios-help-circle-outline"
+                      style={{fontSize: 13, color: '#ffa505'}}/>
+                Không xác định</Text>);
         } else if (status == '4') {
-            return (<Text style={{color: '#44bc37'}}> Bình đang sử dụng <Icon name="ios-checkmark-circle"
-                                                                              style={styles.icon}/> </Text>);
+            return (<Text style={{color: '#44bc37'}}>
+                <Icon name="ios-checkmark-circle"
+                      style={{fontSize: 13, color: '#44bc37'}}/>
+                Bình đang sử dụng </Text>);
         } else if (status == '1') {
-            return (<Text style={{color: Config.colorThin}}> Vỏ <Icon name="ios-battery-dead" style={styles.icon}/>
-            </Text>);
+            return (<Text style={{color: Config.colorThin}}>
+                <Icon name="ios-battery-dead"
+                      style={{fontSize: 13, color: Config.colorThin}}/>
+                Vỏ </Text>);
         } else if (status == '2') {
-            return (<Text style={{color: '#ff00ff'}}> Tái nạp <Icon name="ios-refresh-circle" style={styles.icon}/>
-            </Text>);
+            return (<Text style={{color: '#ff00ff'}}>
+                <Icon name="ios-refresh-circle"
+                      style={{fontSize: 13, color: '#ff00ff'}}/>
+                Tái nạp </Text>);
         } else if (status == '3') {
-            return (<Text style={{color: '#c40521'}}> Bình tồn <Icon name="ios-warning" style={styles.icon}/></Text>);
+            return (<Text style={{color: '#c40521'}}>
+                <Icon name="ios-warning"
+                      style={{fontSize: 13, color: '#c40521'}}/>
+                Bình tồn </Text>);
         } else {
             return (<Text style={{color: '#26619c'}}>{status}</Text>);
         }
@@ -260,7 +272,7 @@ export default class Home extends Component {
         }
     }
 
-    _isLoading(isSearching, codeDevice, data){
+    _isLoading(isSearching, codeDevice, data) {
         this.setState({isSearching: true, searchText: codeDevice, products: data});
     }
 
@@ -329,10 +341,10 @@ export default class Home extends Component {
         var right = (
             <Right style={{flex: 1}}>
                 {/*<Button onPress={() => Actions.search()} transparent>*/}
-                    {/*<Icon name='ios-search-outline'/>*/}
+                {/*<Icon name='ios-search-outline'/>*/}
                 {/*</Button>*/}
                 {/*<Button onPress={() => Actions.cart()} transparent>*/}
-                    {/*<Icon name='ios-cart'/>*/}
+                {/*<Icon name='ios-cart'/>*/}
                 {/*</Button>*/}
             </Right>
         );
@@ -348,15 +360,15 @@ export default class Home extends Component {
                             <TextDetect key={new Date().valueOf()}
                                         capturePhotoPath={this.props.capturePhotoPath}
                                         callback={this.search}
-                                        textDetect={this.props.textDetect} />
+                                        textDetect={this.props.textDetect}/>
 
 
                             {/*<View style={styles.titleView}>*/}
-                                {/*<Text style={styles.title}> TRA CỨU THÔNG TIN BÌNH </Text>*/}
+                            {/*<Text style={styles.title}> TRA CỨU THÔNG TIN BÌNH </Text>*/}
                             {/*</View>*/}
                             {/*<Button onPress={() => Actions.camera()} transparent>*/}
-                                {/*<Icon name='ios-camera' style={{color: 'green'}}/>*/}
-                                {/*<Text> Chụp ảnh </Text>*/}
+                            {/*<Icon name='ios-camera' style={{color: 'green'}}/>*/}
+                            {/*<Text> Chụp ảnh </Text>*/}
                             {/*</Button>*/}
                             {/*{this._renderImageCamera()}*/}
                             <View style={{
@@ -365,7 +377,7 @@ export default class Home extends Component {
                                 alignItems: 'center',
                                 paddingLeft: 10,
                                 paddingRight: 10
-                            }} >
+                            }}>
                                 <Item>
                                     <Input
                                         placeholder="Tìm kiếm bình..."
@@ -526,6 +538,47 @@ const styles = StyleSheet.create({
     },
     icon: {
         fontSize: 13
-    }
+    },
+    stage0: {
+        color: '#ffa505'
+    },
+    stage1: {
+        color: Config.colorThin
+    },
+    stage2: {
+        color: '#ff00ff'
+    },
+    stage3: {
+        color: '#c40521'
+    },
+    stage4: {
+        color: '#44bc37'
+    },
 });
+
+const _styles = {
+    font: {
+        fontFamily: 'Roboto',
+        color: Colors.navbarBackgroundColor
+    },
+    icon: {
+        fontSize: 13
+    },
+    stage0: {
+        color: '#ffa505'
+    },
+    stage1: {
+        color: Config.colorThin
+    },
+    stage2: {
+        color: '#ff00ff'
+    },
+    stage3: {
+        color: '#c40521'
+    },
+    stage4: {
+        color: '#44bc37'
+    },
+
+};
 

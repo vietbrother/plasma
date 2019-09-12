@@ -5,7 +5,7 @@ const Config = {
   statusBarColor: '#233240',
   vnd: '\u20AB',
   title: 'PLASMA',
-  // mainColor: '#c40521',
+  errorColor: '#c40521',
   mainColor: '#164687',
   // mainColor: '#235c8e',
   colorBold: '#365676',
@@ -46,6 +46,9 @@ const Config = {
   btnLogin: 'Đăng nhập',
   btnLogout: 'Đăng xuất',
   btnCamera: 'Chụp ảnh',
+  btnScan: 'Quét',
+  btnAddDevice: 'Nhập thiết bị',
+  btnCancel: 'Hủy',
 
   //error
   err_login : 'Tên đăng nhập hoặc mật khẩu không đúng'
