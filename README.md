@@ -61,6 +61,7 @@ gradlew assembleRelease
 ## Reference
 
 https://github.com/Michaelvilleneuve/react-native-document-scanner
+https://github.com/kevin3274/react-native-odoo
 
 ## Documentation
 

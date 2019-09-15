@@ -357,20 +357,21 @@ export default class Home extends Component {
                     <Container>
                         <Navbar left={left} right={right} title={Config.titleHome}/>
                         <Content>
-                            <TextDetect key={new Date().valueOf()}
-                                        capturePhotoPath={this.props.capturePhotoPath}
-                                        callback={this.search}
-                                        textDetect={this.props.textDetect}/>
+                            {/*<TextDetect key={new Date().valueOf()}*/}
+                                        {/*capturePhotoPath={this.props.capturePhotoPath}*/}
+                                        {/*callback={this.search}*/}
+                                        {/*textDetect={this.props.textDetect}/>*/}
 
 
-                            {/*<View style={styles.titleView}>*/}
-                            {/*<Text style={styles.title}> TRA CỨU THÔNG TIN BÌNH </Text>*/}
-                            {/*</View>*/}
-                            {/*<Button onPress={() => Actions.camera()} transparent>*/}
-                            {/*<Icon name='ios-camera' style={{color: 'green'}}/>*/}
-                            {/*<Text> Chụp ảnh </Text>*/}
-                            {/*</Button>*/}
-                            {/*{this._renderImageCamera()}*/}
+                            <Button onPress={() => Actions.cameraScanner()} transparent>
+                                <Icon name='ios-camera' style={{color: 'green'}}/>
+                                <Text> {Config.btnScan} </Text>
+                            </Button>
+                            <Button onPress={() => Actions.cameraScannerList()} transparent>
+                                <Icon name='ios-aperture' style={{color: 'green'}}/>
+                                <Text> {Config.btnScanMultiple} </Text>
+                            </Button>
+
                             <View style={{
                                 flex: 1,
                                 justifyContent: 'center',

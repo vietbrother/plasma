@@ -29,6 +29,16 @@ const Config = {
   goolge_vision_url : 'https://vision.googleapis.com/v1/images:annotate?key=',
   goolge_vision_key : 'AIzaSyBXBryO7MPVvhhneyQkKwW8CzfecAmpSSo', //thuclt
 
+  imageHeight: 640,
+  imageWidth: 800,
+
+  //api
+  odooUrl: '103.94.16.226',
+  odooPort: 8069,
+  odooDb: 'plasmadb',
+  odooUser: 'admin',
+  odooPass: '1@',
+
   //title
   titleCompany : 'Plasma',
   titleCompanySub : 'MED',
@@ -46,7 +56,8 @@ const Config = {
   btnLogin: 'Đăng nhập',
   btnLogout: 'Đăng xuất',
   btnCamera: 'Chụp ảnh',
-  btnScan: 'Quét',
+  btnScan: 'Quét lần lượt',
+  btnScanMultiple: 'Xuất hàng loạt',
   btnAddDevice: 'Nhập thiết bị',
   btnCancel: 'Hủy',
 

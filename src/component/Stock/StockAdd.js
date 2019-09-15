@@ -22,13 +22,12 @@ import {
     List, ListItem,
     Card, CardItem,
     DatePicker,
-    Content, Picker, Form, Body
+    Body, Input
 } from 'native-base';
 import {Actions} from 'react-native-router-flux';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 
 // Our custom files and classes import
-import Colors from '../Colors';
 import Config from '../../Config';
 import Text from '../../component/Text';
 import Navbar from '../../component/Navbar';

@@ -10,7 +10,7 @@ import {
     StatusBar,
     Dimensions,
     ActivityIndicator,
-    NativeModules
+    NativeModules, Alert
 } from "react-native";
 
 // import Key from Config.goolge_vision_key;

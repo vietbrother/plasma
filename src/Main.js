@@ -35,6 +35,12 @@ import Config from "./Config";
 
 import Camera from "./component/Camera/Camera";
 import Verify from "./component/Verify/Verify";
+import Odoo from "./Odoo";
+import CameraScanner from "./component/Camera/CameraScanner";
+import CameraScannerList from "./component/Camera/CameraScannerList";
+import StockAdd from "./component/Stock/StockAdd";
+import FlowItem from "./component/Flow/FlowItem";
+import StockOut from "./component/Stock/StockOut";
 
 export default class Main extends Component {
 
@@ -64,6 +70,14 @@ export default class Main extends Component {
       wpAPI: true, // Enable the WP REST API integration
       version: 'wc/v3', // WooCommerce WP REST API version
       queryStringAuth: true
+    });
+
+    global.odooAPI = new Odoo({
+      host: Config.odooUrl,
+      port: Config.odooPort,
+      database: Config.odooDb,
+      username: Config.odooUser,
+      password: Config.odooPass
     });
   }
 
@@ -97,6 +111,11 @@ export default class Main extends Component {
 
             <Scene key="camera" component={Camera} hideNavBar />
             <Scene key="verify" component={Verify} hideNavBar />
+            <Scene key="cameraScanner" component={CameraScanner} hideNavBar />
+            <Scene key="cameraScannerList" component={CameraScannerList} hideNavBar />
+            <Scene key="stockAdd" component={StockAdd} hideNavBar />
+            <Scene key="flowItem" component={FlowItem} hideNavBar />
+            <Scene key="stockOut" component={StockOut} hideNavBar />
           </Scene>
         </Router>
       </Root>
