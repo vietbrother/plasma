@@ -367,10 +367,10 @@ export default class Home extends Component {
                                 <Icon name='ios-camera' style={{color: 'green'}}/>
                                 <Text> {Config.btnScan} </Text>
                             </Button>
-                            <Button onPress={() => Actions.cameraScannerList()} transparent>
-                                <Icon name='ios-aperture' style={{color: 'green'}}/>
-                                <Text> {Config.btnScanMultiple} </Text>
-                            </Button>
+                            {/*<Button onPress={() => Actions.cameraScannerList()} transparent>*/}
+                                {/*<Icon name='ios-aperture' style={{color: 'green'}}/>*/}
+                                {/*<Text> {Config.btnScanMultiple} </Text>*/}
+                            {/*</Button>*/}
 
                             <View style={{
                                 flex: 1,

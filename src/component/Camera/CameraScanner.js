@@ -41,16 +41,17 @@ export default class CameraScanner extends Component {
 
     takePicture = async () => {
         try {
+            this.setState({isLoading: true});
             const data = await this.camera.takePictureAsync();
             console.log('Path to image: ' + data.uri);
             this._actionDetectLabel(data.uri);
         } catch (err) {
             console.log('err: ', err);
-            this.setState({isLoading: false, imgPath: data.uri});
+            this.setState({isLoading: false});
         }
     };
 
-    _actionDetectLabel(imagePath) {
+    _actionDetectLabel(imgPath) {
         try {
             //compress image
             //let imgPath = this.props.captureData.uri;
@@ -72,7 +73,7 @@ export default class CameraScanner extends Component {
                 });
         } catch (err) {
             console.log({err})
-            this.setState({isLoading: false, imgPath: data.uri});
+            this.setState({isLoading: false});
         }
     }
 
@@ -116,26 +117,38 @@ export default class CameraScanner extends Component {
                 //parser data
                 var textDetect = '';
                 try {
-                    var arr = JSON.parse(responseObj).responses;
+                    var arr = responseObj.responses;
                     for (var i = 0; i < arr.length; i++) {
                         var element = arr[i];
+                        console.log(element);
                         var tempLabel = element.fullTextAnnotation == null ? '' : element.fullTextAnnotation.text;
                         if (tempLabel.length > textDetect.length) {
                             textDetect = tempLabel;
+                        }
+                    }
+                    console.log(textDetect);
+                    if(textDetect != null && textDetect != ''){
+                        textDetect = textDetect.trim().replace('O' , '0');
+                        var res = textDetect.match(/[A-Z]+\d+/g);
+                        if(res != null){
+                            textDetect = res[0];
                         }
                     }
                 } catch (e) {
                     console.log(e);
                 }
                 console.log(textDetect);
-                this.setState({isLoading: false, imgPath: data.uri});
+                this.setState({isLoading: false});
+                this._getDeviceInfo(textDetect);
             } catch (err) {
                 console.log(err);
-                this.setState({isLoading: false, imgPath: data.uri});
+                this.setState({isLoading: false});
+                alert('Không thể phân tích mã thiết bị.');
             }
         } catch (err) {
-            console.log({err})
-            this.setState({isLoading: false, imgPath: data.uri});
+            console.log({err});
+            this.setState({isLoading: false});
+            alert('Không thể phân tích ảnh. Xin thử lại.');
         }
     }
 
@@ -212,17 +225,23 @@ export default class CameraScanner extends Component {
         console.log('__________________________');
         try {
             if (products == null || products.length < 1) {
-                alert('Không tìm thấy thông tin bình');
                 this.setState({isLoading: false});
+                alert('Không tìm thấy thông tin bình ' + this.state.textDetect);
                 return;
             }
-            let newStage = this._switchStage(products[0].stage);
-            if (newStage == '3') {//chuyen trang thai tu binh ton sang xuat cho khach
+            var newStage = this._switchStage(products[0].stage);
+            if (newStage == '4') {//chuyen trang thai tu binh ton sang xuat cho khach
+                this.setState({isLoading: false});
                 Alert.alert(
                     '',
                     'Xuất bình ' + this.state.textDetect + ' cho khách', // <- this part is optional, you can pass an empty string
                     [
-                        {text: 'Xuất cho khách', onPress: () => Actions.stockOut({sessionLoginKey: '123'})},
+                        {text: 'Xuất cho khách', onPress: () => Actions.stockOut({textDetect: this.state.textDetect, deviceInfo: products[0]})},
+                        {
+                            text: 'Hủy',
+                            onPress: () => console.log('Cancel Pressed'),
+                            style: 'cancel',
+                        },
                     ],
                     {cancelable: true},
                 );
@@ -339,19 +358,19 @@ export default class CameraScanner extends Component {
                 orderCode = dateStr + 'Thu_hoi';
                 orderType = Config.orderType1ThuHoi;
                 orderCustomerId = '1';// cong ty
-            } else if (status == '4') {
+            } else if (oldStage == '4') {
                 orderCode = dateStr + 'Thu_hoi';
                 orderType = Config.orderType1ThuHoi;
                 orderCustomerId = '1';// cong ty
-            } else if (status == '1') {
+            } else if (oldStage == '1') {
                 orderCode = dateStr + 'Xuat_tai_nap';
                 orderType = Config.orderType2XuatTaiNap;
                 orderCustomerId = '2';// nha may
-            } else if (status == '2') {
+            } else if (oldStage == '2') {
                 orderCode = dateStr + 'Nhap_kho';
                 orderType = Config.orderType3NhapKho;
                 orderCustomerId = '1';// cong ty
-            } else if (status == '3') {
+            } else if (oldStage == '3') {
                 orderCode = dateStr + 'Xuat_cho_khach';
                 orderType = Config.orderType4XuatChoKhach;
                 orderCustomerId = customerId;// cong ty
@@ -368,7 +387,6 @@ export default class CameraScanner extends Component {
                 }
             });
             var params = {
-                stage: newState,
                 p_equipments: [(6, 0, device_id)],
                 type: orderType,
                 p_customer: orderCustomerId
@@ -396,7 +414,7 @@ export default class CameraScanner extends Component {
         console.log('_______response__create_________________');
         console.log(response);
         try {
-            if (response) {
+            if (response != null) {
                 alert('Chuyển trạng thái mã bình ' + this.state.textDetect + ' từ '
                     + this._renderStatus(this.state.oldStage)
                     + ' sang ' + this._renderStatus(this.state.newStage));
@@ -433,15 +451,20 @@ export default class CameraScanner extends Component {
                                 {/*<Text>{Config.btnCamera}</Text>*/}
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => {
-                            // Actions.flowItem({textDetect: 'HN05059', capturePhotoPath: ''});
-                            // this.setState({renderModal: true, extractedText: 'HN05059'});
-                            this._getDeviceInfo('HN05059');
-                        }}>
+                        <TouchableOpacity onPress={() => Actions.pop()}>
                             <View style={styles.camBtn}>
-                                <Text>_Test_</Text>
+                                <Text>Dừng</Text>
                             </View>
                         </TouchableOpacity>
+                        {/*<TouchableOpacity onPress={() => {*/}
+                            {/*// Actions.flowItem({textDetect: 'HN05059', capturePhotoPath: ''});*/}
+                            {/*// this.setState({renderModal: true, extractedText: 'HN05059'});*/}
+                            {/*this._getDeviceInfo('HN05059');*/}
+                        {/*}}>*/}
+                            {/*<View style={styles.camBtn}>*/}
+                                {/*<Text>_Test_</Text>*/}
+                            {/*</View>*/}
+                        {/*</TouchableOpacity>*/}
                     </View>
                 </RNCamera>
                 {/*{this._renderModal()}*/}

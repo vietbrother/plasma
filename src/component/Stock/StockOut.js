@@ -50,7 +50,10 @@ export default class StockOut extends Component {
             warehouse: '',
             createDate: new Date(),
             customer_id: '',
-            customers: []
+            deviceInfo: {},
+            customers: [],
+            newStage: 0,
+            oldStage: '',
         };
     }
 
@@ -59,7 +62,9 @@ export default class StockOut extends Component {
         //+) Kho: WAREHOUSE = [(0, 'Không xác định'), (1, 'Kho Công ty'), (2, 'Kho Nhà máy'), (3, 'Kho Khách hàng')]
         this.setState({textDetect: this.props.textDetect, code: this.props.textDetect});
         this.setState({stateName: '3', warehouse: '1'});
-        this.setState({deviceId: this.props.deviceId});
+        this.setState({deviceInfo: this.props.deviceInfo});
+        this.setState({deviceId: this.state.deviceInfo.id});
+        console.log(this.props.deviceInfo);
 
         try {
             this.setState({isLoading: true});
@@ -72,7 +77,6 @@ export default class StockOut extends Component {
                 }
             });
 
-            let codeDevice = textDetect;
             var params = {
                 domain: [],
                 fields: ['id', 'name', 'address'],
@@ -102,6 +106,7 @@ export default class StockOut extends Component {
                 this.setState({isLoading: false});
                 return;
             }
+            this.setState({customer_id: products[0].id});
             this.setState({isLoading: false, customers: products});
         } catch (e) {
             console.log(e);
@@ -114,6 +119,7 @@ export default class StockOut extends Component {
         this.setState({
             customer_id: value
         });
+        console.log(this.state.customer_id);
     }
 
     renderListCustomer() {
@@ -121,9 +127,8 @@ export default class StockOut extends Component {
         var lstCustomer = this.state.customers;
         for (var i = 0; i < lstCustomer.length; i++) {
             cat.push(
-                <Picker.Item label={lstCustomer[i].name} value={lstCustomer[i].id}/>
+                <Picker.Item key={new Date()} label={lstCustomer[i].name} value={lstCustomer[i].id}/>
             );
-
         }
         return cat;
     }
@@ -167,60 +172,61 @@ export default class StockOut extends Component {
                         </CardItem>
                         <CardItem>
                             <Body>
-                            <Text style={{fontSize: 18, fontWeight: 'bold'}}>Mã nhận diện
-                                : {this.state.textDetect}</Text>
+                            <Text style={{fontSize: 16}}>Mã nhận diện
+                                : <Text style={{fontSize: 18, fontWeight: 'bold'}}>{this.state.textDetect}</Text>
+                            </Text>
                             </Body>
                         </CardItem>
+                        {/*<CardItem>*/}
+                        {/*<Body>*/}
+                        {/*<Text style={{fontSize: 18, fontWeight: 'bold'}}>Mã thiết bị : </Text>*/}
+                        {/*<Input*/}
+                        {/*placeholder={this.state.code}*/}
+                        {/*onChangeText={(text) => this.setState({code: text})}*/}
+                        {/*// onSubmitEditing={() => this.search(this.state.searchText)}*/}
+                        {/*// style={{marginTop: 9}}*/}
+                        {/*/>*/}
+                        {/*</Body>*/}
+                        {/*</CardItem>*/}
+                        {/*<CardItem>*/}
+                        {/*<Body>*/}
+                        {/*<Text style={{fontSize: 18, fontWeight: 'bold'}}>Trạng thái : </Text>*/}
+                        {/*<Picker*/}
+                        {/*note*/}
+                        {/*mode="dropdown"*/}
+                        {/*style={{width: 120}}*/}
+                        {/*selectedValue={this.state.stateName}*/}
+                        {/*// onValueChange={this.onValueChangeStateName.bind(this)}*/}
+                        {/*>*/}
+                        {/*<Picker.Item label="Bình tồn" value="3"/>*/}
+                        {/*</Picker>*/}
+                        {/*</Body>*/}
+                        {/*</CardItem>*/}
+                        {/*<CardItem>*/}
+                        {/*<Body>*/}
+                        {/*<Text style={{fontSize: 18, fontWeight: 'bold'}}>Kho : </Text>*/}
+                        {/*<Picker*/}
+                        {/*note*/}
+                        {/*mode="dropdown"*/}
+                        {/*style={{width: 120}}*/}
+                        {/*selectedValue={this.state.warehouse}*/}
+                        {/*// onValueChange={this.onValueChangeWarehouse.bind(this)}*/}
+                        {/*>*/}
+                        {/*/!*<Picker.Item label="Không xác định" value="0"/>*!/*/}
+                        {/*<Picker.Item label="Kho công ty" value="1"/>*/}
+                        {/*/!*<Picker.Item label="Kho nhà máy" value="2"/>*!/*/}
+                        {/*/!*<Picker.Item label="Kho khách hàng" value="3"/>*!/*/}
+                        {/*</Picker>*/}
+                        {/*</Body>*/}
+                        {/*</CardItem>*/}
                         <CardItem>
                             <Body>
-                            <Text style={{fontSize: 18, fontWeight: 'bold'}}>Mã thiết bị : </Text>
-                            <Input
-                                placeholder={this.state.code}
-                                onChangeText={(text) => this.setState({code: text})}
-                                // onSubmitEditing={() => this.search(this.state.searchText)}
-                                // style={{marginTop: 9}}
-                            />
-                            </Body>
-                        </CardItem>
-                        <CardItem>
-                            <Body>
-                            <Text style={{fontSize: 18, fontWeight: 'bold'}}>Trạng thái : </Text>
+                            <Text style={{fontSize: 16, fontWeight: 'bold'}}>Khách hàng : </Text>
                             <Picker
                                 note
                                 mode="dropdown"
-                                style={{width: 120}}
-                                selectedValue={this.state.stateName}
-                                // onValueChange={this.onValueChangeStateName.bind(this)}
-                            >
-                                <Picker.Item label="Bình tồn" value="3"/>
-                            </Picker>
-                            </Body>
-                        </CardItem>
-                        <CardItem>
-                            <Body>
-                            <Text style={{fontSize: 18, fontWeight: 'bold'}}>Kho : </Text>
-                            <Picker
-                                note
-                                mode="dropdown"
-                                style={{width: 120}}
-                                selectedValue={this.state.warehouse}
-                                // onValueChange={this.onValueChangeWarehouse.bind(this)}
-                            >
-                                {/*<Picker.Item label="Không xác định" value="0"/>*/}
-                                <Picker.Item label="Kho công ty" value="1"/>
-                                {/*<Picker.Item label="Kho nhà máy" value="2"/>*/}
-                                {/*<Picker.Item label="Kho khách hàng" value="3"/>*/}
-                            </Picker>
-                            </Body>
-                        </CardItem>
-                        <CardItem>
-                            <Body>
-                            <Text style={{fontSize: 18, fontWeight: 'bold'}}>Khách hàng : </Text>
-                            <Picker
-                                note
-                                mode="dropdown"
-                                style={{width: 120}}
-                                selectedValue={this.state.warehouse}
+                                style={{width: '100%'}}
+                                selectedValue={this.state.customer_id}
                                 onValueChange={this.onValueChangeCustomer.bind(this)}
                             >
                                 {this.renderListCustomer()}
@@ -239,14 +245,15 @@ export default class StockOut extends Component {
                             <Left>
                                 <Button transparent onPress={() => this.addDevice()}>
                                     <Icon active name="ios-checkmark-circle"/>
-                                    <Text>{Config.btnAddDevice}</Text>
+                                    <Text> {Config.btnDeviceOut} </Text>
                                 </Button>
                             </Left>
                             <Body>
                             </Body>
                             <Right>
                                 <Button onPress={() => Actions.pop()} transparent>
-                                    <Text><Icon name='ios-arrow-back'/> Hủy</Text>
+                                    <Icon name='ios-close-circle-outline'/>
+                                    <Text> Hủy</Text>
                                 </Button>
                             </Right>
                         </CardItem>
@@ -270,13 +277,15 @@ export default class StockOut extends Component {
 
         var customer_id = this.state.customer_id;
         if (customer_id == null || customer_id == '') {
-            this.setState({hasError: true, errorText: 'Cần nhập khách hàng'});
+            this.setState({hasError: true, errorText: 'Cần chọn khách hàng xuất'});
             return;
         }
         try {
             this.setState({isLoading: true});
-            let newStage = this._switchStage(this.state.stateName);
-            this._actionChangeStage(this.state.deviceId, newStage);
+            var newStage = this._switchStage(this.state.stateName);
+            console.log("this.state.this.state.deviceInfo.id-----------" + this.state.deviceInfo.id);
+            this.setState({newStage: newStage, oldStage: this.state.deviceInfo.stage});
+            this._actionChangeStage(this.state.deviceInfo.id, newStage);
         } catch (error) {
             this.setState({isLoading: false});
             console.error(error);
@@ -298,7 +307,8 @@ export default class StockOut extends Component {
 
             var codeDevice = this.state.textDetect;
             var params = {
-                stage: newState
+                stage: newState,
+                p_customer: this.state.customer_id
             }; //params
             global.odooAPI.update('p.equipment', id, params, this._getResUpdate.bind(this)); //update stage
         } catch (e) {
@@ -366,7 +376,7 @@ export default class StockOut extends Component {
         }
     }
 
-    _createOrder(customerId){
+    _createOrder(customerId) {
         try {
             var oldStage = this.state.oldStage;
             var dateTime = new Date().toISOString();
@@ -376,7 +386,7 @@ export default class StockOut extends Component {
             var orderCode = '';
             var orderCustomerId = '';
             var orderType = '';
-            var device_id = this.state.products[0].id;
+            var device_id = this.state.deviceInfo.id;
             //TYPE = [(0, 'Không xác định'), (1, 'Thu hồi'), (2, 'Xuất tái nạp'), (3, 'Nhập kho'), (4, 'Xuất cho khách')]
 
 
@@ -389,7 +399,7 @@ export default class StockOut extends Component {
                 }
             });
             var params = {
-                p_equipments: [(6, 0, this.state.deviceId)],
+                p_equipments: [(6, 0, this.state.deviceInfo.id)],
                 type: Config.orderType4XuatChoKhach,
                 p_customer: orderCustomerId
             }; //params
@@ -408,6 +418,7 @@ export default class StockOut extends Component {
             this.setState({isLoading: false});
         }
     }
+
     _getResCreateOrder(err, response) {
         if (err) {
             alert(err);
@@ -416,13 +427,15 @@ export default class StockOut extends Component {
         console.log('_______response__create_________________');
         console.log(response);
         try {
+            this.setState({isLoading: false});
             if (response) {
                 alert('Chuyển trạng thái mã bình ' + this.state.textDetect + ' từ '
                     + this._renderStatus(this.state.oldStage)
                     + ' sang ' + this._renderStatus(this.state.newStage));
+                Actions.pop();
+            } else {
+                alert('Chuyển trạng thái mã bình ' + this.state.textDetect + ' thất bại ');
             }
-            this.setState({isLoading: false});
-            Actions.pop();
         } catch (e) {
             console.log(e);
             this.setState({isLoading: false});

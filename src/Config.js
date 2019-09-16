@@ -56,13 +56,14 @@ const Config = {
   btnLogin: 'Đăng nhập',
   btnLogout: 'Đăng xuất',
   btnCamera: 'Chụp ảnh',
-  btnScan: 'Quét lần lượt',
+  btnScan: 'Quét thiết bị',
   btnScanMultiple: 'Xuất hàng loạt',
   btnAddDevice: 'Nhập thiết bị',
+  btnDeviceOut: 'Xuất thiết bị',
   btnCancel: 'Hủy',
 
   //error
-  err_login : 'Tên đăng nhập hoặc mật khẩu không đúng'
+  err_login : 'Tên đăng nhập hoặc mật khẩu không đúng',
 
   //stage
   stage0KhongXacDinh: '0',
