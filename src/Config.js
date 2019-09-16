@@ -64,6 +64,27 @@ const Config = {
   //error
   err_login : 'Tên đăng nhập hoặc mật khẩu không đúng'
 
+  //stage
+  stage0KhongXacDinh: '0',
+  stage1Vo: '1',
+  stage2TaiNap: '2',
+  stage3BinhTon: '3',
+  stage4BinhDangSuDung: '4',
+
+
+  //warehouse - kho
+  warehouseKhongXacDinh: '0',
+  warehouseKhoCongTy: '1',
+  warehouseKhoNhaMay: '2',
+  warehouseKhoKhachHang: '3',
+
+  //order
+  orderType0KhongXacDinh: '0',
+  orderType1ThuHoi: '1',
+  orderType2XuatTaiNap: '2',
+  orderType3NhapKho: '3',
+  orderType4XuatChoKhach: '4',
+
 };
 
 

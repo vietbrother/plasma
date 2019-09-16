@@ -45,6 +45,7 @@ export default class StockOut extends Component {
 
             textDetect: '',
             code: '',
+            deviceId: '',
             stateName: '',
             warehouse: '',
             createDate: new Date(),
@@ -54,11 +55,14 @@ export default class StockOut extends Component {
     }
 
     componentWillMount() {
+        //+) Trạng thái: STAGE = [(0, 'Không xác định'), (1, 'Vỏ'), (2, 'Tái nạp'), (3, 'Bình tồn'), (4, 'Bình đang sử dụng')]
+        //+) Kho: WAREHOUSE = [(0, 'Không xác định'), (1, 'Kho Công ty'), (2, 'Kho Nhà máy'), (3, 'Kho Khách hàng')]
         this.setState({textDetect: this.props.textDetect, code: this.props.textDetect});
-        this.setState({stateName: this.props.stateName, warehouse: this.props.warehouse});
+        this.setState({stateName: '3', warehouse: '1'});
+        this.setState({deviceId: this.props.deviceId});
 
         try {
-            this.setState({isLoading: true, textDetect: textDetect});
+            this.setState({isLoading: true});
             // Connect to Odoo
             global.odooAPI.connect(function (err) {
                 if (err) {
@@ -82,6 +86,7 @@ export default class StockOut extends Component {
             this.setState({isLoading: false});
         }
     }
+
     _getResSearch(err, products) {
         if (err) {
             alert(err);
@@ -105,23 +110,6 @@ export default class StockOut extends Component {
     }
 
 
-
-    onValueChangeStateName(value: string) {
-        this.setState({
-            stateName: value
-        });
-    }
-
-    onValueChangeWarehouse(value: string) {
-        this.setState({
-            warehouse: value
-        });
-    }
-
-    setDate(newDate) {
-        this.setState({createDate: newDate});
-    }
-
     onValueChangeCustomer(value: string) {
         this.setState({
             customer_id: value
@@ -133,7 +121,7 @@ export default class StockOut extends Component {
         var lstCustomer = this.state.customers;
         for (var i = 0; i < lstCustomer.length; i++) {
             cat.push(
-                <Picker.Item label={lstCustomer[i].name} value={lstCustomer[i].id} />
+                <Picker.Item label={lstCustomer[i].name} value={lstCustomer[i].id}/>
             );
 
         }
@@ -168,14 +156,14 @@ export default class StockOut extends Component {
                     //Text style of the Spinner Text
                     textStyle={styles.spinnerTextStyle}
                 />
-                <Navbar left={left} right={right} title="Nhập thiết bị"/>
+                <Navbar left={left} right={right} title="Xuất bình"/>
                 <Content contentContainerStyle={{
                     paddingHorizontal: 10,
                     backgroundColor: '#f3f9ff'
                 }}>
                     <Card transparent>
                         <CardItem header bordered>
-                            <Text style={{fontSize: 18, fontWeight: 'bold'}}>Nhập thiết bị</Text>
+                            <Text style={{fontSize: 18, fontWeight: 'bold'}}>Xuất thiết bị cho khách</Text>
                         </CardItem>
                         <CardItem>
                             <Body>
@@ -202,13 +190,9 @@ export default class StockOut extends Component {
                                 mode="dropdown"
                                 style={{width: 120}}
                                 selectedValue={this.state.stateName}
-                                onValueChange={this.onValueChangeStateName.bind(this)}
+                                // onValueChange={this.onValueChangeStateName.bind(this)}
                             >
-                                <Picker.Item label="Không xác định" value="0"/>
-                                <Picker.Item label="Vỏ" value="1"/>
-                                <Picker.Item label="Tái nạp" value="2"/>
                                 <Picker.Item label="Bình tồn" value="3"/>
-                                <Picker.Item label="Bình đang sử dụng" value="4"/>
                             </Picker>
                             </Body>
                         </CardItem>
@@ -220,12 +204,12 @@ export default class StockOut extends Component {
                                 mode="dropdown"
                                 style={{width: 120}}
                                 selectedValue={this.state.warehouse}
-                                onValueChange={this.onValueChangeWarehouse.bind(this)}
+                                // onValueChange={this.onValueChangeWarehouse.bind(this)}
                             >
-                                <Picker.Item label="Không xác định" value="0"/>
+                                {/*<Picker.Item label="Không xác định" value="0"/>*/}
                                 <Picker.Item label="Kho công ty" value="1"/>
-                                <Picker.Item label="Kho nhà máy" value="2"/>
-                                <Picker.Item label="Kho khách hàng" value="3"/>
+                                {/*<Picker.Item label="Kho nhà máy" value="2"/>*/}
+                                {/*<Picker.Item label="Kho khách hàng" value="3"/>*/}
                             </Picker>
                             </Body>
                         </CardItem>
@@ -245,27 +229,6 @@ export default class StockOut extends Component {
                         </CardItem>
 
 
-                        <CardItem>
-                            <Body>
-                            <Text style={{}}>Ngày nhập : </Text>
-                            <DatePicker
-                                defaultDate={this.state.createDate}
-                                // minimumDate={new Date(2018, 1, 1)}
-                                // maximumDate={new Date(2018, 12, 31)}
-                                locale={"en"}
-                                timeZoneOffsetInMinutes={undefined}
-                                modalTransparent={false}
-                                animationType={"fade"}
-                                androidMode={"default"}
-                                placeHolderText="Chọn ngày"
-                                textStyle={{color: "green"}}
-                                placeHolderTextStyle={{color: "#d3d3d3"}}
-                                onDateChange={this.setDate}
-                                disabled={false}
-                            />
-                            </Body>
-                        </CardItem>
-
                         {this.state.hasError ? <Text style={{
                             color: Config.errorColor,
                             textAlign: 'center',
@@ -274,15 +237,12 @@ export default class StockOut extends Component {
 
                         <CardItem>
                             <Left>
-                                <Button bordered onPress={() => this.addDevice()}>
-                                    <Text style={{color: '#fdfdfd'}}> {Config.btnAddDevice} </Text>
+                                <Button transparent onPress={() => this.addDevice()}>
+                                    <Icon active name="ios-checkmark-circle"/>
+                                    <Text>{Config.btnAddDevice}</Text>
                                 </Button>
                             </Left>
                             <Body>
-                            {/*<Button transparent>*/}
-                                {/*<Icon active name="chatbubbles"/>*/}
-                                {/*<Text>4 Comments</Text>*/}
-                            {/*</Button>*/}
                             </Body>
                             <Right>
                                 <Button onPress={() => Actions.pop()} transparent>
@@ -292,9 +252,9 @@ export default class StockOut extends Component {
                         </CardItem>
 
                         {/*<View style={{alignItems: 'center', width: '100%'}}>*/}
-                            {/*<Button bordered onPress={() => this.login()}>*/}
-                                {/*<Text style={{color: '#fdfdfd'}}> {Config.btnAddDevice} </Text>*/}
-                            {/*</Button>*/}
+                        {/*<Button bordered onPress={() => this.login()}>*/}
+                        {/*<Text style={{color: '#fdfdfd'}}> {Config.btnAddDevice} </Text>*/}
+                        {/*</Button>*/}
 
                         {/*</View>*/}
                     </Card>
@@ -308,34 +268,166 @@ export default class StockOut extends Component {
 
     async addDevice() {
 
-        var stateName = this.state.stateName;
-        var warehouse = this.state.warehouse;
-        if (stateName == null || stateName == '') {
-            this.setState({hasError: true, errorText: 'Cần nhập trạng thái'});
-            return;
-        }
-        if (warehouse == null || warehouse == '') {
-            this.setState({hasError: true, errorText: 'Cần nhập kho'});
+        var customer_id = this.state.customer_id;
+        if (customer_id == null || customer_id == '') {
+            this.setState({hasError: true, errorText: 'Cần nhập khách hàng'});
             return;
         }
         try {
             this.setState({isLoading: true});
-
-            console.log(statusLogin);
+            let newStage = this._switchStage(this.state.stateName);
+            this._actionChangeStage(this.state.deviceId, newStage);
         } catch (error) {
             this.setState({isLoading: false});
             console.error(error);
         }
-        //
-        // if (statusLogin == 'ok') {
-        //     Actions.home({sessionLoginKey: sessionLoginKey});
-        // } else {
-        //     this.setState({hasError: true, errorText: 'Tên đăng nhập hoặc mật khẩu không đúng'});
-        // }
-
-        Actions.pop();
     }
 
+    _actionChangeStage(id, newState) {
+        try {
+
+            console.log('--------------id ' + id + "---newState  " + newState);
+            // Connect to Odoo
+            global.odooAPI.connect(function (err) {
+                if (err) {
+                    console.log('--------------connect error');
+                    this.setState({isLoading: false});
+                    return console.log(err);
+                }
+            });
+
+            var codeDevice = this.state.textDetect;
+            var params = {
+                stage: newState
+            }; //params
+            global.odooAPI.update('p.equipment', id, params, this._getResUpdate.bind(this)); //update stage
+        } catch (e) {
+            console.log(e);
+            alert('Chuyển trạng thái bình ' + this.state.textDetect + ' thất bại! ');
+            this.setState({isLoading: false});
+        }
+    }
+
+    _getResUpdate(err, response) {
+        if (err) {
+            alert(err);
+            return console.log(err);
+        }
+        console.log('_______response___________________');
+        console.log(response);
+        try {
+            this.setState({responseUpdate: response});
+            /*
+            if (response) {
+                alert('Chuyển trạng thái mã bình ' + this.state.textDetect + ' từ '
+                    + this._renderStatus(this.state.oldStage)
+                + ' sang ' + this._renderStatus(this.state.newStage));
+            }
+            this.setState({isLoading: false});
+            */
+            this._createOrder('0');
+        } catch (e) {
+            console.log(e);
+            alert('Chuyển trạng thái mã bình ' + this.state.textDetect + ' thất bại! ');
+            this.setState({isLoading: false});
+        }
+    }
+
+
+    _switchStage(status) {
+        if (status == '0') {
+            return '1';
+        } else if (status == '4') {
+            return '1';
+        } else if (status == '1') {
+            return '2';
+        } else if (status == '2') {
+            return '3';
+        } else if (status == '3') {
+            return '4';
+        } else {
+            return '0';
+        }
+    }
+
+    _renderStatus(status) {
+        if (status == '0') {
+            return 'Không xác định';
+        } else if (status == '4') {
+            return 'Bình đang sử dụng';
+        } else if (status == '1') {
+            return 'Vỏ';
+        } else if (status == '2') {
+            return 'Tái nạp';
+        } else if (status == '3') {
+            return 'Bình tồn';
+        } else {
+            return {status};
+        }
+    }
+
+    _createOrder(customerId){
+        try {
+            var oldStage = this.state.oldStage;
+            var dateTime = new Date().toISOString();
+            var dateStr = dateTime.split('T')[0].replace(/-/g, '').replace(/:/g, '')
+            var dateTimeStr = dateTime.split('.')[0].replace('T', '_').replace(/-/g, '').replace(/:/g, '');
+
+            var orderCode = '';
+            var orderCustomerId = '';
+            var orderType = '';
+            var device_id = this.state.products[0].id;
+            //TYPE = [(0, 'Không xác định'), (1, 'Thu hồi'), (2, 'Xuất tái nạp'), (3, 'Nhập kho'), (4, 'Xuất cho khách')]
+
+
+            // Connect to Odoo
+            global.odooAPI.connect(function (err) {
+                if (err) {
+                    console.log('--------------connect error');
+                    this.setState({isLoading: false});
+                    return console.log(err);
+                }
+            });
+            var params = {
+                p_equipments: [(6, 0, this.state.deviceId)],
+                type: Config.orderType4XuatChoKhach,
+                p_customer: orderCustomerId
+            }; //params
+            global.odooAPI.create('p.order', params, this._getResCreateOrder.bind(this)); //update stage
+
+        } catch (e) {
+            console.log(e);
+            Alert.alert(
+                '',
+                'Chuyển trạng thái thành công! Lỗi khi tạo đơn hàng!', // <- this part is optional, you can pass an empty string
+                [
+                    {text: 'Đóng', onPress: () => console.log('OK Pressed')},
+                ],
+                {cancelable: false},
+            );
+            this.setState({isLoading: false});
+        }
+    }
+    _getResCreateOrder(err, response) {
+        if (err) {
+            alert(err);
+            return console.log(err);
+        }
+        console.log('_______response__create_________________');
+        console.log(response);
+        try {
+            if (response) {
+                alert('Chuyển trạng thái mã bình ' + this.state.textDetect + ' từ '
+                    + this._renderStatus(this.state.oldStage)
+                    + ' sang ' + this._renderStatus(this.state.newStage));
+            }
+            this.setState({isLoading: false});
+            Actions.pop();
+        } catch (e) {
+            console.log(e);
+            this.setState({isLoading: false});
+        }
+    }
 
 }
 

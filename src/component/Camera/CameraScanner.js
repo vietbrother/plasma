@@ -80,7 +80,6 @@ export default class CameraScanner extends Component {
 
         //from camera /Users/jbecks/Library/Developer/CoreSimulator/Devices/D9FE59D4-5706-4B0B-98D7-9D7B9519D18A/data/Containers/Data/Application/CCDC4308-F7FA-443A-B9B1-0DEBBDF93C01/Documents/24D6D353-B8FA-414F-ADEC-92B672FD056D.jpg
         //from cameraRoll assets-library://asset/asset.JPG?id=729F50DA-9627-42A9-802D-69B22C9EECD2&ext=JPG
-        // const imgPath = this.props.navigation.state.params.path;
         //const imgPath = this.props.captureData.uri;
         console.log(imgPath);
         try {
@@ -197,6 +196,7 @@ export default class CameraScanner extends Component {
             global.odooAPI.search_read('p.equipment', params, this._getResSearch.bind(this)); //search_read
         } catch (e) {
             console.log(e);
+            alert('Lấy thông tin bình ' + this.state.textDetect + ' thất bại! ');
             this.setState({isLoading: false});
         }
     }
@@ -217,10 +217,22 @@ export default class CameraScanner extends Component {
                 return;
             }
             let newStage = this._switchStage(products[0].stage);
-            this.setState({newStage: newStage, oldStage: products[0].stage});
+            if (newStage == '3') {//chuyen trang thai tu binh ton sang xuat cho khach
+                Alert.alert(
+                    '',
+                    'Xuất bình ' + this.state.textDetect + ' cho khách', // <- this part is optional, you can pass an empty string
+                    [
+                        {text: 'Xuất cho khách', onPress: () => Actions.stockOut({sessionLoginKey: '123'})},
+                    ],
+                    {cancelable: true},
+                );
+                return;
+            }
+            this.setState({newStage: newStage, oldStage: products[0].stage, products: products});
             this._actionChangeStage(products[0].id, newStage);
         } catch (e) {
             console.log(e);
+            alert('Lấy thông tin bình ' + this.state.textDetect + ' thất bại! ');
             this.setState({isLoading: false, products: []});
         }
     }
@@ -245,6 +257,7 @@ export default class CameraScanner extends Component {
             global.odooAPI.update('p.equipment', id, params, this._getResUpdate.bind(this)); //update stage
         } catch (e) {
             console.log(e);
+            alert('Chuyển trạng thái bình ' + this.state.textDetect + ' thất bại! ');
             this.setState({isLoading: false});
         }
     }
@@ -258,14 +271,18 @@ export default class CameraScanner extends Component {
         console.log(response);
         try {
             this.setState({responseUpdate: response});
+            /*
             if (response) {
                 alert('Chuyển trạng thái mã bình ' + this.state.textDetect + ' từ '
                     + this._renderStatus(this.state.oldStage)
                 + ' sang ' + this._renderStatus(this.state.newStage));
             }
             this.setState({isLoading: false});
+            */
+            this._createOrder('0');
         } catch (e) {
             console.log(e);
+            alert('Chuyển trạng thái mã bình ' + this.state.textDetect + ' thất bại! ');
             this.setState({isLoading: false});
         }
     }
@@ -300,6 +317,94 @@ export default class CameraScanner extends Component {
             return 'Bình tồn';
         } else {
             return {status};
+        }
+    }
+
+    /**
+     * Create order
+     * */
+    _createOrder(customerId){
+        try {
+            var oldStage = this.state.oldStage;
+            var dateTime = new Date().toISOString();
+            var dateStr = dateTime.split('T')[0].replace(/-/g, '').replace(/:/g, '')
+            var dateTimeStr = dateTime.split('.')[0].replace('T', '_').replace(/-/g, '').replace(/:/g, '');
+
+            var orderCode = '';
+            var orderCustomerId = '';
+            var orderType = '';
+            var device_id = this.state.products[0].id;
+            //TYPE = [(0, 'Không xác định'), (1, 'Thu hồi'), (2, 'Xuất tái nạp'), (3, 'Nhập kho'), (4, 'Xuất cho khách')]
+            if (oldStage == '0') {
+                orderCode = dateStr + 'Thu_hoi';
+                orderType = Config.orderType1ThuHoi;
+                orderCustomerId = '1';// cong ty
+            } else if (status == '4') {
+                orderCode = dateStr + 'Thu_hoi';
+                orderType = Config.orderType1ThuHoi;
+                orderCustomerId = '1';// cong ty
+            } else if (status == '1') {
+                orderCode = dateStr + 'Xuat_tai_nap';
+                orderType = Config.orderType2XuatTaiNap;
+                orderCustomerId = '2';// nha may
+            } else if (status == '2') {
+                orderCode = dateStr + 'Nhap_kho';
+                orderType = Config.orderType3NhapKho;
+                orderCustomerId = '1';// cong ty
+            } else if (status == '3') {
+                orderCode = dateStr + 'Xuat_cho_khach';
+                orderType = Config.orderType4XuatChoKhach;
+                orderCustomerId = customerId;// cong ty
+            } else {
+                return;
+            }
+
+            // Connect to Odoo
+            global.odooAPI.connect(function (err) {
+                if (err) {
+                    console.log('--------------connect error');
+                    this.setState({isLoading: false});
+                    return console.log(err);
+                }
+            });
+            var params = {
+                stage: newState,
+                p_equipments: [(6, 0, device_id)],
+                type: orderType,
+                p_customer: orderCustomerId
+            }; //params
+            global.odooAPI.create('p.order', params, this._getResCreateOrder.bind(this)); //update stage
+
+        } catch (e) {
+            console.log(e);
+            Alert.alert(
+                '',
+                'Chuyển trạng thái thành công! Lỗi khi tạo đơn hàng!', // <- this part is optional, you can pass an empty string
+                [
+                    {text: 'Đóng', onPress: () => console.log('OK Pressed')},
+                ],
+                {cancelable: false},
+            );
+            this.setState({isLoading: false});
+        }
+    }
+    _getResCreateOrder(err, response) {
+        if (err) {
+            alert(err);
+            return console.log(err);
+        }
+        console.log('_______response__create_________________');
+        console.log(response);
+        try {
+            if (response) {
+                alert('Chuyển trạng thái mã bình ' + this.state.textDetect + ' từ '
+                    + this._renderStatus(this.state.oldStage)
+                    + ' sang ' + this._renderStatus(this.state.newStage));
+            }
+            this.setState({isLoading: false});
+        } catch (e) {
+            console.log(e);
+            this.setState({isLoading: false});
         }
     }
 
