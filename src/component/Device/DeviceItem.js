@@ -34,16 +34,11 @@ import {
 import {Actions} from 'react-native-router-flux';
 
 
-import RNTesseractOcr from 'react-native-tesseract-ocr';
 // Our custom files and classes import
-import Text from '../component/Text';
-import Navbar from '../component/Navbar';
-import Colors from "../Colors";
-import Config from "../Config";
-import Product from '../component/Product';
-import Camera from '../component/Camera/Camera';
-
-import Odoo from '../Odoo';
+import Text from '../../component/Text';
+import Navbar from '../../component/Navbar';
+import Colors from "../../Colors";
+import Config from "../../Config";
 import HTML from 'react-native-render-html';
 
 export default class DeviceItem extends Component {
@@ -60,112 +55,117 @@ export default class DeviceItem extends Component {
 
             extractedText: "",
             searchText: '',
+            device: {}
         };
+    }
+
+    componentDidMount(): void {
+        this.setState({device: this.props.device});
+        console.log(this.props.device);
     }
 
     render() {
         return (
-            <View>
+            <View style={{
+                flex: 1,
+                width: '100%', color: Config.mainColor, fontSize: 16,
+                borderBottomColor: Colors.navbarBackgroundColor, borderBottomWidth: 1,
+                paddingLeft: 10,
+                paddingTop: 20, paddingBottom: 20
+            }}>
                 {this._renderMainContent()}
             </View>
         );
     }
 
-    componentDidMount() {
-        let textDect = this.props.textDetect == null ? '' : this.props.textDetect.trim();
-        this.setState({extractedText: textDect, products: this.props.products});
-    }
-
 
     _renderMainContent() {
-        let items = [];
-        for (var i = 0; i < this.state.products.length; i++) {
-            var item = this.state.products[i];
-            var key = new Date().valueOf();
-            items.push(
-                <View style={{
-                    width: '100%', color: Config.mainColor, fontSize: 16,
-                    borderBottomColor: Colors.navbarBackgroundColor, borderBottomWidth: 1,
-                    paddingLeft: 10,
-                    paddingTop: 20, paddingBottom: 20
-                }}>
-                    <Grid>
-                        <Col size={3}>
-                            <Text style={{fontWeight: 'bold', fontSize: 16}}><Icon name="ios-pricetag"
-                                                                                   style={styles.icon}/> Mã bình
-                                :</Text>
-                        </Col>
-                        <Col size={2}>
-                            <HTML
-                                html={this._renderCodeProducts(item.code)}
-                                classesStyles={{
-                                    fontFamily: 'Roboto',
-                                    color: 'red',
-                                    fontSize: 18, fontWeight: 'bold'
-                                }}
-                            />
-                        </Col>
-                    </Grid>
-                    <Grid>
-                        <Col size={2}>
-                            <Text style={{fontWeight: 'bold'}}><Icon name="ios-time" style={styles.icon}/> Trạng thái :</Text>
-                        </Col>
-                        <Col size={3}>
-                            <Text style={{textAlign: 'center'}}>
-                                {this._renderStatus(item.stage)}
-                            </Text>
-                        </Col>
-                    </Grid>
-                    <Grid>
-                        <Col size={2}>
-                            <Text style={{fontWeight: 'bold'}}><Icon name="md-locate" style={styles.icon}/> Kho :</Text>
-                        </Col>
-                        <Col size={3}>
-                            <Text style={{textAlign: 'center'}}>
-                                {this._renderWarehouse(item.warehouse)}
-                            </Text>
-                        </Col>
-                    </Grid>
+        return (
+            <TouchableOpacity
+                onPress={() => Actions.deviceDetail({device: this.props.device})}
+                activeOpacity={0.9}
+            >
+                <Grid>
+                    <Col size={2}>
+                        <Text style={{fontWeight: 'bold', fontSize: 16}}><Icon name="ios-pricetag"
+                                                                               style={styles.icon}/> Mã bình
+                            :</Text>
+                    </Col>
+                    <Col size={3}>
+                        <Text style={{textAlign: 'center'}}>
+                            {this._renderStatus(this.props.device.code)}
+                        </Text>
+                    </Col>
+                </Grid>
+                <Grid>
+                    <Col size={2}>
+                        <Text style={{fontWeight: 'bold'}}><Icon name="ios-time" style={styles.icon}/> Trạng thái
+                            :</Text>
+                    </Col>
+                    <Col size={3}>
+                        <Text style={{textAlign: 'center'}}>
+                            {this._renderStatus(this.props.device.stage)}
+                        </Text>
+                    </Col>
+                </Grid>
+                <Grid>
+                    <Col size={2}>
+                        <Text style={{fontWeight: 'bold'}}><Icon name="md-locate" style={styles.icon}/> Kho :</Text>
+                    </Col>
+                    <Col size={3}>
+                        <Text style={{textAlign: 'center'}}>
+                            {this._renderWarehouse(this.props.device.warehouse)}
+                        </Text>
+                    </Col>
+                </Grid>
 
-                    <Grid>
-                        <Col size={2}>
-                            <Text style={{fontWeight: 'bold'}}><Icon name="ios-contact" style={styles.icon}/> Khách hàng
-                                :</Text>
-                        </Col>
-                        <Col size={3}>
-                            <Text
-                                style={{textAlign: 'center'}}>{item.p_customer == null || item.p_customer == false || item.p_customer.length < 2 ? 'Chưa có' : item.p_customer[1]}
-                            </Text>
-                        </Col>
+                <Grid>
+                    <Col size={2}>
+                        <Text style={{fontWeight: 'bold'}}><Icon name="ios-contact" style={styles.icon}/> Khách hàng
+                            :</Text>
+                    </Col>
+                    <Col size={3}>
+                        <Text style={{textAlign: 'center'}}>
+                            {this.props.device.p_customer == null
+                            || this.props.device.p_customer == false
+                            || this.props.device.p_customer.length < 2 ? 'Chưa có' : this.props.device.p_customer[1]}
+                        </Text>
+                    </Col>
 
-                    </Grid>
-                </View>
-            );
-        }
-        return items;
+                </Grid>
+            </TouchableOpacity>
+        );
+
 
     }
 
-    _renderCodeProducts(code) {
-        let temp = code.replace(new RegExp(this.state.searchText, "gi"), (match) => `<b style="color: dodgerblue">${match}</b>`);
-        return temp;
-    }
 
     _renderStatus(status) {
         if (status == '0') {
-            return (<Text style={{color: '#ffa505'}}> Không xác định <Icon name="ios-help-circle-outline"
-                                                                           style={styles.icon}/></Text>);
+            return (<Text style={{color: '#ffa505'}}>
+                <Icon name="ios-help-circle-outline"
+                      style={{fontSize: 13, color: '#ffa505'}}/>
+                Không xác định</Text>);
         } else if (status == '4') {
-            return (<Text style={{color: '#44bc37'}}> Bình đang sử dụng <Icon name="ios-checkmark-circle"
-                                                                              style={styles.icon}/> </Text>);
+            return (<Text style={{color: '#44bc37'}}>
+                <Icon name="ios-checkmark-circle"
+                      style={{fontSize: 13, color: '#44bc37'}}/>
+                Bình đang sử dụng </Text>);
         } else if (status == '1') {
-            return (<Text style={{color: Config.colorThin}}> Vỏ <Icon name="ios-battery-dead" style={styles.icon}/>
-            </Text>);
+            return (<Text style={{color: Config.colorThin}}>
+                <Icon name="ios-battery-dead"
+                      style={{fontSize: 13, color: Config.colorThin}}/>
+                Vỏ </Text>);
         } else if (status == '2') {
-            return (<Text style={{color: '#ff00ff'}}> Tái nạp <Icon name="ios-refresh-circle" style={styles.icon}/>
-            </Text>);
+            return (<Text style={{color: '#ff00ff'}}>
+                <Icon name="ios-refresh-circle"
+                      style={{fontSize: 13, color: '#ff00ff'}}/>
+                Tái nạp </Text>);
         } else if (status == '3') {
-            return (<Text style={{color: '#c40521'}}> Bình tồn <Icon name="ios-warning" style={styles.icon}/></Text>);
+            return (<Text style={{color: '#c40521'}}>
+                <Icon name="ios-warning"
+                      style={{fontSize: 13, color: '#c40521'}}/>
+                Bình tồn </Text>);
         } else {
             return (<Text style={{color: '#26619c'}}>{status}</Text>);
         }
@@ -184,8 +184,6 @@ export default class DeviceItem extends Component {
             return (<Text style={{color: Config.mainColor}}>{warehouse}</Text>);
         }
     }
-
-
 }
 
 const styles = StyleSheet.create({

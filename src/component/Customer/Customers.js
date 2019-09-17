@@ -35,22 +35,13 @@ import {
 import {Actions} from 'react-native-router-flux';
 
 
-import RNTesseractOcr from 'react-native-tesseract-ocr';
-// Our custom files and classes import
-import Text from '../component/Text';
-import Navbar from '../component/Navbar';
-import SideMenu from '../component/SideMenu';
-import SideMenuDrawer from '../component/SideMenuDrawer';
-import CategoryBlock from '../component/CategoryBlock';
-import CategoryRootBlock from '../component/CategoryRootBlock';
-import Colors from "../Colors";
-import Config from "../Config";
-import Product from '../component/Product';
-import Camera from '../component/Camera/Camera';
+import Text from '../../component/Text';
+import Navbar from '../../component/Navbar';
+import SideMenu from '../../component/SideMenu';
+import SideMenuDrawer from '../../component/SideMenuDrawer';
+import Colors from "../../Colors";
+import Config from "../../Config";
 
-import Odoo from '../Odoo';
-import HTML from 'react-native-render-html';
-import CustomerDetail from "./CustomerDetail";
 
 export default class Customers extends Component {
 
@@ -73,6 +64,10 @@ export default class Customers extends Component {
     componentDidMount() {
         // this.callApi();
         //this.getSessionKey();
+    }
+
+    componentWillMount(): void {
+        this.search();
     }
 
 
@@ -100,7 +95,7 @@ export default class Customers extends Component {
             items.push(
                 <View style={{
                     width: '100%', color: Config.mainColor, fontSize: 16,
-                    borderBottomColor: Colors.navbarBackgroundColor, borderBottomWidth: 1,
+                    borderBottomColor: '#7c8fb7', borderBottomWidth: 0.5,
                     paddingLeft: 10,
                     paddingTop: 20, paddingBottom: 20
                 }}>
@@ -109,7 +104,8 @@ export default class Customers extends Component {
                         activeOpacity={0.9}
                     >
                         <Text style={{fontSize: 16, fontWeight: 'bold'}}>{item.name}</Text>
-                        <Text style={{textAlign: 'center'}}>
+                        <Text style={{textAlign: 'left'}}>
+                            <Icon active name='ios-pin' style={{fontSize: 14, color: "#687373", paddingRight: 5}} />
                             {item.address}
                         </Text>
                     </TouchableOpacity>
@@ -120,9 +116,9 @@ export default class Customers extends Component {
 
     }
 
-    search(customerName) {
-        console.log('home-----------------search');
-        this.setState({isSearching: true, searchText: customerName});
+    search() {
+        console.log('customer-----------------search');
+        this.setState({isSearching: true});
         // this._isLoading(true, codeDevice).bind;
         let items = [];
         try {
@@ -137,10 +133,9 @@ export default class Customers extends Component {
                 }
             });
 
-            this.setState({searchText: customerName});
             var params = {
                 // ids: [1, 2, 3, 4, 5],
-                domain: [['name', 'like', customerName]],
+                domain: [['name', 'like', this.state.searchText]],
                 order: 'id',
                 // limit: 15,
                 offset: 0,
@@ -181,48 +176,46 @@ export default class Customers extends Component {
                 {/*</Button>*/}
             </Right>
         );
-        const {categories, loading} = this.state;
-        if (this.state.loading == false) {
-            return (
-                <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref} key={new Date().valueOf()}
-                                fetchData={'1'}
-                                sessionLoginKey={this.props.sessionLoginKey}>
-                    <Container>
-                        <Navbar left={left} right={right} title={Config.customerList}/>
-                        <Content>
-                            <View style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                paddingLeft: 10,
-                                paddingRight: 10
-                            }}>
-                                <Item>
-                                    <Input
-                                        placeholder="Tìm kiếm khách hàng..."
-                                        // value={this.state.searchText}
-                                        onChangeText={(text) => this.setState({searchText: text})}
-                                        // onSubmitEditing={() => this.search(this.state.searchText)}
-                                        // style={{marginTop: 9}}
-                                    />
-                                    <Icon name="ios-search" style={Config.mainColor}
-                                          onPress={() => this.search(this.state.searchText)}/>
-                                </Item>
-                                <ActivityIndicator
-                                    animating={this.state.isSearching}
-                                    color={Config.mainColor}
-                                    size="large"
+
+        return (
+            <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref}
+                            // key={new Date().valueOf()}
+                            // fetchData={'1'}
+                            sessionLoginKey={this.props.sessionLoginKey}>
+                <Container>
+                    <Navbar left={left} right={right} title={Config.customerList}/>
+                    <Content>
+                        <View style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            paddingLeft: 10,
+                            paddingRight: 10
+                        }}>
+                            <Item>
+                                <Input
+                                    placeholder="Tìm kiếm khách hàng..."
+                                    // value={this.state.searchText}
+                                    onChangeText={(text) => this.setState({searchText: text})}
+                                    // onSubmitEditing={() => this.search(this.state.searchText)}
+                                    // style={{marginTop: 9}}
                                 />
+                                <Icon name="ios-search" style={Config.mainColor}
+                                      onPress={() => this.search()}/>
 
-                                {this._renderResult()}
-                            </View>
+                            </Item>
+                            <ActivityIndicator
+                                animating={this.state.isSearching}
+                                color={Config.mainColor}
+                                size="large"
+                            />
 
-                        </Content>
-                    </Container>
-                </SideMenuDrawer>);
-        } else {
-            return <ActivityIndicator/>
-        }
+                            {this._renderResult()}
+                        </View>
+
+                    </Content>
+                </Container>
+            </SideMenuDrawer>);
 
     }
 

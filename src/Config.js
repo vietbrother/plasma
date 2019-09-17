@@ -101,6 +101,14 @@ const Config = {
   customerName: 'Tên khách hàng',
   customerAddress: 'Địa chỉ khách hàng',
 
+  //devices
+  deviceList: "Thiết bị",
+  deviceDetail: "Thông tin thiết bị",
+  deviceCode: "Mã bình",
+  deviceStage: "Trạng thái",
+  deviceWarehouse: "Kho",
+  deviceDes: "Thông số kỹ thuật",
+  deviceCustomer: "Khách hàng",
 };
 
 

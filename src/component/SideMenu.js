@@ -182,8 +182,9 @@ export default class SideMenu extends Component {
                     {/*<View style={styles.line}/>*/}
                     <View style={{paddingRight: 15}}>
                         <List>
-                            {this.props.sessionLoginKey != null || this.state.sessionKey != null ?
-                                this.renderSecondaryList() : this.renderSecondaryListNologin()}
+                            {/*{this.props.sessionLoginKey != null || this.state.sessionKey != null ?*/}
+                                {/*this.renderSecondaryList() : this.renderSecondaryListNologin()}*/}
+                                {this.renderSecondaryList()}
                         </List>
                     </View>
                     <View style={styles.line}/>
@@ -434,13 +435,13 @@ const menusSecondaryItems = [
         id: 11,
         title: Config.titleMngtDevices,
         icon: 'md-pint',
-        key: 'product'
+        key: 'devices'
     },
     {
         id: 12,
         title: Config.titleMngtCustomers,
         icon: 'ios-people',
-        key: 'orders'
+        key: 'customers'
     },
     {
         id: 13,

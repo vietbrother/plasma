@@ -44,6 +44,8 @@ import StockOut from "./component/Stock/StockOut";
 import Customers from "./component/Customer/Customers";
 import CustomerAdd from "./component/Customer/CustomerAdd";
 import CustomerDetail from "./component/Customer/CustomerDetail";
+import Devices from "./component/Device/Devices";
+import DeviceDetail from "./component/Device/DeviceDetail";
 
 export default class Main extends Component {
 
@@ -123,6 +125,9 @@ export default class Main extends Component {
             <Scene key="customers" component={Customers} hideNavBar />
             <Scene key="customerAdd" component={CustomerAdd} hideNavBar />
             <Scene key="customerDetail" component={CustomerDetail} hideNavBar />
+
+            <Scene key="devices" component={Devices} hideNavBar />
+            <Scene key="deviceDetail" component={DeviceDetail} hideNavBar />
 
 
           </Scene>
