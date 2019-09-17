@@ -51,6 +51,7 @@ const Config = {
   titleHotline: 'Hotline :',
 
   titleCopyRight: 'Plasma © 2019',
+  required: 'Cần nhập ',
 
   //button
   btnLogin: 'Đăng nhập',
@@ -61,9 +62,15 @@ const Config = {
   btnAddDevice: 'Nhập thiết bị',
   btnDeviceOut: 'Xuất thiết bị',
   btnCancel: 'Hủy',
+  btnClose: 'Đóng',
+
+  //success
+  success: 'Thành công',
 
   //error
   err_login : 'Tên đăng nhập hoặc mật khẩu không đúng',
+  err_add : 'Lỗi khi thêm mới! Vui lòng thử lại sau',
+  err_connect : 'Lỗi kết nối',
 
   //stage
   stage0KhongXacDinh: '0',
@@ -85,6 +92,14 @@ const Config = {
   orderType2XuatTaiNap: '2',
   orderType3NhapKho: '3',
   orderType4XuatChoKhach: '4',
+
+  //customer
+  customerList: 'Khách hàng',
+  customerAddTitle: 'Thêm khách hàng',
+  customerDetail: 'Thông tin khách hàng',
+  customerListTitle: 'Khách hàng',
+  customerName: 'Tên khách hàng',
+  customerAddress: 'Địa chỉ khách hàng',
 
 };
 

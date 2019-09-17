@@ -41,6 +41,9 @@ import CameraScannerList from "./component/Camera/CameraScannerList";
 import StockAdd from "./component/Stock/StockAdd";
 import FlowItem from "./component/Flow/FlowItem";
 import StockOut from "./component/Stock/StockOut";
+import Customers from "./component/Customer/Customers";
+import CustomerAdd from "./component/Customer/CustomerAdd";
+import CustomerDetail from "./component/Customer/CustomerDetail";
 
 export default class Main extends Component {
 
@@ -116,6 +119,12 @@ export default class Main extends Component {
             <Scene key="stockAdd" component={StockAdd} hideNavBar />
             <Scene key="flowItem" component={FlowItem} hideNavBar />
             <Scene key="stockOut" component={StockOut} hideNavBar />
+
+            <Scene key="customers" component={Customers} hideNavBar />
+            <Scene key="customerAdd" component={CustomerAdd} hideNavBar />
+            <Scene key="customerDetail" component={CustomerDetail} hideNavBar />
+
+
           </Scene>
         </Router>
       </Root>
