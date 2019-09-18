@@ -71,8 +71,8 @@ export default class StockOut extends Component {
             // Connect to Odoo
             global.odooAPI.connect(function (err) {
                 if (err) {
-                    console.log('--------------connect error');
                     this.setState({isLoading: false});
+                    console.log('--------------connect error');
                     return console.log(err);
                 }
             });
@@ -299,8 +299,8 @@ export default class StockOut extends Component {
             // Connect to Odoo
             global.odooAPI.connect(function (err) {
                 if (err) {
-                    console.log('--------------connect error');
                     this.setState({isLoading: false});
+                    console.log('--------------connect error');
                     return console.log(err);
                 }
             });

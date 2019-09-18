@@ -42,7 +42,7 @@ import SideMenuDrawer from '../../component/SideMenuDrawer';
 import Colors from "../../Colors";
 import Config from "../../Config";
 import HTML from 'react-native-render-html';
-import OrderItem from "../../component/Order/OrderItem";
+import OrderItem from "./OrderItem";
 
 
 export default class Orders extends Component {

@@ -32,7 +32,7 @@ import Config from '../../Config';
 import Text from '../../component/Text';
 import Navbar from '../../component/Navbar';
 import Spinner from 'react-native-loading-spinner-overlay';
-import DeviceItem from "../Device/Devices";
+import DeviceItem from "../Device/DeviceItem";
 
 
 export default class OrderDetail extends Component {
@@ -47,7 +47,7 @@ export default class OrderDetail extends Component {
             code: '',
             create_date: '',
             p_customer: [],
-            p_equipments_id: [],
+            p_equipments: [],
             deviceList: [],
         };
     }
@@ -57,13 +57,16 @@ export default class OrderDetail extends Component {
 
     componentDidMount() {
         this.setState({
-            code: this.props.order.code,
+            code: this.props.order.code == null || this.props.order.code == false ? 'Không có' : this.props.order.code,
             create_date: this.props.order.create_date,
             p_customer: this.props.order.p_customer,
-            p_equipments: this.props.order.p_equipments,
+            p_equipments: this.props.order.p_equipments
         });
-        console.log(this.state.p_customer);
-        if(this.state.p_equipments != null && this.state.p_equipments.length > 0){
+        console.log(this.props.order);
+        console.log(this.props.order.p_equipments);
+        console.log(this.props.order.p_equipments.length);
+        console.log(this.state.p_equipments);
+        if (this.props.order.p_equipments != null && this.props.order.p_equipments.length > 0) {
             this.search();
         }
     }
@@ -85,7 +88,7 @@ export default class OrderDetail extends Component {
 
             var params = {
                 // ids: [1, 2, 3, 4, 5],
-                domain: [['id', 'in', this.state.p_equipments]],
+                domain: [['id', 'in', this.props.order.p_equipments]],
                 fields: ['id', 'code', 'stage', 'warehouse', 'p_customer', 'description'],
                 order: 'id',
                 limit: 15,
@@ -111,7 +114,7 @@ export default class OrderDetail extends Component {
 
     _renderListDevice() {
         let items = [];
-        if(this.state.deviceList.length > 0){
+        if (this.state.deviceList.length > 0) {
             for (var i = 0; i < this.state.deviceList.length; i++) {
                 var item = this.state.deviceList[i];
                 var key = new Date().valueOf();
@@ -170,6 +173,14 @@ export default class OrderDetail extends Component {
 
                         <CardItem>
                             <Body>
+                            <Text style={styles.title}>{Config.orderCode} : </Text>
+                            <Input
+                                value={this.state.code}
+                            />
+                            </Body>
+                        </CardItem>
+                        <CardItem>
+                            <Body>
                             <Text style={styles.title}>{Config.orderDate} : </Text>
                             <Input
                                 value={this.state.create_date}
@@ -192,7 +203,7 @@ export default class OrderDetail extends Component {
                             <Text style={{fontSize: 18, fontWeight: 'bold'}}>{Config.orderListDevice}</Text>
                         </CardItem>
                         <CardItem>
-
+                            {this._renderListDevice()}
                         </CardItem>
 
                         <CardItem>

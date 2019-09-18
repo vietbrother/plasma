@@ -83,7 +83,7 @@ export default class OrderItem extends Component {
     _renderMainContent() {
         return (
             <TouchableOpacity
-                onPress={() => Actions.orderDetail({device: this.props.order})}
+                onPress={() => Actions.orderDetail({order: this.props.order})}
                 activeOpacity={0.9}
             >
                 <Grid>

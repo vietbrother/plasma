@@ -168,7 +168,7 @@ export default class Login extends Component {
                 port: Config.odooPort,
                 database: Config.odooDb,
                 username: user,
-                password: password
+                password: pass
             });
 
             // Connect to Odoo
@@ -206,26 +206,27 @@ export default class Login extends Component {
     _getResLogin(err, data) {
         this.setState({isLoading: false});
         if (err) {
-            if (err.toString().includes('Network')) {
-                this.setState({hasError: true, errorText: Config.err_connect});
-            } else {
-                this.setState({hasError: true, errorText: Config.err_login});
-            }
+            this.setState({hasError: true, errorText: Config.err_connect});
             console.log(err);
             return;
         }
         console.log(data);
         console.log('__________________________');
-        AsyncStorage.setItem('userId', data.username);
+        if (data.username == false) {
+            this.setState({hasError: true, errorText: Config.err_login});
+        } else {
+            AsyncStorage.setItem('userId', data.username);
 
-        global.odooAPI = new Odoo({
-            host: Config.odooUrl,
-            port: Config.odooPort,
-            database: Config.odooDb,
-            username: Config.odooUser,
-            password: Config.odooPass
-        });
-        Actions.home({sessionLoginKey: '123'});
+            global.odooAPI = new Odoo({
+                host: Config.odooUrl,
+                port: Config.odooPort,
+                database: Config.odooDb,
+                username: Config.odooUser,
+                password: Config.odooPass
+            });
+            Actions.home({sessionLoginKey: '123'});
+        }
+
     }
 
 }

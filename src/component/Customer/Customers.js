@@ -41,6 +41,7 @@ import SideMenu from '../../component/SideMenu';
 import SideMenuDrawer from '../../component/SideMenuDrawer';
 import Colors from "../../Colors";
 import Config from "../../Config";
+import CustomerItem from "./CustomerItem";
 
 
 export default class Customers extends Component {

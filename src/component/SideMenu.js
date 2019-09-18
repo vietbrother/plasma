@@ -50,7 +50,6 @@ export default class SideMenu extends Component {
     }
 
 
-
     componentWillMount() {
         // AsyncStorage.getItem("cookieUserFromApi", (err, res) => {
         //     console.log("get cookieUserFromApi in menu ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
@@ -79,7 +78,7 @@ export default class SideMenu extends Component {
                         var items = [];
                         data.map((item, i) => {
                             // if (item.parent != '0') {
-                                items.push(item);
+                            items.push(item);
                             // }
                         });
                         // console.log(items);
@@ -145,11 +144,11 @@ export default class SideMenu extends Component {
                     <View style={{marginTop: 15, marginBottom: 15, width: '100%', alignItems: 'center'}}>
                         <Image style={{height: 100, width: 100}} source={require('../images/logo_plasma.png')}/>
                         {/*<Text style={{*/}
-                            {/*fontSize: 18,*/}
-                            {/*fontWeight: 'bold',*/}
-                            {/*textAlign: 'center',*/}
-                            {/*width: '100%',*/}
-                            {/*color: Colors.navbarBackgroundColor*/}
+                        {/*fontSize: 18,*/}
+                        {/*fontWeight: 'bold',*/}
+                        {/*textAlign: 'center',*/}
+                        {/*width: '100%',*/}
+                        {/*color: Colors.navbarBackgroundColor*/}
                         {/*}}>PLASMA </Text>*/}
                         <Text style={{
                             fontSize: 18,
@@ -183,18 +182,25 @@ export default class SideMenu extends Component {
                     <View style={{paddingRight: 15}}>
                         <List>
                             {/*{this.props.sessionLoginKey != null || this.state.sessionKey != null ?*/}
-                                {/*this.renderSecondaryList() : this.renderSecondaryListNologin()}*/}
-                                {this.renderSecondaryList()}
+                            {/*this.renderSecondaryList() : this.renderSecondaryListNologin()}*/}
+                            {this.renderSecondaryList()}
                         </List>
                     </View>
                     <View style={styles.line}/>
-                    <View style={{paddingRight: 15, paddingLeft: 15, paddingBottom: 15, textAlign: 'center',
-                        width: '100%',}}>
+                    <View style={{
+                        paddingRight: 15, paddingLeft: 15, paddingBottom: 15, textAlign: 'center',
+                        width: '100%',
+                    }}>
                         <Text> <Icon style={{fontSize: 18}} name={'ios-call'}/> {Config.titleHotline} <Text style={{
                             color: "#c0392b",
                             fontSize: 20,
                         }}>{Config.hotline}</Text></Text>
-                        <Text style={{fontSize: 14, fontWeight: '200',paddingTop: 10, color: Config.colorBold}}>{Config.titleCopyRight}</Text>
+                        <Text style={{
+                            fontSize: 14,
+                            fontWeight: '200',
+                            paddingTop: 10,
+                            color: Config.colorBold
+                        }}>{Config.titleCopyRight}</Text>
                     </View>
                 </View>
             );
@@ -233,7 +239,7 @@ export default class SideMenu extends Component {
                     mappedArr[mappedElem.parent]['subMenu'].push(mappedElem);
                 }
                 // If the element is at the root level, add it to first level elements array.
-                else if(mappedElem.parent != null && mappedElem.parent == '0'){
+                else if (mappedElem.parent != null && mappedElem.parent == '0') {
                     tree.push(mappedElem);
                 }
             }
@@ -333,13 +339,13 @@ export default class SideMenu extends Component {
 
     renderSecondaryList() {
         let secondaryItems = [];
-
+        var key = new Date();
         menusSecondaryItems.map((item, i) => {
             secondaryItems.push(
                 <ListItem
                     last
                     icon
-                    key={item.id}
+                    key={key+ '_' + item.id}
                     button={true}
                     onPress={Actions[item.key]}
                 >
