@@ -42,18 +42,18 @@ import SideMenuDrawer from '../../component/SideMenuDrawer';
 import Colors from "../../Colors";
 import Config from "../../Config";
 import HTML from 'react-native-render-html';
-import DeviceItem from "../../component/Device/DeviceItem";
+import OrderItem from "../../component/Order/OrderItem";
 
 
-export default class Devices extends Component {
+export default class Orders extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
             categories: [],
-            products: [],
-            // isLoading: true,
+            orders: [],
+            isLoading: true,
             isSearching: false,
             error: null,
             sessionKey: null,
@@ -69,70 +69,22 @@ export default class Devices extends Component {
 
     _renderResult() {
         let items = [];
-        for (var i = 0; i < this.state.products.length; i++) {
-            var item = this.state.products[i];
+        for (var i = 0; i < this.state.orders.length; i++) {
+            var item = this.state.orders[i];
             var key = new Date().valueOf();
             console.log(item);
             items.push(
-                <DeviceItem key={key + '_' + i} device={item}></DeviceItem>
+                <OrderItem key={key + '_' + i} order={item}></OrderItem>
             );
         }
         return items;
 
     }
 
-    _renderCodeProducts(code) {
-        let temp = code.replace(new RegExp(this.state.searchText, "gi"), (match) => `<b style="color: dodgerblue">${match}</b>`);
-        return temp;
-    }
 
-    _renderStatus(status) {
-        if (status == '0') {
-            return (<Text style={{color: '#ffa505'}}>
-                <Icon name="ios-help-circle-outline"
-                      style={{fontSize: 13, color: '#ffa505'}}/>
-                Không xác định</Text>);
-        } else if (status == '4') {
-            return (<Text style={{color: '#44bc37'}}>
-                <Icon name="ios-checkmark-circle"
-                      style={{fontSize: 13, color: '#44bc37'}}/>
-                Bình đang sử dụng </Text>);
-        } else if (status == '1') {
-            return (<Text style={{color: Config.colorThin}}>
-                <Icon name="ios-battery-dead"
-                      style={{fontSize: 13, color: Config.colorThin}}/>
-                Vỏ </Text>);
-        } else if (status == '2') {
-            return (<Text style={{color: '#ff00ff'}}>
-                <Icon name="ios-refresh-circle"
-                      style={{fontSize: 13, color: '#ff00ff'}}/>
-                Tái nạp </Text>);
-        } else if (status == '3') {
-            return (<Text style={{color: '#c40521'}}>
-                <Icon name="ios-warning"
-                      style={{fontSize: 13, color: '#c40521'}}/>
-                Bình tồn </Text>);
-        } else {
-            return (<Text style={{color: '#26619c'}}>{status}</Text>);
-        }
-    }
-
-    _renderWarehouse(warehouse) {
-        if (warehouse == '0') {
-            return (<Text style={{color: Config.mainColor}}> Không xác định</Text>);
-        } else if (warehouse == '1') {
-            return (<Text style={{color: Config.mainColor}}> Kho công ty</Text>);
-        } else if (warehouse == '2') {
-            return (<Text style={{color: Config.mainColor}}> Kho nhà máy</Text>);
-        } else if (warehouse == '3') {
-            return (<Text style={{color: Config.mainColor}}> Kho khách hàng</Text>);
-        } else {
-            return (<Text style={{color: Config.mainColor}}>{warehouse}</Text>);
-        }
-    }
 
     search() {
-        console.log('devices-----------------search');
+        console.log('Orders-----------------search');
         this.setState({isSearching: true});
         let items = [];
         try {
@@ -149,26 +101,26 @@ export default class Devices extends Component {
             var params = {
                 // ids: [1, 2, 3, 4, 5],
                 domain: [['code', 'like', this.state.searchText]],
-                fields: ['id', 'code', 'stage', 'warehouse', 'p_customer', 'description'],
-                order: 'id',
-                limit: 15,
+                // fields: ['id', 'code', 'stage', 'warehouse', 'p_customer', 'description'],
+                order: 'create_date desc',
+                // limit: 15,
                 offset: 0,
             }; //params
-            global.odooAPI.search_read('p.equipment', params, this._getData.bind(this)); //search_read
+            global.odooAPI.search_read('p.order', params, this._getData.bind(this)); //search_read
         } catch (e) {
             console.log(e);
             this.setState({isSearching: false});
         }
     }
 
-    _getData(err, products) {
+    _getData(err, orders) {
         if (err) {
             alert(err);
             return console.log(err);
         }
-        console.log(products);
+        console.log(orders);
         console.log('__________________________');
-        this.setState({isSearching: false, products: products});
+        this.setState({isSearching: false, orders: orders});
     }
 
     render() {
@@ -197,7 +149,7 @@ export default class Devices extends Component {
                 // sessionLoginKey={this.props.sessionLoginKey}
             >
                 <Container>
-                    <Navbar left={left} right={right} title={Config.deviceList}/>
+                    <Navbar left={left} right={right} title={Config.orderList}/>
                     <Content>
                         <View style={{
                             flex: 1,
@@ -208,7 +160,7 @@ export default class Devices extends Component {
                         }}>
                             <Item>
                                 <Input
-                                    placeholder="Tìm kiếm bình..."
+                                    placeholder="Tìm kiếm đơn hàng..."
                                     // value={this.state.searchText}
                                     onChangeText={(text) => this.setState({searchText: text})}
                                     // onSubmitEditing={() => this.search(this.state.searchText)}

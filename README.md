@@ -62,6 +62,7 @@ gradlew assembleRelease
 
 https://github.com/Michaelvilleneuve/react-native-document-scanner
 https://github.com/kevin3274/react-native-odoo
+https://www.odoo.com/documentation/9.0/reference/orm.html#openerp.models.Model.search
 
 ## Documentation
 

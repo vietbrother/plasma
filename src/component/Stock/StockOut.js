@@ -387,6 +387,7 @@ export default class StockOut extends Component {
             var orderCustomerId = '';
             var orderType = '';
             var device_id = this.state.deviceInfo.id;
+            var device_code = this.state.products[0].code;
             //TYPE = [(0, 'Không xác định'), (1, 'Thu hồi'), (2, 'Xuất tái nạp'), (3, 'Nhập kho'), (4, 'Xuất cho khách')]
 
 
@@ -401,6 +402,7 @@ export default class StockOut extends Component {
             var params = {
                 p_equipments: [(6, 0, this.state.deviceInfo.id)],
                 type: Config.orderType4XuatChoKhach,
+                code: dateTimeStr + 'Xuat_cho_khach_' + device_code,
                 p_customer: orderCustomerId
             }; //params
             global.odooAPI.create('p.order', params, this._getResCreateOrder.bind(this)); //update stage

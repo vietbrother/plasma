@@ -71,21 +71,6 @@ export default class Customers extends Component {
     }
 
 
-    async getSessionKey() {
-        try {
-            const value = await AsyncStorage.getItem('cookieUserFromApi');
-            console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            console.log(value);
-            this.setState({sessionKey: value});
-            console.log("state : " + this.state.sessionKey);
-            // this._fetchCategorieData();
-            // this._fetchProductsData();
-            this.setState({loading: false});
-        } catch (error) {
-            // Handle errors here
-            console.error(error);
-        }
-    }
 
     _renderResult() {
         let items = [];
@@ -93,23 +78,7 @@ export default class Customers extends Component {
             var item = this.state.customers[i];
             var key = new Date().valueOf();
             items.push(
-                <View style={{
-                    width: '100%', color: Config.mainColor, fontSize: 16,
-                    borderBottomColor: '#7c8fb7', borderBottomWidth: 0.5,
-                    paddingLeft: 10,
-                    paddingTop: 20, paddingBottom: 20
-                }}>
-                    <TouchableOpacity
-                        onPress={() => Actions.customerDetail({customer: item})}
-                        activeOpacity={0.9}
-                    >
-                        <Text style={{fontSize: 16, fontWeight: 'bold'}}>{item.name}</Text>
-                        <Text style={{textAlign: 'left'}}>
-                            <Icon active name='ios-pin' style={{fontSize: 14, color: "#687373", paddingRight: 5}} />
-                            {item.address}
-                        </Text>
-                    </TouchableOpacity>
-                </View>
+                <CustomerItem key={key+'_'+i} customer={item}></CustomerItem>
             );
         }
         return items;

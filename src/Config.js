@@ -92,6 +92,12 @@ const Config = {
   orderType2XuatTaiNap: '2',
   orderType3NhapKho: '3',
   orderType4XuatChoKhach: '4',
+  orderList: 'Đơn hàng',
+  orderDetail: 'Thông tin đơn hàng',
+  orderDate: 'Thời gian tạo',
+  orderCustomer: 'Khách hàng',
+  orderCode: 'Mã đơn hàng',
+  orderListDevice: 'Danh sách thiết bị',
 
   //customer
   customerList: 'Khách hàng',

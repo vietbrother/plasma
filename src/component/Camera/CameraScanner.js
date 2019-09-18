@@ -127,10 +127,10 @@ export default class CameraScanner extends Component {
                         }
                     }
                     console.log(textDetect);
-                    if(textDetect != null && textDetect != ''){
-                        textDetect = textDetect.trim().replace('O' , '0');
+                    if (textDetect != null && textDetect != '') {
+                        textDetect = textDetect.trim().replace('O', '0');
                         var res = textDetect.match(/[A-Z]+\d+/g);
-                        if(res != null){
+                        if (res != null) {
                             textDetect = res[0];
                         }
                     }
@@ -236,7 +236,13 @@ export default class CameraScanner extends Component {
                     '',
                     'Xuất bình ' + this.state.textDetect + ' cho khách', // <- this part is optional, you can pass an empty string
                     [
-                        {text: 'Xuất cho khách', onPress: () => Actions.stockOut({textDetect: this.state.textDetect, deviceInfo: products[0]})},
+                        {
+                            text: 'Xuất cho khách',
+                            onPress: () => Actions.stockOut({
+                                textDetect: this.state.textDetect,
+                                deviceInfo: products[0]
+                            })
+                        },
                         {
                             text: 'Hủy',
                             onPress: () => console.log('Cancel Pressed'),
@@ -342,7 +348,7 @@ export default class CameraScanner extends Component {
     /**
      * Create order
      * */
-    _createOrder(customerId){
+    _createOrder(customerId) {
         try {
             var oldStage = this.state.oldStage;
             var dateTime = new Date().toISOString();
@@ -353,28 +359,30 @@ export default class CameraScanner extends Component {
             var orderCustomerId = '';
             var orderType = '';
             var device_id = this.state.products[0].id;
+            var device_code = this.state.products[0].code;
             //TYPE = [(0, 'Không xác định'), (1, 'Thu hồi'), (2, 'Xuất tái nạp'), (3, 'Nhập kho'), (4, 'Xuất cho khách')]
             if (oldStage == '0') {
-                orderCode = dateStr + 'Thu_hoi';
+                orderCode = dateTimeStr + 'Thu_hoi_' + device_code;
                 orderType = Config.orderType1ThuHoi;
                 orderCustomerId = '1';// cong ty
             } else if (oldStage == '4') {
-                orderCode = dateStr + 'Thu_hoi';
+                orderCode = dateTimeStr + 'Thu_hoi_' + device_code;
                 orderType = Config.orderType1ThuHoi;
                 orderCustomerId = '1';// cong ty
             } else if (oldStage == '1') {
-                orderCode = dateStr + 'Xuat_tai_nap';
+                orderCode = dateTimeStr + 'Xuat_tai_nap_' + device_code;
                 orderType = Config.orderType2XuatTaiNap;
                 orderCustomerId = '2';// nha may
             } else if (oldStage == '2') {
-                orderCode = dateStr + 'Nhap_kho';
+                orderCode = dateTimeStr + 'Nhap_kho_' + device_code;
                 orderType = Config.orderType3NhapKho;
                 orderCustomerId = '1';// cong ty
             } else if (oldStage == '3') {
-                orderCode = dateStr + 'Xuat_cho_khach';
+                orderCode = dateTimeStr + 'Xuat_cho_khach_' + device_code;
                 orderType = Config.orderType4XuatChoKhach;
-                orderCustomerId = customerId;// cong ty
+                orderCustomerId = customerId;// khach hang
             } else {
+                alert('Trạng thái thiết bị không đúng')
                 return;
             }
 
@@ -388,6 +396,7 @@ export default class CameraScanner extends Component {
             });
             var params = {
                 p_equipments: [(6, 0, device_id)],
+                code: orderCode,
                 type: orderType,
                 p_customer: orderCustomerId
             }; //params
@@ -406,6 +415,7 @@ export default class CameraScanner extends Component {
             this.setState({isLoading: false});
         }
     }
+
     _getResCreateOrder(err, response) {
         if (err) {
             alert(err);
@@ -457,13 +467,13 @@ export default class CameraScanner extends Component {
                             </View>
                         </TouchableOpacity>
                         {/*<TouchableOpacity onPress={() => {*/}
-                            {/*// Actions.flowItem({textDetect: 'HN05059', capturePhotoPath: ''});*/}
-                            {/*// this.setState({renderModal: true, extractedText: 'HN05059'});*/}
-                            {/*this._getDeviceInfo('HN05059');*/}
+                        {/*// Actions.flowItem({textDetect: 'HN05059', capturePhotoPath: ''});*/}
+                        {/*// this.setState({renderModal: true, extractedText: 'HN05059'});*/}
+                        {/*this._getDeviceInfo('HN05059');*/}
                         {/*}}>*/}
-                            {/*<View style={styles.camBtn}>*/}
-                                {/*<Text>_Test_</Text>*/}
-                            {/*</View>*/}
+                        {/*<View style={styles.camBtn}>*/}
+                        {/*<Text>_Test_</Text>*/}
+                        {/*</View>*/}
                         {/*</TouchableOpacity>*/}
                     </View>
                 </RNCamera>

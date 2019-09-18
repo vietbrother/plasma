@@ -46,6 +46,8 @@ import CustomerAdd from "./component/Customer/CustomerAdd";
 import CustomerDetail from "./component/Customer/CustomerDetail";
 import Devices from "./component/Device/Devices";
 import DeviceDetail from "./component/Device/DeviceDetail";
+import OrderList from "./component/Orders/Orders";
+import OrderDetail from "./component/Orders/OrderDetail";
 
 export default class Main extends Component {
 
@@ -77,13 +79,13 @@ export default class Main extends Component {
       queryStringAuth: true
     });
 
-    global.odooAPI = new Odoo({
-      host: Config.odooUrl,
-      port: Config.odooPort,
-      database: Config.odooDb,
-      username: Config.odooUser,
-      password: Config.odooPass
-    });
+    // global.odooAPI = new Odoo({
+    //   host: Config.odooUrl,
+    //   port: Config.odooPort,
+    //   database: Config.odooDb,
+    //   username: Config.odooUser,
+    //   password: Config.odooPass
+    // });
   }
 
   componentWillMount = () => {
@@ -110,8 +112,8 @@ export default class Main extends Component {
             <Scene initial key="login" component={Login} hideNavBar />
             <Scene key="signup" component={Signup} hideNavBar />
             <Scene key="checkout" component={Checkout} hideNavBar />
-            <Scene key="orders" component={Orders} hideNavBar />
-            <Scene key="orderItem" component={OrderItem} hideNavBar />
+            {/*<Scene key="orders" component={Orders} hideNavBar />*/}
+            {/*<Scene key="orderItem" component={OrderItem} hideNavBar />*/}
             <Scene key="profile" component={Profile} hideNavBar />
 
             <Scene key="camera" component={Camera} hideNavBar />
@@ -129,6 +131,8 @@ export default class Main extends Component {
             <Scene key="devices" component={Devices} hideNavBar />
             <Scene key="deviceDetail" component={DeviceDetail} hideNavBar />
 
+            <Scene key="orders" component={OrderList} hideNavBar />
+            <Scene key="orderDetail" component={OrderDetail} hideNavBar />
 
           </Scene>
         </Router>

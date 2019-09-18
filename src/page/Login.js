@@ -15,6 +15,7 @@ import Navbar from '../component/Navbar';
 
 import {StyleSheet, Image, AsyncStorage, ScrollView, Keyboard, TouchableWithoutFeedback} from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
+import Odoo from "../Odoo";
 
 export default class Login extends Component {
     constructor(props) {
@@ -103,11 +104,13 @@ export default class Login extends Component {
                                 textAlign: 'center',
                                 width: '100%',
                                 color: Config.colorBold
-                            }}>{Config.titleCompany}<Text style={{fontWeight: '200', color: Config.colorThin}}>{Config.titleCompanySub}</Text> </Text>
+                            }}>{Config.titleCompany}<Text
+                                style={{fontWeight: '200', color: Config.colorThin}}>{Config.titleCompanySub}</Text>
+                            </Text>
                             {/*<Text style={{fontSize: 18, textAlign: 'left', width: '100%', color: '#687373'}}>Thực*/}
-                                {/*phẩm*/}
-                                {/*sạch*/}
-                                {/*Nhật Bản </Text>*/}
+                            {/*phẩm*/}
+                            {/*sạch*/}
+                            {/*Nhật Bản </Text>*/}
                         </View>
                         <Item>
                             <Icon active name='ios-person' style={{color: "#687373"}}/>
@@ -132,13 +135,14 @@ export default class Login extends Component {
                             </Button>
                         </View>
                         {/*<View style={{alignItems: 'center', width: '100%'}}>*/}
-                            {/*<Button onPress={() => Actions.signup()}*/}
-                                    {/*style={styles.buttonLogin}>*/}
-                                {/*<Text style={{color: '#fdfdfd'}}> Đăng ký </Text>*/}
-                            {/*</Button>*/}
+                        {/*<Button onPress={() => Actions.signup()}*/}
+                        {/*style={styles.buttonLogin}>*/}
+                        {/*<Text style={{color: '#fdfdfd'}}> Đăng ký </Text>*/}
+                        {/*</Button>*/}
                         {/*</View>*/}
 
-                        <Text style={{fontSize: 16, fontWeight: '200', color: Config.colorBold, paddingTop: 100,}}>Bản quyền thuộc về {Config.titleCopyRight}</Text>
+                        <Text style={{fontSize: 16, fontWeight: '200', color: Config.colorBold, paddingTop: 100,}}>Bản
+                            quyền thuộc về {Config.titleCopyRight}</Text>
                     </View>
                 </ScrollView>
 
@@ -148,52 +152,81 @@ export default class Login extends Component {
 
     async login() {
 
-        // var user = this.state.username;
-        // var pass = this.state.password;
-        // let statusLogin;
-        // let sessionLoginKey;
-        // if (user == null || user == '' || pass == '' || pass == '') {
-        //     this.setState({hasError: true, errorText: 'Cần nhập tên đăng nhập và mật khẩu'});
-        //     return;
-        // }
-        // try {
-        //     this.setState({isLoading: true});
-        //     await fetch(Config.url + '/api/user/generate_auth_cookie/?username=' + user + '&password=' + pass + '&insecure=cool')
-        //         .then((response) => response.json())
-        //         .then((responseJson) => {
-        //             console.log(responseJson);
-        //             try {
-        //                 this.setState({isLoading: false});
-        //                 statusLogin = responseJson.status;
-        //                 if (statusLogin == 'ok') {
-        //                     sessionLoginKey = responseJson.cookie;
-        //                     AsyncStorage.setItem('cookieUserFromApi', responseJson.cookie);
-        //                     AsyncStorage.setItem('userId', responseJson.user.id.toString());
-        //                     responseJson.user['pass'] = pass;
-        //                     AsyncStorage.setItem('userInfo', JSON.stringify(responseJson.user));
-        //                 }
-        //             } catch (error) {
-        //                 // Error saving data
-        //                 console.error(error);
-        //             }
-        //         })
-        //         .catch((error) => {
-        //             console.error(error);
-        //         });
-        //     console.log(statusLogin);
-        // } catch (error) {
-        //     console.error(error);
-        // }
-        //
-        // if (statusLogin == 'ok') {
-        //     Actions.home({sessionLoginKey: sessionLoginKey});
-        // } else {
-        //     this.setState({hasError: true, errorText: 'Tên đăng nhập hoặc mật khẩu không đúng'});
-        // }
+        var user = this.state.username;
+        var pass = this.state.password;
+        let statusLogin;
+        let sessionLoginKey;
+        if (user == null || user == '' || pass == '' || pass == '') {
+            this.setState({hasError: true, errorText: 'Cần nhập tên đăng nhập và mật khẩu'});
+            return;
+        }
+        try {
+            this.setState({isLoading: true});
 
-        Actions.home({sessionLoginKey: '123'});
+            var odooClient = new Odoo({
+                host: Config.odooUrl,
+                port: Config.odooPort,
+                database: Config.odooDb,
+                username: user,
+                password: password
+            });
+
+            // Connect to Odoo
+            odooClient.connect(this._getResLogin.bind(this));
+            // await fetch(Config.url + '/api/user/generate_auth_cookie/?username=' + user + '&password=' + pass + '&insecure=cool')
+            //     .then((response) => response.json())
+            //     .then((responseJson) => {
+            //         console.log(responseJson);
+            //         try {
+            //             this.setState({isLoading: false});
+            //             statusLogin = responseJson.status;
+            //             if (statusLogin == 'ok') {
+            //                 sessionLoginKey = responseJson.cookie;
+            //                 AsyncStorage.setItem('cookieUserFromApi', responseJson.cookie);
+            //                 AsyncStorage.setItem('userId', responseJson.user.id.toString());
+            //                 responseJson.user['pass'] = pass;
+            //                 AsyncStorage.setItem('userInfo', JSON.stringify(responseJson.user));
+            //             }
+            //         } catch (error) {
+            //             // Error saving data
+            //             console.error(error);
+            //         }
+            //     })
+            //     .catch((error) => {
+            //         console.error(error);
+            //     });
+            // console.log(statusLogin);
+        } catch (error) {
+            console.error(error);
+            this.setState({isLoading: false});
+            this.setState({hasError: true, errorText: 'Tên đăng nhập hoặc mật khẩu không đúng'});
+        }
     }
 
+    _getResLogin(err, data) {
+        this.setState({isLoading: false});
+        if (err) {
+            if (err.toString().includes('Network')) {
+                this.setState({hasError: true, errorText: Config.err_connect});
+            } else {
+                this.setState({hasError: true, errorText: Config.err_login});
+            }
+            console.log(err);
+            return;
+        }
+        console.log(data);
+        console.log('__________________________');
+        AsyncStorage.setItem('userId', data.username);
+
+        global.odooAPI = new Odoo({
+            host: Config.odooUrl,
+            port: Config.odooPort,
+            database: Config.odooDb,
+            username: Config.odooUser,
+            password: Config.odooPass
+        });
+        Actions.home({sessionLoginKey: '123'});
+    }
 
 }
 
