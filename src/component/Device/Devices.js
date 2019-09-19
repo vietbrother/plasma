@@ -81,56 +81,6 @@ export default class Devices extends Component {
 
     }
 
-    _renderCodeProducts(code) {
-        let temp = code.replace(new RegExp(this.state.searchText, "gi"), (match) => `<b style="color: dodgerblue">${match}</b>`);
-        return temp;
-    }
-
-    _renderStatus(status) {
-        if (status == '0') {
-            return (<Text style={{color: '#ffa505'}}>
-                <Icon name="ios-help-circle-outline"
-                      style={{fontSize: 13, color: '#ffa505'}}/>
-                Không xác định</Text>);
-        } else if (status == '4') {
-            return (<Text style={{color: '#44bc37'}}>
-                <Icon name="ios-checkmark-circle"
-                      style={{fontSize: 13, color: '#44bc37'}}/>
-                Bình đang sử dụng </Text>);
-        } else if (status == '1') {
-            return (<Text style={{color: Config.colorThin}}>
-                <Icon name="ios-battery-dead"
-                      style={{fontSize: 13, color: Config.colorThin}}/>
-                Vỏ </Text>);
-        } else if (status == '2') {
-            return (<Text style={{color: '#ff00ff'}}>
-                <Icon name="ios-refresh-circle"
-                      style={{fontSize: 13, color: '#ff00ff'}}/>
-                Tái nạp </Text>);
-        } else if (status == '3') {
-            return (<Text style={{color: '#c40521'}}>
-                <Icon name="ios-warning"
-                      style={{fontSize: 13, color: '#c40521'}}/>
-                Bình tồn </Text>);
-        } else {
-            return (<Text style={{color: '#26619c'}}>{status}</Text>);
-        }
-    }
-
-    _renderWarehouse(warehouse) {
-        if (warehouse == '0') {
-            return (<Text style={{color: Config.mainColor}}> Không xác định</Text>);
-        } else if (warehouse == '1') {
-            return (<Text style={{color: Config.mainColor}}> Kho công ty</Text>);
-        } else if (warehouse == '2') {
-            return (<Text style={{color: Config.mainColor}}> Kho nhà máy</Text>);
-        } else if (warehouse == '3') {
-            return (<Text style={{color: Config.mainColor}}> Kho khách hàng</Text>);
-        } else {
-            return (<Text style={{color: Config.mainColor}}>{warehouse}</Text>);
-        }
-    }
-
     search() {
         console.log('devices-----------------search');
         this.setState({isSearching: true});
@@ -162,13 +112,14 @@ export default class Devices extends Component {
     }
 
     _getData(err, products) {
+        this.setState({isSearching: false});
         if (err) {
             alert(err);
             return console.log(err);
         }
         console.log(products);
         console.log('__________________________');
-        this.setState({isSearching: false, products: products});
+        this.setState({products: products});
     }
 
     render() {

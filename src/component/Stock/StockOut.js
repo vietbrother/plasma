@@ -81,7 +81,7 @@ export default class StockOut extends Component {
                 domain: [],
                 fields: ['id', 'name', 'address'],
                 order: 'name',
-                limit: 15,
+                // limit: 15,
                 offset: 0,
             }; //params
             global.odooAPI.search_read('p.customer', params, this._getResSearch.bind(this)); //search_read

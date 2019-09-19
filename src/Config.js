@@ -58,10 +58,13 @@ const Config = {
   btnLogout: 'Đăng xuất',
   btnCamera: 'Chụp ảnh',
   btnScan: 'Quét thiết bị',
+  btnScanContinue: 'Quét tiếp',
   btnScanMultiple: 'Xuất hàng loạt',
   btnAddDevice: 'Nhập thiết bị',
   btnDeviceOut: 'Xuất thiết bị',
+  btnOrderOut: 'Xuất hóa đơn',
   btnCancel: 'Hủy',
+  btnStop: 'Dừng',
   btnClose: 'Đóng',
 
   //success
@@ -71,6 +74,7 @@ const Config = {
   err_login : 'Tên đăng nhập hoặc mật khẩu không đúng',
   err_add : 'Lỗi khi thêm mới! Vui lòng thử lại sau',
   err_connect : 'Lỗi kết nối',
+  err_order_add : 'Lỗi khi tạo đơn hàng',
 
   //stage
   stage0KhongXacDinh: '0',
@@ -98,6 +102,8 @@ const Config = {
   orderCustomer: 'Khách hàng',
   orderCode: 'Mã đơn hàng',
   orderListDevice: 'Danh sách thiết bị',
+  orderNumberDevice: 'Số lượng thiết bị cần quét',
+  numberDeviceScanned: 'Số lượng thiết bị đã quét',
 
   //customer
   customerList: 'Khách hàng',
@@ -115,6 +121,8 @@ const Config = {
   deviceWarehouse: "Kho",
   deviceDes: "Thông số kỹ thuật",
   deviceCustomer: "Khách hàng",
+
+  //stock
 };
 
 

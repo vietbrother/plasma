@@ -82,7 +82,6 @@ export default class Orders extends Component {
     }
 
 
-
     search() {
         console.log('Orders-----------------search');
         this.setState({isSearching: true});
@@ -114,13 +113,14 @@ export default class Orders extends Component {
     }
 
     _getData(err, orders) {
+        this.setState({isSearching: false});
         if (err) {
             alert(err);
             return console.log(err);
         }
         console.log(orders);
         console.log('__________________________');
-        this.setState({isSearching: false, orders: orders});
+        this.setState({orders: orders});
     }
 
     render() {

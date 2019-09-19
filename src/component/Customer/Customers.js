@@ -119,6 +119,7 @@ export default class Customers extends Component {
     }
 
     _getData(err, customers) {
+        this.setState({isSearching: false});
         if (err) {
             alert(err);
             return console.log(err);

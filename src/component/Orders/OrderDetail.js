@@ -202,9 +202,16 @@ export default class OrderDetail extends Component {
                         <CardItem header bordered>
                             <Text style={{fontSize: 18, fontWeight: 'bold'}}>{Config.orderListDevice}</Text>
                         </CardItem>
-                        <CardItem>
+                        <View style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            paddingLeft: 10,
+                            paddingRight: 10,
+                            backgroundColor: 'white'
+                        }}>
                             {this._renderListDevice()}
-                        </CardItem>
+                        </View>
 
                         <CardItem>
                             <Left>

@@ -152,39 +152,6 @@ export default class CameraScanner extends Component {
         }
     }
 
-    // _renderModal() {
-    //     if (this.state.extractedText != null) {
-    //         return (
-    //             <Modal
-    //                 animationType="slide"
-    //                 transparent={false}
-    //                 visible={this.state.renderModal}
-    //                 onRequestClose={() => {
-    //                     Alert.alert('Modal has been closed.');
-    //                     this.setState({renderModal: false});
-    //                 }}>
-    //                 <View style={{
-    //                     justifyContent: 'center',
-    //                     alignItems: 'center',
-    //                     backgroundColor: "#00BCD4",
-    //                     height: '80%',
-    //                     width: '80%',
-    //                     borderRadius: 10,
-    //                     borderWidth: 1,
-    //                     borderColor: '#fff',
-    //                     marginTop: 80,
-    //                     marginLeft: 40,
-    //                 }}>
-    //                     <FlowItem key={new Date().valueOf()} textDetect={'HN05059'}></FlowItem>
-    //                     <Button onPress={() => this.setState({renderModal: false})} transparent>
-    //                         <Icon name='ios-camera' style={{color: 'green'}}/>
-    //                         <Text> Close </Text>
-    //                     </Button>
-    //                 </View>
-    //             </Modal>);
-    //     }
-    // }
-
 
     _getDeviceInfo(textDetect): void {
         try {
@@ -267,13 +234,14 @@ export default class CameraScanner extends Component {
 
             console.log('--------------id ' + id + "---newState  " + newState);
             // Connect to Odoo
-            global.odooAPI.connect(function (err) {
-                if (err) {
-                    console.log('--------------connect error');
-                    this.setState({isLoading: false});
-                    return console.log(err);
-                }
-            });
+            // global.odooAPI.connect(function (err) {
+            //     if (err) {
+            //         console.log('--------------connect error');
+            //         this.setState({isLoading: false});
+            //         return console.log(err);
+            //     }
+            // });
+            global.odooAPI.connect(this._getResConnect.bind(this));
 
             var codeDevice = this.state.textDetect;
             var params = {
@@ -286,9 +254,18 @@ export default class CameraScanner extends Component {
             this.setState({isLoading: false});
         }
     }
+    _getResConnect(err){
+        if (err) {
+            console.log('--------------connect error');
+            this.setState({isLoading: false});
+            alert(Config.err_connect);
+            return console.log(err);
+        }
+    }
 
     _getResUpdate(err, response) {
         if (err) {
+            this.setState({isLoading: false});
             alert(err);
             return console.log(err);
         }
@@ -417,6 +394,7 @@ export default class CameraScanner extends Component {
     }
 
     _getResCreateOrder(err, response) {
+        this.setState({isLoading: false});
         if (err) {
             alert(err);
             return console.log(err);
@@ -428,11 +406,20 @@ export default class CameraScanner extends Component {
                 alert('Chuyển trạng thái mã bình ' + this.state.textDetect + ' từ '
                     + this._renderStatus(this.state.oldStage)
                     + ' sang ' + this._renderStatus(this.state.newStage));
+            } else {
+                alert(Config.err_order_add);
             }
-            this.setState({isLoading: false});
         } catch (e) {
             console.log(e);
             this.setState({isLoading: false});
+            Alert.alert(
+                '',
+                'Chuyển trạng thái thành công! Lỗi khi tạo đơn hàng!', // <- this part is optional, you can pass an empty string
+                [
+                    {text: 'Đóng', onPress: () => console.log('OK Pressed')},
+                ],
+                {cancelable: false},
+            );
         }
     }
 

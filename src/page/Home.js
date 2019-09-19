@@ -358,19 +358,21 @@ export default class Home extends Component {
                         <Navbar left={left} right={right} title={Config.titleHome}/>
                         <Content>
                             {/*<TextDetect key={new Date().valueOf()}*/}
-                                        {/*capturePhotoPath={this.props.capturePhotoPath}*/}
-                                        {/*callback={this.search}*/}
-                                        {/*textDetect={this.props.textDetect}/>*/}
+                            {/*capturePhotoPath={this.props.capturePhotoPath}*/}
+                            {/*callback={this.search}*/}
+                            {/*textDetect={this.props.textDetect}/>*/}
 
-
-                            <Button onPress={() => Actions.cameraScanner()} transparent>
-                                <Icon name='ios-camera' style={{color: 'green'}}/>
-                                <Text> {Config.btnScan} </Text>
-                            </Button>
-                            {/*<Button onPress={() => Actions.cameraScannerList()} transparent>*/}
-                                {/*<Icon name='ios-aperture' style={{color: 'green'}}/>*/}
-                                {/*<Text> {Config.btnScanMultiple} </Text>*/}
-                            {/*</Button>*/}
+                            <CardItem>
+                                <Button onPress={() => Actions.cameraScanner()} transparent>
+                                    <Icon name='ios-camera' style={{color: 'green', fontSize: 16}}/>
+                                    <Text> {Config.btnScan} </Text>
+                                </Button>
+                                <Button onPress={() => Actions.stockOutMultiple()} transparent>
+                                    {/*<Icon name='ios-aperture' style={{color: 'green', fontSize: 16}}/>*/}
+                                    <Icon name='ios-filling' style={{color: 'green', fontSize: 16}}/>
+                                    <Text> {Config.btnScanMultiple} </Text>
+                                </Button>
+                            </CardItem>
 
                             <View style={{
                                 flex: 1,
