@@ -49,6 +49,7 @@ import Devices from "./component/Device/Devices";
 import DeviceDetail from "./component/Device/DeviceDetail";
 import OrderList from "./component/Orders/Orders";
 import OrderDetail from "./component/Orders/OrderDetail";
+import Bill from "./component/Bill/Bill";
 
 export default class Main extends Component {
 
@@ -135,6 +136,8 @@ export default class Main extends Component {
 
             <Scene key="orders" component={OrderList} hideNavBar />
             <Scene key="orderDetail" component={OrderDetail} hideNavBar />
+
+            <Scene key="bill" component={Bill} modal hideNavBar />
 
           </Scene>
         </Router>

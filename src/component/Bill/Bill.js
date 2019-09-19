@@ -41,24 +41,18 @@ export default class Bill extends Component {
     }
 
     componentWillMount() {
-        AsyncStorage.getItem('userId', (err, res) => {
-            if (res) {
-                //if user is existed
-                let userId = res;
-                this.setState({userId: userId});
-                AsyncStorage.getItem("CART", (err, res) => {
-                    console.log("res " + res);
-                    if (!res) this.setState({cartItems: []});
-                    else {
-                        var itemArr = JSON.parse(res);
-                        var temp = itemArr.filter(function (cartItem) {
-                            return cartItem.userId == userId;
-                        });
-                        this.setState({cartItems: temp});
-                    }
-                    this.getTotal();
+
+        AsyncStorage.getItem(Config.keyStoreOrderDeviceOut, (err, res) => {
+            console.log("res " + res);
+            if (!res) this.setState({cartItems: []});
+            else {
+                var itemArr = JSON.parse(res);
+                var temp = itemArr.filter(function (cartItem) {
+                    return cartItem.userId == userId;
                 });
+                this.setState({cartItems: temp});
             }
+            this.getTotal();
         });
 
     }
@@ -73,11 +67,11 @@ export default class Bill extends Component {
         );
         return (
             <Container style={{backgroundColor: '#fdfdfd'}}>
-                <Navbar left={left} title="Giỏ hàng"/>
+                <Navbar left={left} title={Config.orderListDevice}/>
                 {this.state.cartItems.length <= 0 ?
                     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                        <Icon name="ios-cart" size={38} style={{fontSize: 38, color: '#95a5a6', marginBottom: 7}}/>
-                        <Text style={{color: '#95a5a6'}}>Giỏ hàng trống</Text>
+                        <Icon name="ios-paper" size={38} style={{fontSize: 38, color: '#95a5a6', marginBottom: 7}}/>
+                        <Text style={{color: '#95a5a6'}}>{Config.deviceListEmpty}</Text>
                     </View>
                     :
                     <Content style={{paddingRight: 10}}>
@@ -86,10 +80,10 @@ export default class Bill extends Component {
                         </List>
                         <Grid style={{marginTop: 20, marginBottom: 10}}>
                             <Col style={{paddingLeft: 10, paddingRight: 5}}>
-                                <Button onPress={() => this.checkout()}
+                                <Button onPress={() => Actions.pop()}
                                         style={{backgroundColor: '#c40521'}} block iconLeft>
                                     <Icon name='ios-card'/>
-                                    <Text style={{color: '#fdfdfd'}}> Thanh toán </Text>
+                                    <Text style={{color: Config.mainColor}}> Đóng </Text>
                                 </Button>
                             </Col>
                             <Col style={{paddingLeft: 5, paddingRight: 10}}>
@@ -107,44 +101,6 @@ export default class Bill extends Component {
         );
     }
 
-    getTotal() {
-        let totalTemp = 0;
-        this.state.cartItems.map((item, i) => {
-            totalTemp += item.quantity * item.price;
-        });
-        this.setState({total: totalTemp});
-    }
-
-    changeQuatity(item, quantityUpdate) {
-        var tempCartItem = this.state.cartItems;
-        var objIndex = tempCartItem.findIndex((obj => obj.name == item.name));
-        if (objIndex != -1) {
-            tempCartItem[objIndex].quantity = quantityUpdate;
-            this.setState({cartItems: tempCartItem});
-            this.getTotal();
-        }
-        this.upfateStorageData(tempCartItem)
-    }
-
-    upfateStorageData(tempCartItem) {
-        AsyncStorage.getItem("CART", (err, res) => {
-            if (res) {
-                var itemArr = JSON.parse(res);
-                for (var index = 0; index < tempCartItem.length; ++index) {
-                    var item = tempCartItem[index];
-                    var objIndex = itemArr.findIndex((obj => obj.name == item.name && obj.userId == this.state.userId));
-                    if (objIndex != -1) {
-                        itemArr[objIndex].quantity = item.quantity;
-                    } else {
-                        itemArr.push(item);
-                    }
-                }
-                AsyncStorage.setItem("CART", JSON.stringify(itemArr));
-
-            }
-        });
-    }
-
     renderItems() {
         let items = [];
         this.state.cartItems.map((item, i) => {
@@ -156,41 +112,9 @@ export default class Bill extends Component {
                 >
                     <Thumbnail square style={{width: 110, height: 90}} source={{uri: item.images[0].src}}/>
                     <Body style={{paddingLeft: 10}}>
-                    <Text style={{fontSize: 16}}>
-                        <Text style={{
-                            fontSize: 18,
-                            color: '#BE0026'
-                        }}>{item.quantity > 1 ? item.quantity + " x " : null}</Text>
-                        {item.name}
+                    <Text style={{fontSize: 16, color: Config.mainColor}}>
+                        {item.code}
                     </Text>
-                    <Text style={{
-                        fontSize: 16,
-                        fontWeight: 'bold',
-                        marginBottom: 10
-                    }}>{item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} {Config.vnd}</Text>
-                    {/*<Text style={{fontSize: 14 ,fontStyle: 'italic'}}>Tên: {item.name}</Text>*/}
-                    {/*<Text style={{fontSize: 14 ,fontStyle: 'italic'}}>Size: {item.size}</Text>*/}
-
-                    <View style={{flex: 1, flexDirection: 'row'}}>
-                        <Button style={{flex: 1}} icon transparent
-                                style={{backgroundColor: '#fdfdfd'}}
-                                onPress={() => this.changeQuatity(item, (item.quantity > 1 ? item.quantity - 1 : 1))}>
-                            <Icon style={{color: Colors.navbarBackgroundColor}}
-                                  name='ios-remove-circle-outline'/>
-                        </Button>
-                        <View style={{
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                        }}>
-                            <Text style={{fontSize: 18}}>{item.quantity}</Text>
-                        </View>
-                        <Button style={{flex: 1}} icon transparent
-                                style={{backgroundColor: '#fdfdfd'}}
-                                onPress={() => this.changeQuatity(item, item.quantity + 1)}>
-                            <Icon style={{color: Colors.navbarBackgroundColor}}
-                                  name='ios-add-circle-outline'/>
-                        </Button>
-                    </View>
                     </Body>
                     <Right>
                         <Button style={{marginLeft: -25}} transparent onPress={() => this.removeItemPressed(item)}>
@@ -202,33 +126,13 @@ export default class Bill extends Component {
                 </ListItem>
             );
         });
-        items.push(
-            <Card transparent>
-                <CardItem>
-                    <Grid style={{fontSize: 16,}}>
-                        <Col size={2}>
-                            <Text>Thành tiền : </Text>
-                        </Col>
-                        <Col size={2}>
-                            <Text style={{
-                                fontSize: 20,
-                                fontWeight: 'bold',
-                                color: '#BE0026',
-                                textAlign: 'right'
-                            }}>{this.state.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} {Config.vnd}</Text>
-                        </Col>
-                    </Grid>
-
-                </CardItem>
-
-            </Card>);
         return items;
     }
 
     removeItemPressed(item) {
         Alert.alert(
-            'Xóa ' + item.name,
-            'Bạn có muốn xóa đồ này trong giỏ hàng ?',
+            'Xóa ' + item.code,
+            'Bạn có muốn xóa thiết bị ' + item.code + '  trong đơn hàng ?',
             [
                 {text: 'Không', onPress: () => console.log('No Pressed'), style: 'cancel'},
                 {text: 'Có', onPress: () => this.removeItem(item)},
@@ -243,13 +147,13 @@ export default class Bill extends Component {
                 items.push(item);
         });
         this.setState({cartItems: items});
-        AsyncStorage.setItem("CART", JSON.stringify(items));
+        AsyncStorage.setItem(Config.keyStoreOrderDeviceOut, JSON.stringify(items));
     }
 
     removeAllPressed() {
         Alert.alert(
-            'Xóa giỏ hàng',
-            'Bạn có muốn làm trống giỏ hàng ?',
+            'Xóa thiết bị',
+            'Bạn có muốn xóa hết thiết bị trong đơn ?',
             [
                 {text: 'Không', onPress: () => console.log('No Pressed'), style: 'cancel'},
                 {text: 'Có', onPress: () => this.removeAll()}
@@ -259,15 +163,12 @@ export default class Bill extends Component {
 
     removeAll() {
         this.setState({cartItems: []})
-        AsyncStorage.setItem("CART", JSON.stringify([]));
+        AsyncStorage.setItem(Config.keyStoreOrderDeviceOut, JSON.stringify([]));
     }
 
-    checkout() {
-        Actions.checkout({cartItems: this.state.cartItems, userId: this.state.userId});
-    }
 
     itemClicked(item) {
-        Actions.product({product: item});
+        Actions.deviceDetail({device: item})
     }
 
 }

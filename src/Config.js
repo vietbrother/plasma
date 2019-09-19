@@ -115,6 +115,7 @@ const Config = {
 
   //devices
   deviceList: "Thiết bị",
+  deviceListEmpty: "Không có thiết bị",
   deviceDetail: "Thông tin thiết bị",
   deviceCode: "Mã bình",
   deviceStage: "Trạng thái",
@@ -122,7 +123,8 @@ const Config = {
   deviceDes: "Thông số kỹ thuật",
   deviceCustomer: "Khách hàng",
 
-  //stock
+  //bill
+  keyStoreOrderDeviceOut: "ORDER_DEVICE_OUT",
 };
 
 

@@ -35,8 +35,9 @@ export default class CameraScannerList extends Component {
 
             customerId: '',
             customerName: '',
-            numberDeviceCurrent: '',
-            numberDeviceTotal: ''
+            numberDeviceCurrent: 0,
+            numberDeviceTotal: 0,
+            deviceList: []
         }
     }
 
@@ -187,9 +188,9 @@ export default class CameraScannerList extends Component {
     }
 
     _getResSearch(err, products) {
+        this.setState({isLoading: false});
         if (err) {
             alert(err);
-            this.setState({isLoading: false});
             return console.log(err);
         }
         console.log('==========================================');
@@ -201,32 +202,7 @@ export default class CameraScannerList extends Component {
                 alert('Không tìm thấy thông tin bình ' + this.state.textDetect);
                 return;
             }
-            var newStage = this._switchStage(products[0].stage);
-            if (newStage == '4') {//chuyen trang thai tu binh ton sang xuat cho khach
-                this.setState({isLoading: false});
-                Alert.alert(
-                    '',
-                    'Xuất bình ' + this.state.textDetect + ' cho khách', // <- this part is optional, you can pass an empty string
-                    [
-                        {
-                            text: 'Xuất cho khách',
-                            onPress: () => Actions.stockOut({
-                                textDetect: this.state.textDetect,
-                                deviceInfo: products[0]
-                            })
-                        },
-                        {
-                            text: 'Hủy',
-                            onPress: () => console.log('Cancel Pressed'),
-                            style: 'cancel',
-                        },
-                    ],
-                    {cancelable: true},
-                );
-                return;
-            }
-            this.setState({newStage: newStage, oldStage: products[0].stage, products: products});
-            this._actionChangeStage(products[0].id, newStage);
+            this._addToOrder(products[0]);
         } catch (e) {
             console.log(e);
             alert('Lấy thông tin bình ' + this.state.textDetect + ' thất bại! ');
@@ -234,213 +210,49 @@ export default class CameraScannerList extends Component {
         }
     }
 
-    _actionChangeStage(id, newState) {
-        try {
 
-            console.log('--------------id ' + id + "---newState  " + newState);
-            // Connect to Odoo
-            // global.odooAPI.connect(function (err) {
-            //     if (err) {
-            //         console.log('--------------connect error');
-            //         this.setState({isLoading: false});
-            //         return console.log(err);
-            //     }
-            // });
-            global.odooAPI.connect(this._getResConnect.bind(this));
+    _addToOrder(device) {
+        var temp = [];
+        temp.push(device);
+        var currentQuantity = this.state.numberDeviceCurrent;
+        currentQuantity = currentQuantity + 1;
 
-            var codeDevice = this.state.textDetect;
-            var params = {
-                stage: newState
-            }; //params
-            global.odooAPI.update('p.equipment', id, params, this._getResUpdate.bind(this)); //update stage
-        } catch (e) {
-            console.log(e);
-            alert('Chuyển trạng thái bình ' + this.state.textDetect + ' thất bại! ');
-            this.setState({isLoading: false});
-        }
-    }
+        AsyncStorage.getItem(Config.keyStoreOrderDeviceOut, (err, res) => {
+            if (!res) AsyncStorage.setItem(Config.keyStoreOrderDeviceOut, JSON.stringify([temp]));
+            else {
+                var items = JSON.parse(res);
+                items.push(device);
 
-    _getResConnect(err) {
-        if (err) {
-            console.log('--------------connect error');
-            this.setState({isLoading: false});
-            alert(Config.err_connect);
-            return console.log(err);
-        }
-    }
-
-    _getResUpdate(err, response) {
-        if (err) {
-            this.setState({isLoading: false});
-            alert(err);
-            return console.log(err);
-        }
-        console.log('_______response___________________');
-        console.log(response);
-        try {
-            this.setState({responseUpdate: response});
-            /*
-            if (response) {
-                alert('Chuyển trạng thái mã bình ' + this.state.textDetect + ' từ '
-                    + this._renderStatus(this.state.oldStage)
-                + ' sang ' + this._renderStatus(this.state.newStage));
+                AsyncStorage.setItem(Config.keyStoreOrderDeviceOut, JSON.stringify(items));
             }
-            this.setState({isLoading: false});
-            */
-            this._createOrder('0');
-        } catch (e) {
-            console.log(e);
-            alert('Chuyển trạng thái mã bình ' + this.state.textDetect + ' thất bại! ');
-            this.setState({isLoading: false});
-        }
-    }
-
-
-    _switchStage(status) {
-        if (status == '0') {
-            return '1';
-        } else if (status == '4') {
-            return '1';
-        } else if (status == '1') {
-            return '2';
-        } else if (status == '2') {
-            return '3';
-        } else if (status == '3') {
-            return '4';
-        } else {
-            return '0';
-        }
-    }
-
-    _renderStatus(status) {
-        if (status == '0') {
-            return 'Không xác định';
-        } else if (status == '4') {
-            return 'Bình đang sử dụng';
-        } else if (status == '1') {
-            return 'Vỏ';
-        } else if (status == '2') {
-            return 'Tái nạp';
-        } else if (status == '3') {
-            return 'Bình tồn';
-        } else {
-            return {status};
-        }
-    }
-
-    /**
-     * Create order
-     * */
-    _createOrder(customerId) {
-        try {
-            var oldStage = this.state.oldStage;
-            var dateTime = new Date().toISOString();
-            var dateStr = dateTime.split('T')[0].replace(/-/g, '').replace(/:/g, '')
-            var dateTimeStr = dateTime.split('.')[0].replace('T', '_').replace(/-/g, '').replace(/:/g, '');
-
-            var orderCode = '';
-            var orderCustomerId = '';
-            var orderType = '';
-            var device_id = this.state.products[0].id;
-            var device_code = this.state.products[0].code;
-            //TYPE = [(0, 'Không xác định'), (1, 'Thu hồi'), (2, 'Xuất tái nạp'), (3, 'Nhập kho'), (4, 'Xuất cho khách')]
-            if (oldStage == '0') {
-                orderCode = dateTimeStr + 'Thu_hoi_' + device_code;
-                orderType = Config.orderType1ThuHoi;
-                orderCustomerId = '1';// cong ty
-            } else if (oldStage == '4') {
-                orderCode = dateTimeStr + 'Thu_hoi_' + device_code;
-                orderType = Config.orderType1ThuHoi;
-                orderCustomerId = '1';// cong ty
-            } else if (oldStage == '1') {
-                orderCode = dateTimeStr + 'Xuat_tai_nap_' + device_code;
-                orderType = Config.orderType2XuatTaiNap;
-                orderCustomerId = '2';// nha may
-            } else if (oldStage == '2') {
-                orderCode = dateTimeStr + 'Nhap_kho_' + device_code;
-                orderType = Config.orderType3NhapKho;
-                orderCustomerId = '1';// cong ty
-            } else if (oldStage == '3') {
-                orderCode = dateTimeStr + 'Xuat_cho_khach_' + device_code;
-                orderType = Config.orderType4XuatChoKhach;
-                orderCustomerId = customerId;// khach hang
-            } else {
-                alert('Trạng thái thiết bị không đúng')
-                return;
-            }
-
-            // Connect to Odoo
-            global.odooAPI.connect(function (err) {
-                if (err) {
-                    console.log('--------------connect error');
-                    this.setState({isLoading: false});
-                    return console.log(err);
-                }
+            Toast.show({
+                text: 'Đã thêm binh ' + device.code,
+                position: 'bottom',
+                type: 'success',
+                buttonText: 'Ẩn',
+                duration: 3000
             });
-            var params = {
-                p_equipments: [(6, 0, device_id)],
-                code: orderCode,
-                type: orderType,
-                p_customer: orderCustomerId
-            }; //params
-            global.odooAPI.create('p.order', params, this._getResCreateOrder.bind(this)); //update stage
-
-        } catch (e) {
-            console.log(e);
-            Alert.alert(
-                '',
-                'Chuyển trạng thái thành công! Lỗi khi tạo đơn hàng!', // <- this part is optional, you can pass an empty string
-                [
-                    {text: 'Đóng', onPress: () => console.log('OK Pressed')},
-                ],
-                {cancelable: false},
-            );
-            this.setState({isLoading: false});
-        }
+            this.setState({numberDeviceCurrent: currentQuantity});
+        });
     }
-
-    _getResCreateOrder(err, response) {
-        this.setState({isLoading: false});
-        if (err) {
-            alert(err);
-            return console.log(err);
-        }
-        console.log('_______response__create_________________');
-        console.log(response);
-        try {
-            if (response != null) {
-                alert('Chuyển trạng thái mã bình ' + this.state.textDetect + ' từ '
-                    + this._renderStatus(this.state.oldStage)
-                    + ' sang ' + this._renderStatus(this.state.newStage));
-            } else {
-                alert(Config.err_order_add);
-            }
-        } catch (e) {
-            console.log(e);
-            this.setState({isLoading: false});
-            Alert.alert(
-                '',
-                'Chuyển trạng thái thành công! Lỗi khi tạo đơn hàng!', // <- this part is optional, you can pass an empty string
-                [
-                    {text: 'Đóng', onPress: () => console.log('OK Pressed')},
-                ],
-                {cancelable: false},
-            );
-        }
-    }
-
 
     _renderButton() {
-        if (this.state.numberDeviceCurrent == this.state.numberDeviceTotal) {
+        if (this.state.numberDeviceCurrent >= this.state.numberDeviceTotal) {
             return (
                 <CardItem>
+                    <TouchableOpacity onPress={() => Actions.bill()}>
+                        <View style={styles.continueBtn}>
+                            <Icon name='ios-paper'/>
+                            <Text>{Config.deviceList}</Text>
+                        </View>
+                    </TouchableOpacity>
                     <TouchableOpacity onPress={this.takePicture}>
                         <View style={styles.continueBtn}>
                             <Icon name='ios-skip-forward'/>
                             <Text>{Config.btnScanContinue}</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => Actions.pop()}>
+                    <TouchableOpacity onPress={() => Actions.home()}>
                         <View style={styles.camBtn}>
                             <Icon name='ios-close-circle'/>
                             <Text>{Config.btnCancel}</Text>
@@ -457,7 +269,7 @@ export default class CameraScannerList extends Component {
                             <Text>{Config.btnOrderOut}</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => Actions.pop()}>
+                    <TouchableOpacity onPress={() => Actions.home()}>
                         <View style={styles.camBtn}>
                             <Icon name='ios-close-circle'/>
                             <Text>{Config.btnCancel}</Text>
@@ -465,6 +277,10 @@ export default class CameraScannerList extends Component {
                     </TouchableOpacity>
                 </CardItem>);
         }
+    }
+
+    _createOrder(customerId) {
+        AsyncStorage.setItem(Config.keyStoreOrderDeviceOut, JSON.stringify([]));
     }
 
     render() {
