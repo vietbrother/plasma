@@ -174,9 +174,9 @@ export default class OrderDetail extends Component {
                         <CardItem>
                             <Body>
                             <Text style={styles.title}>{Config.orderCode} : </Text>
-                            <Input
-                                value={this.state.code}
-                            />
+                            <Text>
+                                {this.state.code}
+                            </Text>
                             </Body>
                         </CardItem>
                         <CardItem>

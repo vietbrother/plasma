@@ -456,12 +456,12 @@ const menusSecondaryItems = [
         key: 'orders'
     },
 
-    // {
-    //     id: 14,
-    //     title: Config.titleMngtStatistics,
-    //     icon: 'ios-podium',
-    //     key: 'profile'
-    // },
+    {
+        id: 14,
+        title: Config.titleMngtStatistics,
+        icon: 'ios-podium',
+        key: 'statistic'
+    },
     {
         id: 15,
         title: Config.titleMngtProfile,

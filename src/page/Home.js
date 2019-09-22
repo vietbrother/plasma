@@ -362,17 +362,43 @@ export default class Home extends Component {
                             {/*callback={this.search}*/}
                             {/*textDetect={this.props.textDetect}/>*/}
 
-                            <CardItem>
-                                <Button onPress={() => Actions.cameraScanner()} transparent>
-                                    <Icon name='ios-camera' style={{color: 'green', fontSize: 16}}/>
-                                    <Text> {Config.btnScan} </Text>
-                                </Button>
-                                <Button onPress={() => Actions.stockOutMultiple()} transparent>
-                                    {/*<Icon name='ios-aperture' style={{color: 'green', fontSize: 16}}/>*/}
-                                    <Icon name='ios-filling' style={{color: 'green', fontSize: 16}}/>
-                                    <Text> {Config.btnScanMultiple} </Text>
-                                </Button>
-                            </CardItem>
+                            {/*<CardItem>*/}
+                            {/*<Button onPress={() => Actions.cameraScanner()} transparent>*/}
+                            {/*<Icon name='ios-camera' style={{color: 'green', fontSize: 23}}/>*/}
+                            {/*<Text> {Config.btnScan} </Text>*/}
+                            {/*</Button>*/}
+                            {/*<Button onPress={() => Actions.stockOutMultiple()} transparent>*/}
+                            {/*/!*<Icon name='ios-aperture' style={{color: 'green', fontSize: 16}}/>*!/*/}
+                            {/*<Icon name='ios-browsers' style={{color: 'green', fontSize: 23}}/>*/}
+                            {/*<Text> {Config.btnScanMultiple} </Text>*/}
+                            {/*</Button>*/}
+                            {/*</CardItem>*/}
+                            <View style={{
+                                flex: 1,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                paddingTop: 15,
+                                paddingBottom: 15
+                            }}>
+                                <Grid>
+                                    <Col>
+                                        <TouchableOpacity onPress={() => Actions.cameraScanner()}>
+                                            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                                <Icon name='ios-camera' style={styles.btnScanStyle}/>
+                                                <Text> {Config.btnScan} </Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </Col>
+                                    <Col>
+                                        <TouchableOpacity onPress={() => Actions.stockOutMultiple()}>
+                                            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                                <Icon name='ios-browsers' style={styles.btnScanStyle}/>
+                                                <Text> {Config.btnScanMultiple} </Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </Col>
+                                </Grid>
+                            </View>
 
                             <View style={{
                                 flex: 1,
@@ -500,6 +526,9 @@ const styles = StyleSheet.create({
         paddingRight: 5,
         paddingLeft: 5,
         paddingBottom: 20
+    },
+    btnScanStyle: {
+        color: 'green', fontSize: 35
     },
     image: {
         width: 120,

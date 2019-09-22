@@ -7,9 +7,9 @@ import {
     TouchableOpacity,
     StyleSheet,
     Dimensions,
-    Modal, Alert
+    Modal, Alert, AsyncStorage
 } from "react-native";
-import {Button, Container, Icon, CardItem, Left, Right,} from 'native-base';
+import {Button, Container, Icon, CardItem, Left, Right, Grid, Col, Toast} from 'native-base';
 
 import {RNCamera} from 'react-native-camera';
 
@@ -33,8 +33,8 @@ export default class CameraScannerList extends Component {
             newStage: 0,
             oldStage: '',
 
-            customerId: '',
-            customerName: '',
+            customer_id: '',
+            customer_name: '',
             numberDeviceCurrent: 0,
             numberDeviceTotal: 0,
             deviceList: []
@@ -43,10 +43,10 @@ export default class CameraScannerList extends Component {
 
     componentDidMount(): void {
         this.setState({
-            customerId: this.props.customer_id,
-            customerName: this.props.customer_name,
+            customer_id: this.props.customer_id,
+            customer_name: this.props.customer_name,
             numberDeviceTotal: this.props.numberDeviceScan,
-        })
+        });
     }
 
     takePicture = async () => {
@@ -118,7 +118,7 @@ export default class CameraScannerList extends Component {
                     })
                 });
                 var responseObj = await response.json();
-                console.log(responseObj);
+                // console.log(responseObj);
 
                 //parser data
                 var textDetect = '';
@@ -134,7 +134,7 @@ export default class CameraScannerList extends Component {
                     }
                     console.log(textDetect);
                     if (textDetect != null && textDetect != '') {
-                        textDetect = textDetect.trim().replace('O', '0');
+                        // textDetect = textDetect.trim().replace('O', '0');
                         var res = textDetect.match(/[A-Z]+\d+/g);
                         if (res != null) {
                             textDetect = res[0];
@@ -217,13 +217,19 @@ export default class CameraScannerList extends Component {
         var currentQuantity = this.state.numberDeviceCurrent;
         currentQuantity = currentQuantity + 1;
 
-        AsyncStorage.getItem(Config.keyStoreOrderDeviceOut, (err, res) => {
-            if (!res) AsyncStorage.setItem(Config.keyStoreOrderDeviceOut, JSON.stringify([temp]));
+        AsyncStorage.getItem('ORDER_DEVICE_OUT', (err, res) => {
+            console.log(res);
+            if (!res) AsyncStorage.setItem('ORDER_DEVICE_OUT', [device]);
             else {
                 var items = JSON.parse(res);
                 items.push(device);
+                console.log("items : " + items);
 
-                AsyncStorage.setItem(Config.keyStoreOrderDeviceOut, JSON.stringify(items));
+                AsyncStorage.setItem('ORDER_DEVICE_OUT', JSON.stringify(items));
+
+                AsyncStorage.getItem('ORDER_DEVICE_OUT', (err, res) => {
+                    console.log("res " + res);
+                });
             }
             Toast.show({
                 text: 'Đã thêm binh ' + device.code,
@@ -237,50 +243,232 @@ export default class CameraScannerList extends Component {
     }
 
     _renderButton() {
-        if (this.state.numberDeviceCurrent >= this.state.numberDeviceTotal) {
+        if (this.state.numberDeviceCurrent < this.state.numberDeviceTotal) {
             return (
                 <CardItem>
-                    <TouchableOpacity onPress={() => Actions.bill()}>
-                        <View style={styles.continueBtn}>
-                            <Icon name='ios-paper'/>
-                            <Text>{Config.deviceList}</Text>
+                    {/*{this.state.numberDeviceCurrent == 0 ?*/}
+                    {/*<Left><Text></Text></Left> :*/}
+                    {/*<Left>*/}
+                    {/*<TouchableOpacity onPress={() => Actions.bill()}>*/}
+                    {/*<View style={{alignItems: 'center', justifyContent: 'center'}}>*/}
+                    {/*<Icon name='ios-paper' style={styles.btnExport}/>*/}
+                    {/*<Text>{Config.deviceList}</Text>*/}
+                    {/*</View>*/}
+                    {/*</TouchableOpacity>*/}
+                    {/*</Left>*/}
+                    {/*}*/}
+                    <Left>
+                        {/*<TouchableOpacity onPress={() => Actions.bill()}>*/}
+                        <TouchableOpacity onPress={() => {
+                            this._billList()
+                        }}>
+                            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                <Icon name='ios-paper' style={styles.btnExport}/>
+                                <Text>{Config.deviceListTitle}</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </Left>
+
+                    <TouchableOpacity onPress={this.takePicture.bind(this)}>
+                        <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                            {this.state.numberDeviceCurrent == 0 ?
+                                <Icon name='ios-camera' style={styles.btnExport}/> :
+                                <Icon name='ios-skip-forward' style={styles.btnExport}/>}
+                            {this.state.numberDeviceCurrent == 0 ?
+                                <Text>{Config.btnScan}</Text> :
+                                <Text>{Config.btnScanContinue}</Text>}
+
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={this.takePicture}>
-                        <View style={styles.continueBtn}>
-                            <Icon name='ios-skip-forward'/>
-                            <Text>{Config.btnScanContinue}</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => Actions.home()}>
-                        <View style={styles.camBtn}>
-                            <Icon name='ios-close-circle'/>
-                            <Text>{Config.btnCancel}</Text>
-                        </View>
-                    </TouchableOpacity>
+                    {/*<TouchableOpacity onPress={() => {*/}
+                        {/*this._getDeviceInfo('HN05059')*/}
+                    {/*}}>*/}
+                        {/*<View style={{alignItems: 'center', justifyContent: 'center'}}>*/}
+                            {/*<Text>test</Text>*/}
+                        {/*</View>*/}
+                    {/*</TouchableOpacity>*/}
+                    <Right>
+                        <TouchableOpacity onPress={() => Actions.stockOutMultiple()}>
+                            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                <Icon name='ios-close-circle'/>
+                                <Text>{Config.btnCancel}</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </Right>
+
                 </CardItem>
+
             );
         } else {
             return (
                 <CardItem>
-                    <TouchableOpacity onPress={this._createOrder(this.state.customer_id)}>
-                        <View style={styles.continueBtn}>
-                            <Icon name='ios-send'/>
+                    <Left>
+                        <TouchableOpacity onPress={() => {
+                            this._billList()
+                        }}>
+                            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                <Icon name='ios-paper' style={styles.btnExport}/>
+                                <Text>{Config.deviceListTitle}</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </Left>
+                    <TouchableOpacity onPress={() => {
+                        this._actionCreateOrder()
+                    }}>
+                        <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                            <Icon name='ios-send' style={{color: 'green'}}/>
                             <Text>{Config.btnOrderOut}</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => Actions.home()}>
-                        <View style={styles.camBtn}>
-                            <Icon name='ios-close-circle'/>
-                            <Text>{Config.btnCancel}</Text>
-                        </View>
-                    </TouchableOpacity>
-                </CardItem>);
+                    <Right>
+                        <TouchableOpacity onPress={() => {
+                            Actions.stockOutMultiple()
+                        }}>
+                            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                <Icon name='ios-close-circle'/>
+                                <Text>{Config.btnCancel}</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </Right>
+                </CardItem>
+            );
         }
     }
 
-    _createOrder(customerId) {
-        AsyncStorage.setItem(Config.keyStoreOrderDeviceOut, JSON.stringify([]));
+    _actionCreateOrder() {
+        AsyncStorage.getItem('ORDER_DEVICE_OUT', (err, res) => {
+            console.log("_____res " + res);
+            if (res) {
+                var items = JSON.parse(res);
+                var lstDeviceId = [];
+                for (var i = 0; i < items.length; i++) {
+                    lstDeviceId.push(items[i].id);
+                    this._actionChangeStage(items[i].id, items[i].code);
+                }
+                this._createOrder(lstDeviceId);
+            }
+        });
+        // AsyncStorage.setItem('ORDER_DEVICE_OUT', JSON.stringify([]));
+    }
+
+    _actionChangeStage(id, deviceCode) {
+        try {
+            // Connect to Odoo
+            global.odooAPI.connect(this._getResConnect.bind(this));
+            var codeDevice = deviceCode;
+            var params = {
+                stage: Config.stage4BinhDangSuDung
+            }; //params
+            global.odooAPI.update('p.equipment', id, params, this._getResUpdate.bind(this)); //update stage
+        } catch (e) {
+            console.log(e);
+            alert('Chuyển trạng thái bình ' + deviceCode + ' thất bại! ');
+            this.setState({isLoading: false});
+        }
+    }
+
+    _getResConnect(err) {
+        if (err) {
+            console.log('--------------connect error');
+            this.setState({isLoading: false});
+            alert(Config.err_connect);
+            return console.log(err);
+        }
+    }
+
+    _getResUpdate(err, response) {
+        if (err) {
+            this.setState({isLoading: false});
+            alert(err);
+            return console.log(err);
+        }
+        console.log('_______response___________________');
+        console.log(response);
+        try {
+            this.setState({isLoading: false});
+        } catch (e) {
+            console.log(e);
+            alert('Chuyển trạng thái bình thất bại! ');
+            this.setState({isLoading: false});
+        }
+    }
+
+
+    _createOrder(lstDeviceId) {
+        try {
+            console.log(lstDeviceId);
+            var dateTime = new Date().toISOString();
+            var dateStr = dateTime.split('T')[0].replace(/-/g, '').replace(/:/g, '')
+            var dateTimeStr = dateTime.split('.')[0].replace('T', '').replace(/-/g, '').replace(/:/g, '');
+
+            var orderCustomerId = this.state.customer_id;
+            var orderType = Config.orderType4XuatChoKhach;
+            var device_id = lstDeviceId;
+            var orderCode = dateTimeStr + '_Xuat_hang_loat_cho_khach';
+            //TYPE = [(0, 'Không xác định'), (1, 'Thu hồi'), (2, 'Xuất tái nạp'), (3, 'Nhập kho'), (4, 'Xuất cho khách')]
+
+
+            // Connect to Odoo
+            global.odooAPI.connect(function (err) {
+                if (err) {
+                    console.log('--------------connect error');
+                    this.setState({isLoading: false});
+                    return console.log(err);
+                }
+            });
+            var params = {
+                p_equipments: [(6, 0, [device_id])],
+                type: orderType,
+                code: orderCode,
+                p_customer: orderCustomerId
+            }; //params
+            global.odooAPI.create('p.order', params, this._getResCreateOrder.bind(this)); //update stage
+
+        } catch (e) {
+            console.log(e);
+            Alert.alert(
+                '',
+                'Chuyển trạng thái thành công! Lỗi khi tạo đơn hàng!', // <- this part is optional, you can pass an empty string
+                [
+                    {text: 'Đóng', onPress: () => console.log('OK Pressed')},
+                ],
+                {cancelable: false},
+            );
+            this.setState({isLoading: false});
+        }
+    }
+
+    _getResCreateOrder(err, response) {
+        if (err) {
+            alert(err);
+            return console.log(err);
+        }
+        console.log('_______response__create_________________');
+        console.log(response);
+        try {
+            this.setState({isLoading: false});
+            if (response) {
+                alert('Xuất cho khách thành công ');
+                Actions.pop();
+            } else {
+                alert('Xuất cho khách thất bại ');
+            }
+        } catch (e) {
+            console.log(e);
+            this.setState({isLoading: false});
+        }
+    }
+
+
+    _billList() {
+        // AsyncStorage.getItem('ORDER_DEVICE_OUT', (err, res) => {
+        //     console.log("get 'ORDER_DEVICE_OUT'  " + res);
+        //     Actions.bill({lstDevice : res});
+        // });
+        AsyncStorage.getItem('ORDER_DEVICE_OUT', (err, res) => {
+            console.log("res " + res);
+            Actions.bill({lstDevice: res});
+        });
     }
 
     render() {
@@ -304,14 +492,13 @@ export default class CameraScannerList extends Component {
                 </RNCamera>
                 <View style={styles.bottomBar}>
                     <CardItem>
-                        <Text style={{fontWeight: 'bold'}}><Icon name="ios-contact"
-                                                                 style={styles.icon}/> {Config.orderCustomer}</Text>
+                        <Icon name="ios-contact" style={styles.icon}/>
+                        <Text style={{fontWeight: '400'}}>{Config.orderCustomer} : </Text>
                         <Text style={{fontWeight: 'bold', fontSize: 16}}> {this.state.customer_name} </Text>
                     </CardItem>
                     <CardItem>
-                        <Text style={{fontWeight: 'bold'}}><Icon name="ios-contact"
-                                                                 style={styles.icon}/> {Config.numberDeviceScanned}
-                        </Text>
+                        <Icon name="ios-calculator" style={styles.icon}/>
+                        <Text style={{fontWeight: '400'}}>{Config.numberDeviceScanned} : </Text>
                         <Text style={{
                             fontWeight: 'bold',
                             fontSize: 16,
@@ -334,18 +521,19 @@ const styles = StyleSheet.create({
     cam: {
         justifyContent: "flex-end",
         alignItems: "center",
-        height: Dimensions.get("window").height,
+        height: Dimensions.get("window").width,
         width: Dimensions.get("window").width
     },
 
     bottomBar: {
         alignSelf: 'flex-end',
         backgroundColor: "white",
-        flexDirection: 'row',
+        // flexDirection: 'row',
         // height: 80,
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
+        color: Config.mainColor
     },
 
     camBtn: {
@@ -391,12 +579,31 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
 
-    continueBtn: {
+    continueBtnView: {
         borderRadius: 5,
-        borderWidth: 1.3,
-        borderColor: Config.mainColor,
-        marginBottom: 20,
+        borderWidth: 0.5,
+        marginBottom: 10,
+        marginTop: 10,
+        marginLeft: 10,
+        marginRight: 10,
+    },
+    continueBtn: {
+        marginBottom: 10,
+        marginTop: 10,
+        marginLeft: 10,
+        marginRight: 10,
         alignItems: 'center',
         justifyContent: 'center',
     },
+    btnExport: {
+        color: 'green'
+    },
+    btnBar: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingTop: 10,
+        paddingBottom: 10,
+        color: Config.mainColor
+    }
 });

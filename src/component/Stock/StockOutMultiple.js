@@ -129,7 +129,7 @@ export default class StockOutMultiple extends Component {
         let cat = [];
         var lstCustomer = this.state.customers;
         cat.push(
-            <Picker.Item key={new Date()} label={''} value={'-1'}/>
+            <Picker.Item key={new Date()} label={'Chọn khách hàng xuất'} value={'-1'}/>
         );
         var key = new Date();
         for (var i = 0; i < lstCustomer.length; i++) {
@@ -195,14 +195,15 @@ export default class StockOutMultiple extends Component {
                             <Body>
                             <Text style={styles.title}>{Config.orderNumberDevice} : </Text>
                             {/*<Input*/}
-                                {/*placeholder={'Nhập ' + Config.orderNumberDevice}*/}
-                                {/*onChangeText={(text) => this.setState({numberDeviceScan: text})}*/}
+                            {/*placeholder={'Nhập ' + Config.orderNumberDevice}*/}
+                            {/*onChangeText={(text) => this.setState({numberDeviceScan: text})}*/}
                             {/*/>*/}
                             <TextInput
                                 placeholder={'Nhập ' + Config.orderNumberDevice}
                                 underlineColorAndroid='transparent'
                                 style={styles.textInputStyle}
                                 keyboardType={'numeric'}
+                                onChangeText={(text) => this.setState({numberDeviceScan: text})}
                                 // keyboardType = 'number-pad'
                             />
                             </Body>
@@ -245,7 +246,8 @@ export default class StockOutMultiple extends Component {
 
         var customer_id = this.state.customer_id;
         var numberDeviceScan = this.state.numberDeviceScan;
-        if (customer_id == null || customer_id == '') {
+        console.log(customer_id);
+        if (customer_id == null || customer_id == '' || customer_id == '-1') {
             this.setState({hasError: true, errorText: 'Cần chọn khách hàng xuất'});
             return;
         }
@@ -259,13 +261,18 @@ export default class StockOutMultiple extends Component {
             var customer_name = '';
             var lstCustomer = this.state.customers;
             for (var i = 0; i < lstCustomer.length; i++) {
-                if(this.state.customer_id == lstCustomer[i].id){
+                if (this.state.customer_id == lstCustomer[i].id) {
                     customer_name = lstCustomer[i].name;
                     this.setState({customer_name: lstCustomer[i].name})
-                    break;
                 }
             }
-            Actions.cameraScannerList({customer_id: customer_id, customer_name: customer_name, numberDeviceScan: numberDeviceScan});
+            console.log(customer_name);
+            AsyncStorage.setItem(Config.keyStoreOrderDeviceOut, JSON.stringify([]));
+            Actions.cameraScannerList({
+                customer_id: customer_id,
+                customer_name: customer_name,
+                numberDeviceScan: numberDeviceScan
+            });
         } catch (error) {
             this.setState({isLoading: false});
             console.error(error);
@@ -286,6 +293,10 @@ const styles = {
         borderRadius: 10,
         borderWidth: 2,
         borderColor: '#009688',
-        marginBottom: 10
+        width: '100%',
+        marginTop: 10
+    },
+    title: {
+        fontSize: 16, fontWeight: 'bold'
     }
 };

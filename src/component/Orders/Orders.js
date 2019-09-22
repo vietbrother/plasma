@@ -118,8 +118,8 @@ export default class Orders extends Component {
             alert(err);
             return console.log(err);
         }
-        console.log(orders);
-        console.log('__________________________');
+        // console.log(orders);
+        console.log('__________orders________________');
         this.setState({orders: orders});
     }
 

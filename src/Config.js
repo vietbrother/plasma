@@ -30,7 +30,8 @@ const Config = {
   goolge_vision_key : 'AIzaSyBXBryO7MPVvhhneyQkKwW8CzfecAmpSSo', //thuclt
 
   imageHeight: 640,
-  imageWidth: 800,
+  imageWidth: 400,
+  // imageWidth: 800,
 
   //api
   odooUrl: '103.94.16.226',
@@ -114,6 +115,7 @@ const Config = {
   customerAddress: 'Địa chỉ khách hàng',
 
   //devices
+  deviceListTitle: "Ds thiết bị",
   deviceList: "Thiết bị",
   deviceListEmpty: "Không có thiết bị",
   deviceDetail: "Thông tin thiết bị",
@@ -124,7 +126,16 @@ const Config = {
   deviceCustomer: "Khách hàng",
 
   //bill
-  keyStoreOrderDeviceOut: "ORDER_DEVICE_OUT",
+  keyStoreOrderDeviceOut: 'ORDER_DEVICE_OUT',
+
+  //statistic
+  statisticTitle: "Thống kê",
+  statisticCountStage1: "Vỏ",
+  statisticCountStage2: "Tái nạp",
+  statisticCountStage3: "Bình tồn",
+  statisticCountStage4: "Đang sử dụng",
+  statisticCountAll: "Tổng số thiết bị",
+
 };
 
 

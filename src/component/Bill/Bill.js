@@ -40,19 +40,17 @@ export default class Bill extends Component {
         };
     }
 
-    componentWillMount() {
-
-        AsyncStorage.getItem(Config.keyStoreOrderDeviceOut, (err, res) => {
+    componentDidMount() {
+        // this.setState({cartItems: this.props.lstDevice == null ? [] : JSON.parse(this.props.lstDevice)});
+        AsyncStorage.getItem('ORDER_DEVICE_OUT', (err, res) => {
             console.log("res " + res);
-            if (!res) this.setState({cartItems: []});
-            else {
+            if (res) {
                 var itemArr = JSON.parse(res);
-                var temp = itemArr.filter(function (cartItem) {
-                    return cartItem.userId == userId;
-                });
-                this.setState({cartItems: temp});
+                // var temp = itemArr.filter(function (cartItem) {
+                //     return cartItem.userId == userId;
+                // });
+                this.setState({cartItems: itemArr});
             }
-            this.getTotal();
         });
 
     }
@@ -81,19 +79,19 @@ export default class Bill extends Component {
                         <Grid style={{marginTop: 20, marginBottom: 10}}>
                             <Col style={{paddingLeft: 10, paddingRight: 5}}>
                                 <Button onPress={() => Actions.pop()}
-                                        style={{backgroundColor: '#c40521'}} block iconLeft>
+                                        style={{backgroundColor: Config.mainColor}} block iconLeft>
                                     <Icon name='ios-card'/>
-                                    <Text style={{color: Config.mainColor}}> Đóng </Text>
+                                    <Text style={{color: 'white'}}> Đóng </Text>
                                 </Button>
                             </Col>
-                            <Col style={{paddingLeft: 5, paddingRight: 10}}>
-                                <Button onPress={() => this.removeAllPressed()}
-                                        style={{borderWidth: 1, borderColor: Colors.navbarBackgroundColor}} block
-                                        iconRight transparent>
-                                    <Text style={{color: Colors.navbarBackgroundColor}}> Xóa hết </Text>
-                                    <Icon style={{color: Colors.navbarBackgroundColor}} name='ios-trash-outline'/>
-                                </Button>
-                            </Col>
+                            {/*<Col style={{paddingLeft: 5, paddingRight: 10}}>*/}
+                                {/*<Button onPress={() => this.removeAllPressed()}*/}
+                                        {/*style={{borderWidth: 1, borderColor: Colors.navbarBackgroundColor}} block*/}
+                                        {/*iconRight transparent>*/}
+                                    {/*<Text style={{color: Colors.navbarBackgroundColor}}> Xóa hết </Text>*/}
+                                    {/*<Icon style={{color: Colors.navbarBackgroundColor}} name='ios-trash-outline'/>*/}
+                                {/*</Button>*/}
+                            {/*</Col>*/}
                         </Grid>
                     </Content>
                 }
@@ -110,18 +108,17 @@ export default class Bill extends Component {
                     last={this.state.cartItems.length === i + 1}
                     onPress={() => this.itemClicked(item)}
                 >
-                    <Thumbnail square style={{width: 110, height: 90}} source={{uri: item.images[0].src}}/>
                     <Body style={{paddingLeft: 10}}>
                     <Text style={{fontSize: 16, color: Config.mainColor}}>
                         {item.code}
                     </Text>
                     </Body>
-                    <Right>
-                        <Button style={{marginLeft: -25}} transparent onPress={() => this.removeItemPressed(item)}>
-                            <Icon size={30} style={{fontSize: 30, color: 'red'}}
-                                  name='ios-remove-circle-outline'/>
-                        </Button>
-                    </Right>
+                    {/*<Right>*/}
+                        {/*<Button style={{marginLeft: -25}} transparent onPress={() => this.removeItemPressed(item)}>*/}
+                            {/*<Icon size={30} style={{fontSize: 30, color: 'red'}}*/}
+                                  {/*name='ios-remove-circle-outline'/>*/}
+                        {/*</Button>*/}
+                    {/*</Right>*/}
 
                 </ListItem>
             );

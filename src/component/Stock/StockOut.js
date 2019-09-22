@@ -384,7 +384,7 @@ export default class StockOut extends Component {
             var dateTimeStr = dateTime.split('.')[0].replace('T', '_').replace(/-/g, '').replace(/:/g, '');
 
             var orderCode = '';
-            var orderCustomerId = '';
+            var orderCustomerId = customerId;
             var orderType = '';
             var device_id = this.state.deviceInfo.id;
             var device_code = this.state.products[0].code;
