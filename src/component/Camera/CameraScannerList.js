@@ -227,9 +227,9 @@ export default class CameraScannerList extends Component {
 
                 AsyncStorage.setItem('ORDER_DEVICE_OUT', JSON.stringify(items));
 
-                AsyncStorage.getItem('ORDER_DEVICE_OUT', (err, res) => {
-                    console.log("res " + res);
-                });
+                // AsyncStorage.getItem('ORDER_DEVICE_OUT', (err, res) => {
+                //     console.log("res " + res);
+                // });
             }
             Toast.show({
                 text: 'Đã thêm binh ' + device.code,
@@ -280,13 +280,13 @@ export default class CameraScannerList extends Component {
 
                         </View>
                     </TouchableOpacity>
-                    {/*<TouchableOpacity onPress={() => {*/}
-                        {/*this._getDeviceInfo('HN05059')*/}
-                    {/*}}>*/}
-                        {/*<View style={{alignItems: 'center', justifyContent: 'center'}}>*/}
-                            {/*<Text>test</Text>*/}
-                        {/*</View>*/}
-                    {/*</TouchableOpacity>*/}
+                    <TouchableOpacity onPress={() => {
+                        this._getDeviceInfo('HN05059')
+                    }}>
+                        <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                            <Text>test</Text>
+                        </View>
+                    </TouchableOpacity>
                     <Right>
                         <TouchableOpacity onPress={() => Actions.stockOutMultiple()}>
                             <View style={{alignItems: 'center', justifyContent: 'center'}}>
@@ -416,8 +416,25 @@ export default class CameraScannerList extends Component {
                     return console.log(err);
                 }
             });
+            // var endpoint = '/web/dataset/call_kw';
+            // var model = 'p.order';
+            // var method = 'create';
+            //
+            // var args = [{p_equipments: [[6, 0, device_id]], type: orderType,
+            //     p_customer: orderCustomerId}];//args
+            //
+            // var params = {
+            //     model: model,
+            //     method: method,
+            //     args: args,
+            //     kwargs: {},
+            // };//params
+            //
+            // // count
+            // global.odooAPI.rpc_call(endpoint, params, this._getResCreateOrder.bind(this));//odoo.rpc_call
+
             var params = {
-                p_equipments: [(6, 0, [device_id])],
+                p_equipments: [[6, 0, device_id]],
                 type: orderType,
                 code: orderCode,
                 p_customer: orderCustomerId

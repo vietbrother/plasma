@@ -137,6 +137,7 @@ export default class Statistic extends Component {
                 // count
                 var item = result[i];
                 var stageCount = item.stage_count;
+                console.log(stageCount);
                 var stage = item.stage;
                 if (stage == 1) {
                     this.setState({countStage_1: stageCount});
@@ -147,9 +148,9 @@ export default class Statistic extends Component {
                 } else if (stage == 4) {
                     this.setState({countStage_4: stageCount});
                 }
-                totalDevice += stageCount;
+                totalDevice = totalDevice + parseInt(stageCount);
             }
-            this.setState({countStage_all: stageCount});
+            this.setState({countStage_all: totalDevice});
         }
     }
 
@@ -381,19 +382,19 @@ export default class Statistic extends Component {
                                 </Col>
                             </Grid>
 
-                            {/*<Grid>*/}
-                            {/*<Col>*/}
-                            {/*<Card>*/}
-                            {/*<TouchableOpacity onPress={() => {*/}
-                            {/*}}>*/}
-                            {/*<View style={{alignItems: 'center', justifyContent: 'center'}}>*/}
-                            {/*<Text style={styles.btnStageAll}>{this.state.countStage_all}</Text>*/}
-                            {/*<Text> {Config.statisticCountAll} </Text>*/}
-                            {/*</View>*/}
-                            {/*</TouchableOpacity>*/}
-                            {/*</Card>*/}
-                            {/*</Col>*/}
-                            {/*</Grid>*/}
+                            <Grid>
+                                <Col>
+                                    <Card>
+                                        <TouchableOpacity onPress={() => {
+                                        }}>
+                                            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                                <Text style={styles.btnStageAll}>{this.state.countStage_all}</Text>
+                                                <Text> {Config.statisticCountAll} </Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </Card>
+                                </Col>
+                            </Grid>
                         </View>
 
                     </Content>
