@@ -98,7 +98,7 @@ export default class Devices extends Component {
 
             var params = {
                 // ids: [1, 2, 3, 4, 5],
-                domain: [['code', 'like', this.state.searchText]],
+                domain: [['code', 'like', this.state.searchText.toUpperCase()]],
                 fields: ['id', 'code', 'stage', 'warehouse', 'p_customer', 'description'],
                 order: 'id',
                 limit: 15,
