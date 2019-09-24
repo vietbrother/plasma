@@ -79,6 +79,12 @@ export default class Statistic extends Component {
         // // this._searchStageAll();
 
         this._searchCountStage();
+
+        var date = new Date();
+        var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        var startDate = firstDay.toISOString().split('T')[0];
+        var endDate = lastDay.toISOString().split('T')[0];
     }
 
     _searchCountStage() {
@@ -153,6 +159,83 @@ export default class Statistic extends Component {
             this.setState({countStage_all: totalDevice});
         }
     }
+
+    _searchCustomer() {
+        console.log('_searchCustomer-----------------search');
+        this.setState({isSearching: true});
+        // this._isLoading(true, codeDevice).bind;
+        let items = [];
+        try {
+
+            // Connect to Odoo
+            global.odooAPI.connect(function (err) {
+                if (err) {
+                    console.log('--------------connect error');
+                    alert(Config.err_connect);
+                    this.setState({isLoading: false});
+                    return console.log(err);
+                }
+            });
+            var endpoint = '/web/dataset/call_kw';
+            var model = 'p.order';
+            var method = 'read_group';
+
+            var args = [
+                []
+                // [['stage', '=', status]]
+            ];//args
+
+            var params = {
+                model: model,
+                method: method,
+                args: args,
+                kwargs: {
+                    //domain: [['code', 'like', this.state.searchText]],
+                    fields: ['stage', 'sequence'],
+                    groupby: ['stage']
+                },
+            };//params
+
+            global.odooAPI.rpc_call(endpoint, params, this._resSearchStage.bind(this));//odoo.rpc_call
+
+        } catch (e) {
+            console.log(e);
+            this.setState({isSearching: false});
+        }
+    }
+
+    _resSearchCustomer(err, result) {
+        this.setState({isSearching: false});
+        if (err) {
+            alert(err);
+            return console.log(err);
+        }
+        if (result != null && result.length > 0) {
+            var totalDevice = 0;
+            for (var i = 0; i < result.length; i++) {
+                // count
+                var item = result[i];
+                var stageCount = item.stage_count;
+                console.log(stageCount);
+                var stage = item.stage;
+                if (stage == 1) {
+                    this.setState({countStage_1: stageCount});
+                } else if (stage == 2) {
+                    this.setState({countStage_2: stageCount});
+                } else if (stage == 3) {
+                    this.setState({countStage_3: stageCount});
+                } else if (stage == 4) {
+                    this.setState({countStage_4: stageCount});
+                }
+                totalDevice = totalDevice + parseInt(stageCount);
+            }
+            this.setState({countStage_all: totalDevice});
+        }
+    }
+
+
+
+
 
     _searchStage(status) {
         console.log('_searchStage_1-----------------search');
