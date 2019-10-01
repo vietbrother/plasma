@@ -380,24 +380,30 @@ export default class Home extends Component {
                                 paddingTop: 15,
                                 paddingBottom: 15
                             }}>
-                                <Grid>
-                                    <Col>
-                                        <TouchableOpacity onPress={() => Actions.cameraScanner()}>
-                                            <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                                                <Icon name='ios-camera' style={styles.btnScanStyle}/>
-                                                <Text> {Config.btnScan} </Text>
-                                            </View>
-                                        </TouchableOpacity>
-                                    </Col>
-                                    <Col>
-                                        <TouchableOpacity onPress={() => Actions.stockOutMultiple()}>
-                                            <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                                                <Icon name='ios-browsers' style={styles.btnScanStyle}/>
-                                                <Text> {Config.btnScanMultiple} </Text>
-                                            </View>
-                                        </TouchableOpacity>
-                                    </Col>
-                                </Grid>
+                                {/*<Grid>*/}
+                                    {/*<Col>*/}
+                                        {/*<TouchableOpacity onPress={() => Actions.cameraScanner()}>*/}
+                                            {/*<View style={{alignItems: 'center', justifyContent: 'center'}}>*/}
+                                                {/*<Icon name='ios-camera' style={styles.btnScanStyle}/>*/}
+                                                {/*<Text> {Config.btnScan} </Text>*/}
+                                            {/*</View>*/}
+                                        {/*</TouchableOpacity>*/}
+                                    {/*</Col>*/}
+                                    {/*<Col>*/}
+                                        {/*<TouchableOpacity onPress={() => Actions.stockOutMultiple()}>*/}
+                                            {/*<View style={{alignItems: 'center', justifyContent: 'center'}}>*/}
+                                                {/*<Icon name='ios-browsers' style={styles.btnScanStyle}/>*/}
+                                                {/*<Text> {Config.btnScanMultiple} </Text>*/}
+                                            {/*</View>*/}
+                                        {/*</TouchableOpacity>*/}
+                                    {/*</Col>*/}
+                                {/*</Grid>*/}
+                                <TouchableOpacity onPress={() => Actions.stockOutMultipleManual()}>
+                                    <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                        <Icon name='ios-switch' style={styles.btnScanStyle}/>
+                                        <Text> {Config.btnScanMultiple} </Text>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
 
                             <View style={{

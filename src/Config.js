@@ -61,6 +61,7 @@ const Config = {
   btnScan: 'Quét thiết bị',
   btnScanContinue: 'Quét tiếp',
   btnScanMultiple: 'Xuất hàng loạt',
+  btnScanMultipleManual: 'Xuất hàng loạt thủ công',
   btnAddDevice: 'Nhập thiết bị',
   btnDeviceOut: 'Xuất thiết bị',
   btnOrderOut: 'Xuất hóa đơn',

@@ -51,6 +51,7 @@ import OrderList from "./component/Orders/Orders";
 import OrderDetail from "./component/Orders/OrderDetail";
 import Bill from "./component/Bill/Bill";
 import Statistic from "./component/Statistic/Statistic";
+import StockOutMultipleManual from "./component/Stock/StockOutMultipleManual";
 
 export default class Main extends Component {
 
@@ -127,6 +128,7 @@ export default class Main extends Component {
             <Scene key="flowItem" component={FlowItem} hideNavBar />
             <Scene key="stockOut" component={StockOut} hideNavBar />
             <Scene key="stockOutMultiple" component={StockOutMultiple} hideNavBar />
+            <Scene key="stockOutMultipleManual" component={StockOutMultipleManual} hideNavBar />
 
             <Scene key="customers" component={Customers} hideNavBar />
             <Scene key="customerAdd" component={CustomerAdd} hideNavBar />
