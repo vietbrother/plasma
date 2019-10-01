@@ -7,9 +7,13 @@ import {
     TouchableOpacity,
     StyleSheet,
     Dimensions,
-    Modal, Alert, AsyncStorage
+    Modal, Alert, AsyncStorage, ActivityIndicator, ScrollView
 } from "react-native";
-import {Button, Container, Icon, CardItem, Left, Right, Grid, Col, Toast, Footer, FooterTab} from 'native-base';
+import {
+    Button, Container, Icon, CardItem, Left, Right, Grid, Col, Toast, Footer, FooterTab, Item,
+    Input,
+    Header
+} from 'native-base';
 
 import {RNCamera} from 'react-native-camera';
 
@@ -19,6 +23,8 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import ImageResizer from "react-native-image-resizer";
 import RNFS from "react-native-fs";
 import SearchDeviceItem from "../SearchDevice/SearchDeviceItem";
+import DeviceItem from "../Device/DeviceItem";
+import Colors from "../../Colors";
 
 export default class ManualScannerList extends Component {
 
@@ -59,18 +65,27 @@ export default class ManualScannerList extends Component {
             var key = new Date().valueOf();
             console.log(item);
             items.push(
-                <SearchDeviceItem key={key + '_' + i} device={item}></SearchDeviceItem>
-            );
-            items.push(
-                <CardItem>
-                    <Right>
-                        <Button style={styles.buttonChangeState}
-                                onPress={() => {this._addToOrder(item)}} >
-                            <Icon name="ios-add-circle"></Icon>
-                            <Text style={{color: Config.mainColor, marginLeft: 5}}>Thêm thiết bị</Text>
-                        </Button>
-                    </Right>
-                </CardItem>
+                <View style={{
+                    // flex: 1,
+                    width: '100%', color: Config.mainColor, fontSize: 16,
+                    borderBottomColor: Colors.navbarBackgroundColor, borderBottomWidth: 0.5,
+                    paddingLeft: 10,
+                    paddingTop: 10, paddingBottom: 10
+                }}>
+                    <DeviceItem key={key + '_' + i} device={item}></DeviceItem>
+                    <CardItem>
+                        <Left></Left>
+                        <Right>
+                            <Button transparent
+                                    onPress={() => {
+                                        this._addToOrder(item)
+                                    }}>
+                                <Icon name="ios-add-circle"></Icon>
+                                <Text style={{color: Config.mainColor, marginLeft: 5}}>Thêm thiết bị</Text>
+                            </Button>
+                        </Right>
+                    </CardItem>
+                </View>
             );
         }
         return items;
@@ -82,14 +97,7 @@ export default class ManualScannerList extends Component {
         let items = [];
         try {
             // Connect to Odoo
-            global.odooAPI.connect(function (err) {
-                if (err) {
-                    this.setState({isSearching: false});
-                    console.log('--------------connect error');
-                    alert(Config.err_connect)
-                    return console.log(err);
-                }
-            });
+            global.odooAPI.connect(this._getResConnect.bind(this));
 
             var params = {
                 // ids: [1, 2, 3, 4, 5],
@@ -116,7 +124,6 @@ export default class ManualScannerList extends Component {
         console.log('__________________________');
         this.setState({products: products});
     }
-
 
 
     _addToOrder(device) {
@@ -166,24 +173,24 @@ export default class ManualScannerList extends Component {
                         </TouchableOpacity>
                     </Left>
 
-                    <TouchableOpacity onPress={this.takePicture.bind(this)}>
-                        <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                            {this.state.numberDeviceCurrent == 0 ?
-                                <Icon name='ios-camera' style={styles.btnExport}/> :
-                                <Icon name='ios-skip-forward' style={styles.btnExport}/>}
-                            {this.state.numberDeviceCurrent == 0 ?
-                                <Text>{Config.btnScan}</Text> :
-                                <Text>{Config.btnScanContinue}</Text>}
+                    {/*<TouchableOpacity onPress={this.takePicture.bind(this)}>*/}
+                    {/*<View style={{alignItems: 'center', justifyContent: 'center'}}>*/}
+                    {/*{this.state.numberDeviceCurrent == 0 ?*/}
+                    {/*<Icon name='ios-camera' style={styles.btnExport}/> :*/}
+                    {/*<Icon name='ios-skip-forward' style={styles.btnExport}/>}*/}
+                    {/*{this.state.numberDeviceCurrent == 0 ?*/}
+                    {/*<Text>{Config.btnScan}</Text> :*/}
+                    {/*<Text>{Config.btnScanContinue}</Text>}*/}
 
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {
-                        this._getDeviceInfo('HN05059')
-                    }}>
-                        <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                            <Text>test</Text>
-                        </View>
-                    </TouchableOpacity>
+                    {/*</View>*/}
+                    {/*</TouchableOpacity>*/}
+                    {/*<TouchableOpacity onPress={() => {*/}
+                    {/*this._getDeviceInfo('HN05059')*/}
+                    {/*}}>*/}
+                    {/*<View style={{alignItems: 'center', justifyContent: 'center'}}>*/}
+                    {/*<Text>test</Text>*/}
+                    {/*</View>*/}
+                    {/*</TouchableOpacity>*/}
                     <Right>
                         <TouchableOpacity onPress={() => Actions.stockOutMultiple()}>
                             <View style={{alignItems: 'center', justifyContent: 'center'}}>
@@ -306,13 +313,14 @@ export default class ManualScannerList extends Component {
 
 
             // Connect to Odoo
-            global.odooAPI.connect(function (err) {
-                if (err) {
-                    console.log('--------------connect error');
-                    this.setState({isLoading: false});
-                    return console.log(err);
-                }
-            });
+            // global.odooAPI.connect(function (err) {
+            //     if (err) {
+            //         console.log('--------------connect error');
+            //         this.setState({isLoading: false});
+            //         return console.log(err);
+            //     }
+            // });
+            global.odooAPI.connect(this._getResConnect.bind(this));
 
             var params = {
                 p_equipments: [[6, 0, device_id]],
@@ -337,6 +345,7 @@ export default class ManualScannerList extends Component {
     }
 
     _getResCreateOrder(err, response) {
+        this.setState({isLoading: false});
         if (err) {
             alert(err);
             return console.log(err);
@@ -344,7 +353,6 @@ export default class ManualScannerList extends Component {
         console.log('_______response__create_________________');
         console.log(response);
         try {
-            this.setState({isLoading: false});
             if (response) {
                 alert('Xuất cho khách thành công ');
                 Actions.pop();
@@ -376,14 +384,8 @@ export default class ManualScannerList extends Component {
                     //Text style of the Spinner Text
                     textStyle={styles.spinnerTextStyle}
                 />
-                <View style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    paddingLeft: 10,
-                    paddingRight: 10
-                }}>
-                    <Item>
+                <View style={styles.topBar}>
+                    <Item style={{marginLeft: 5, marginRight: 5}}>
                         <Input
                             placeholder="Tìm kiếm bình..."
                             // value={this.state.searchText}
@@ -394,34 +396,32 @@ export default class ManualScannerList extends Component {
                         <Icon name="ios-search" style={Config.mainColor}
                               onPress={() => this.search()}/>
                     </Item>
+                </View>
+                <ScrollView contentContainerStyle={{flexGrow: 1}}>
                     <ActivityIndicator
                         animating={this.state.isSearching}
                         color={Config.mainColor}
                         size="large"
                     />
                     {this._renderResult()}
+                </ScrollView>
+                <View style={styles.bottomBar}>
+                    <CardItem>
+                        <Icon name="ios-contact" style={styles.icon}/>
+                        <Text style={{fontWeight: '400'}}>{Config.orderCustomer} : </Text>
+                        <Text style={{fontWeight: 'bold', fontSize: 16}}> {this.state.customer_name} </Text>
+                    </CardItem>
+                    <CardItem>
+                        <Icon name="ios-calculator" style={styles.icon}/>
+                        <Text style={{fontWeight: '400'}}>{Config.numberDeviceScanned} : </Text>
+                        <Text style={{
+                            fontWeight: 'bold',
+                            fontSize: 16,
+                            color: Config.errorColor
+                        }}>  {this.state.numberDeviceCurrent}/{this.state.numberDeviceTotal} </Text>
+                    </CardItem>
+                    {this._renderButton()}
                 </View>
-                <Footer style={{
-                    backgroundColor: 'white'
-                }}>
-                    <FooterTab style={{backgroundColor: 'white', borderTop: 1, color: Config.mainColor, borderTopColor: 'grey', marginLeft: 10, marginRight: 10, marginTop: 5, marginBottom: 5}}>
-                        <CardItem>
-                            <Icon name="ios-contact" style={styles.icon}/>
-                            <Text style={{fontWeight: '400'}}>{Config.orderCustomer} : </Text>
-                            <Text style={{fontWeight: 'bold', fontSize: 16}}> {this.state.customer_name} </Text>
-                        </CardItem>
-                        <CardItem>
-                            <Icon name="ios-calculator" style={styles.icon}/>
-                            <Text style={{fontWeight: '400'}}>{Config.numberDeviceScanned} : </Text>
-                            <Text style={{
-                                fontWeight: 'bold',
-                                fontSize: 16,
-                                color: Config.errorColor
-                            }}>  {this.state.numberDeviceCurrent}/{this.state.numberDeviceTotal} </Text>
-                        </CardItem>
-                        {this._renderButton()}
-                    </FooterTab>
-                </Footer>
             </View>
         );
     }
@@ -430,6 +430,7 @@ export default class ManualScannerList extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: "white",
         // paddingBottom: 10,
         // backgroundColor: '#000',
     },
@@ -442,6 +443,16 @@ const styles = StyleSheet.create({
 
     bottomBar: {
         alignSelf: 'flex-end',
+        backgroundColor: "white",
+        // flexDirection: 'row',
+        // height: 80,
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: Config.mainColor
+    },
+    topBar: {
+        alignSelf: 'flex-start',
         backgroundColor: "white",
         // flexDirection: 'row',
         // height: 80,

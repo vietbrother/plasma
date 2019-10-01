@@ -261,7 +261,7 @@ export default class StockOutMultipleManual extends Component {
             }
             console.log(customer_name);
             AsyncStorage.setItem(Config.keyStoreOrderDeviceOut, JSON.stringify([]));
-            Actions.cameraScannerList({
+            Actions.manualScannerList({
                 customer_id: customer_id,
                 customer_name: customer_name,
                 numberDeviceScan: numberDeviceScan

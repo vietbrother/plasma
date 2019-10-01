@@ -52,6 +52,7 @@ import OrderDetail from "./component/Orders/OrderDetail";
 import Bill from "./component/Bill/Bill";
 import Statistic from "./component/Statistic/Statistic";
 import StockOutMultipleManual from "./component/Stock/StockOutMultipleManual";
+import ManualScannerList from "./component/Manual/ManualScannerList";
 
 export default class Main extends Component {
 
@@ -143,6 +144,7 @@ export default class Main extends Component {
             <Scene key="bill" component={Bill} modal hideNavBar />
             <Scene key="statistic" component={Statistic} modal hideNavBar />
 
+            <Scene key="manualScannerList" component={ManualScannerList} hideNavBar />
           </Scene>
         </Router>
       </Root>

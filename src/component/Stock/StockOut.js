@@ -4,7 +4,7 @@
 
 // React native and others libraries imports
 import React, {Component} from 'react';
-import {Image, Dimensions, TouchableWithoutFeedback, AsyncStorage} from 'react-native';
+import {Image, Dimensions, TouchableWithoutFeedback, AsyncStorage, Alert} from 'react-native';
 import {
     View,
     Container,
@@ -69,13 +69,14 @@ export default class StockOut extends Component {
         try {
             this.setState({isLoading: true});
             // Connect to Odoo
-            global.odooAPI.connect(function (err) {
-                if (err) {
-                    this.setState({isLoading: false});
-                    console.log('--------------connect error');
-                    return console.log(err);
-                }
-            });
+            // global.odooAPI.connect(function (err) {
+            //     if (err) {
+            //         this.setState({isLoading: false});
+            //         console.log('--------------connect error');
+            //         return console.log(err);
+            //     }
+            // });
+            global.odooAPI.connect(this._resConnect.bind(this));
 
             var params = {
                 domain: [],
@@ -297,13 +298,7 @@ export default class StockOut extends Component {
 
             console.log('--------------id ' + id + "---newState  " + newState);
             // Connect to Odoo
-            global.odooAPI.connect(function (err) {
-                if (err) {
-                    this.setState({isLoading: false});
-                    console.log('--------------connect error');
-                    return console.log(err);
-                }
-            });
+            global.odooAPI.connect(this._resConnect.bind(this));
 
             var codeDevice = this.state.textDetect;
             var params = {
@@ -317,9 +312,17 @@ export default class StockOut extends Component {
             this.setState({isLoading: false});
         }
     }
-
+    _resConnect(err){
+        if (err) {
+            this.setState({isLoading: false});
+            console.log('--------------connect error');
+            alert(Config.err_connect);
+            return console.log(err);
+        }
+    }
     _getResUpdate(err, response) {
         if (err) {
+            this.setState({isLoading: false});
             alert(err);
             return console.log(err);
         }
@@ -384,21 +387,15 @@ export default class StockOut extends Component {
             var dateTimeStr = dateTime.split('.')[0].replace('T', '_').replace(/-/g, '').replace(/:/g, '');
 
             var orderCode = '';
-            var orderCustomerId = customerId;
+            var orderCustomerId = this.state.customer_id;
             var orderType = '';
             var device_id = this.state.deviceInfo.id;
-            var device_code = this.state.products[0].code;
+            var device_code = this.state.deviceInfo.code;
             //TYPE = [(0, 'Không xác định'), (1, 'Thu hồi'), (2, 'Xuất tái nạp'), (3, 'Nhập kho'), (4, 'Xuất cho khách')]
 
 
             // Connect to Odoo
-            global.odooAPI.connect(function (err) {
-                if (err) {
-                    console.log('--------------connect error');
-                    this.setState({isLoading: false});
-                    return console.log(err);
-                }
-            });
+            global.odooAPI.connect(this._resConnect.bind(this));
             var params = {
                 p_equipments: [(6, 0, this.state.deviceInfo.id)],
                 type: Config.orderType4XuatChoKhach,
@@ -423,6 +420,7 @@ export default class StockOut extends Component {
 
     _getResCreateOrder(err, response) {
         if (err) {
+            this.setState({isLoading: false});
             alert(err);
             return console.log(err);
         }
