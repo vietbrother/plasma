@@ -74,8 +74,11 @@ export default class Home extends Component {
             customers: [],
             newStage: 0,
             oldStage: '',
+
+            componentKey: new Date()
         };
     }
+
 
     componentDidMount() {
         // this.callApi();
@@ -86,8 +89,10 @@ export default class Home extends Component {
         console.log(nextProps);
         console.log(nextContext);
         console.log('componentWillReceiveProps----------------nextProps.textDetect ' + nextProps.textDetect);
-        this.setState({searchText: nextProps.textDetect});
-        this.search(nextProps.textDetect);
+        //this.setState({searchText: nextProps.textDetect});
+        //this.search(nextProps.textDetect);
+
+        this.setState({componentKey: new Date(), searchText: ''});
     }
 
     // async callApi() {
@@ -254,7 +259,7 @@ export default class Home extends Component {
             global.odooAPI.connect(this._resConnect.bind(this));
 
             // this.setState({searchText: codeDevice});
-            var codeDevice = this.state.searchText;
+            var codeDevice = this.state.searchText.toUpperCase();
             var params = {
                 // ids: [1, 2, 3, 4, 5],
                 domain: [['code', 'like', codeDevice]],
@@ -370,7 +375,8 @@ export default class Home extends Component {
 
             var codeDevice = device.code;
             var params = {
-                stage: newState
+                stage: newState,
+                warehouse: this._switchWarehouse(newState)
             }; //params
             global.odooAPI.update('p.equipment', device.id, params, this._getResUpdate.bind(this)); //update stage
         } catch (e) {
@@ -418,6 +424,19 @@ export default class Home extends Component {
             return '3';
         } else if (status == '3') {
             return '4';
+        } else {
+            return '0';
+        }
+    }
+    _switchWarehouse(new_status) {
+        if (new_status == '0') {
+            return '0';
+        } else if (new_status == '1') {
+            return '1';
+        } else if (new_status == '2') {
+            return '2';
+        } else if (new_status == '3') {
+            return '1';
         } else {
             return '0';
         }
@@ -566,7 +585,9 @@ export default class Home extends Component {
         const {categories, loading} = this.state;
         if (this.state.loading == false) {
             return (
-                <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref} key={new Date().valueOf()}
+                <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref}
+                                // key={new Date().valueOf()}
+                                key={this.state.componentKey}
                                 fetchData={'1'}
                                 sessionLoginKey={this.props.sessionLoginKey}>
                     <Container>
@@ -630,7 +651,7 @@ export default class Home extends Component {
                             }}>
                                 <Item>
                                     <Input
-                                        placeholder="Tìm kiếm bình..."
+                                        placeholder="Nhập mã bình..."
                                         value={this.state.searchText}
                                         onChangeText={(text) => this.setState({searchText: text})}
                                         // onSubmitEditing={() => this.search(this.state.searchText)}

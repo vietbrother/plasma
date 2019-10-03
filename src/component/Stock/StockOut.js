@@ -303,7 +303,8 @@ export default class StockOut extends Component {
             var codeDevice = this.state.textDetect;
             var params = {
                 stage: newState,
-                p_customer: this.state.customer_id
+                p_customer: this.state.customer_id,
+                warehouse: Config.warehouseKhoKhachHang
             }; //params
             global.odooAPI.update('p.equipment', id, params, this._getResUpdate.bind(this)); //update stage
         } catch (e) {

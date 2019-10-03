@@ -60,9 +60,13 @@ export default class Orders extends Component {
 
             extractedText: "",
             searchText: '',
+            componentKey: new Date()
         };
     }
 
+    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
+        this.setState({componentKey: new Date(), searchText: ''});
+    }
     componentDidMount() {
         this.search();
     }
@@ -88,18 +92,11 @@ export default class Orders extends Component {
         let items = [];
         try {
             // Connect to Odoo
-            global.odooAPI.connect(function (err) {
-                if (err) {
-                    this.setState({isSearching: false});
-                    console.log('--------------connect error');
-                    alert(Config.err_connect)
-                    return console.log(err);
-                }
-            });
+            global.odooAPI.connect(this._getResConnect.bind(this));
 
             var params = {
                 // ids: [1, 2, 3, 4, 5],
-                domain: [['code', 'like', this.state.searchText]],
+                domain: [['code', 'like', this.state.searchText], ['type', '=', Config.orderType4XuatChoKhach]],
                 // fields: ['id', 'code', 'stage', 'warehouse', 'p_customer', 'description'],
                 order: 'create_date desc',
                 // limit: 15,
@@ -111,7 +108,14 @@ export default class Orders extends Component {
             this.setState({isSearching: false});
         }
     }
-
+    _getResConnect(err) {
+        if (err) {
+            console.log('--------------connect error');
+            this.setState({isLoading: false});
+            alert(Config.err_connect);
+            return console.log(err);
+        }
+    }
     _getData(err, orders) {
         this.setState({isSearching: false});
         if (err) {
@@ -145,6 +149,7 @@ export default class Orders extends Component {
         return (
             <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref}
                 // key={new Date().valueOf()}
+                key={this.state.componentKey}
                 // fetchData={'1'}
                 // sessionLoginKey={this.props.sessionLoginKey}
             >

@@ -61,8 +61,13 @@ export default class Devices extends Component {
 
             extractedText: "",
             searchText: '',
-            deviceSelected: {}
+            deviceSelected: {},
+            componentKey: new Date()
         };
+    }
+
+    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
+        this.setState({componentKey: new Date(), searchText: ''});
     }
 
     componentDidMount() {
@@ -75,7 +80,8 @@ export default class Devices extends Component {
             var item = this.state.products[i];
             var key = new Date().valueOf();
             console.log(item);
-            {/*<DeviceItem key={key + '_' + i} device={item}></DeviceItem>*/}
+            {/*<DeviceItem key={key + '_' + i} device={item}></DeviceItem>*/
+            }
             items.push(
                 <View style={{
                     flex: 1,
@@ -99,14 +105,7 @@ export default class Devices extends Component {
         let items = [];
         try {
             // Connect to Odoo
-            global.odooAPI.connect(function (err) {
-                if (err) {
-                    this.setState({isSearching: false});
-                    console.log('--------------connect error');
-                    alert(Config.err_connect)
-                    return console.log(err);
-                }
-            });
+            global.odooAPI.connect(this._getResConnect.bind(this));
 
             var params = {
                 // ids: [1, 2, 3, 4, 5],
@@ -135,7 +134,6 @@ export default class Devices extends Component {
     }
 
 
-
     _renderButton(device) {
         return (
             <CardItem>
@@ -153,7 +151,7 @@ export default class Devices extends Component {
         );
     }
 
-    _actionChangeStage(device){
+    _actionChangeStage(device) {
         this.setState({deviceSelected: device});
         var newStage = this._switchStage(device.stage);
         if (newStage == '4') {//chuyen trang thai tu binh ton sang xuat cho khach
@@ -217,7 +215,8 @@ export default class Devices extends Component {
             this.setState({isLoading: false});
         }
     }
-    _getResConnect(err){
+
+    _getResConnect(err) {
         if (err) {
             console.log('--------------connect error');
             this.setState({isLoading: false});
@@ -402,6 +401,7 @@ export default class Devices extends Component {
 
         return (
             <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref}
+                            key={this.state.componentKey}
                 // key={new Date().valueOf()}
                 // fetchData={'1'}
                 // sessionLoginKey={this.props.sessionLoginKey}

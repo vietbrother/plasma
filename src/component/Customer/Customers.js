@@ -59,6 +59,7 @@ export default class Customers extends Component {
 
             extractedText: "",
             searchText: '',
+            componentKey: new Date()
         };
     }
 
@@ -70,7 +71,9 @@ export default class Customers extends Component {
     componentWillMount(): void {
         this.search();
     }
-
+    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
+        this.setState({componentKey: new Date(), searchText: ''});
+    }
 
 
     _renderResult() {
@@ -94,14 +97,7 @@ export default class Customers extends Component {
         try {
 
             // Connect to Odoo
-            global.odooAPI.connect(function (err) {
-                if (err) {
-                    console.log('--------------connect error');
-                    alert(Config.err_connect)
-                    this.setState({isLoading: false});
-                    return console.log(err);
-                }
-            });
+            global.odooAPI.connect(this._getResConnect.bind(this));
 
             var params = {
                 // ids: [1, 2, 3, 4, 5],
@@ -115,6 +111,14 @@ export default class Customers extends Component {
         } catch (e) {
             console.log(e);
             this.setState({isSearching: false});
+        }
+    }
+    _getResConnect(err) {
+        if (err) {
+            console.log('--------------connect error');
+            this.setState({isLoading: false});
+            alert(Config.err_connect);
+            return console.log(err);
         }
     }
 
@@ -150,6 +154,7 @@ export default class Customers extends Component {
 
         return (
             <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref}
+                            key={this.state.componentKey}
                             // key={new Date().valueOf()}
                             // fetchData={'1'}
                             sessionLoginKey={this.props.sessionLoginKey}>

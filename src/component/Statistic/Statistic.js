@@ -63,6 +63,8 @@ export default class Statistic extends Component {
             countStage_3: '0',
             countStage_4: '0',
             countStage_all: '0',
+
+            componentKey: new Date()
         };
     }
 
@@ -87,6 +89,10 @@ export default class Statistic extends Component {
         var endDate = lastDay.toISOString().split('T')[0];
     }
 
+    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
+        this.setState({componentKey: new Date(), searchText: ''});
+    }
+
     _searchCountStage() {
         console.log('_searchStage_1-----------------search');
         this.setState({isSearching: true});
@@ -95,14 +101,7 @@ export default class Statistic extends Component {
         try {
 
             // Connect to Odoo
-            global.odooAPI.connect(function (err) {
-                if (err) {
-                    console.log('--------------connect error');
-                    alert(Config.err_connect);
-                    this.setState({isLoading: false});
-                    return console.log(err);
-                }
-            });
+            global.odooAPI.connect(this._getResConnect.bind(this));
             var endpoint = '/web/dataset/call_kw';
             var model = 'p.equipment';
             var method = 'read_group';
@@ -131,6 +130,14 @@ export default class Statistic extends Component {
         }
     }
 
+    _getResConnect(err) {
+        if (err) {
+            console.log('--------------connect error');
+            this.setState({isLoading: false});
+            alert(Config.err_connect);
+            return console.log(err);
+        }
+    }
     _resSearchStage(err, result) {
         this.setState({isSearching: false});
         if (err) {

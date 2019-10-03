@@ -101,7 +101,7 @@ export default class ManualScannerList extends Component {
 
             var params = {
                 // ids: [1, 2, 3, 4, 5],
-                domain: [['code', 'like', this.state.searchText.toUpperCase()]],
+                domain: [['code', 'like', this.state.searchText.toUpperCase()], ['stage', '=', Config.stage3BinhTon]],
                 fields: ['id', 'code', 'stage', 'warehouse', 'p_customer', 'description'],
                 order: 'id',
                 limit: 10,
@@ -261,7 +261,9 @@ export default class ManualScannerList extends Component {
             global.odooAPI.connect(this._getResConnect.bind(this));
             var codeDevice = deviceCode;
             var params = {
-                stage: Config.stage4BinhDangSuDung
+                stage: Config.stage4BinhDangSuDung,
+                warehouse: Config.warehouseKhoKhachHang,
+                p_customer: this.state.customer_id
             }; //params
             global.odooAPI.update('p.equipment', id, params, this._getResUpdate.bind(this)); //update stage
         } catch (e) {
@@ -355,7 +357,7 @@ export default class ManualScannerList extends Component {
         try {
             if (response) {
                 alert('Xuất cho khách thành công ');
-                Actions.pop();
+                Actions.stockOutMultipleManual();
             } else {
                 alert('Xuất cho khách thất bại ');
             }
@@ -387,7 +389,7 @@ export default class ManualScannerList extends Component {
                 <View style={styles.topBar}>
                     <Item style={{marginLeft: 5, marginRight: 5}}>
                         <Input
-                            placeholder="Tìm kiếm bình..."
+                            placeholder="Nhập mã bình..."
                             // value={this.state.searchText}
                             onChangeText={(text) => this.setState({searchText: text})}
                             // onSubmitEditing={() => this.search(this.state.searchText)}

@@ -59,6 +59,12 @@ export default class StockOutMultipleManual extends Component {
         };
     }
 
+    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
+        // var customer_id = this.state.customer_id;
+        // var numberDeviceScan = this.state.numberDeviceScan;
+        this.setState({customer_id: '', numberDeviceScan: ''});
+    }
+
     componentWillMount() {
         try {
             this.setState({isLoading: true});
@@ -136,7 +142,7 @@ export default class StockOutMultipleManual extends Component {
     render() {
         var left = (
             <Left style={{flex: 1}}>
-                <Button onPress={() => Actions.pop()} transparent>
+                <Button onPress={() => {Actions.home()}} transparent>
                     <Icon name='ios-arrow-back'/>
                 </Button>
             </Left>
@@ -196,6 +202,7 @@ export default class StockOutMultipleManual extends Component {
                                 underlineColorAndroid='transparent'
                                 style={styles.textInputStyle}
                                 keyboardType={'numeric'}
+                                value={this.state.numberDeviceScan}
                                 onChangeText={(text) => this.setState({numberDeviceScan: text})}
                                 // keyboardType = 'number-pad'
                             />
@@ -218,7 +225,7 @@ export default class StockOutMultipleManual extends Component {
                             <Body>
                             </Body>
                             <Right>
-                                <Button onPress={() => Actions.pop()} transparent>
+                                <Button onPress={() => {Actions.home()}} transparent>
                                     <Icon name='ios-close-circle-outline'/>
                                     <Text> Hủy</Text>
                                 </Button>
