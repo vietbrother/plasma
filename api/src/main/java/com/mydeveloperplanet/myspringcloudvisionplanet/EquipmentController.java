@@ -21,7 +21,8 @@ public class EquipmentController {
     @Autowired
     private EquipmentRepository equipmentRepository;
 
-    @PostMapping("/save")   // GET Method for reading operation
+    //@PostMapping("/save")   // GET Method for reading operation
+    @RequestMapping(value = "/save", method = RequestMethod.POST, produces = "application/json")
     public String updateEquipment(@RequestParam("lstCodeRequest") String lstCodeRequest,
             @RequestParam("stage") String stage, @RequestParam("customerId") String customerId) {
         String res = "fail";
