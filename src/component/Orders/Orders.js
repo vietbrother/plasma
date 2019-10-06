@@ -168,7 +168,7 @@ export default class Orders extends Component {
                                     placeholder="Tìm kiếm đơn hàng..."
                                     // value={this.state.searchText}
                                     onChangeText={(text) => this.setState({searchText: text})}
-                                    // onSubmitEditing={() => this.search(this.state.searchText)}
+                                    onSubmitEditing={() => this.search(this.state.searchText)}
                                     // style={{marginTop: 9}}
                                 />
                                 <Icon name="ios-search" style={Config.mainColor}

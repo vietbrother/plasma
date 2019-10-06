@@ -20,13 +20,10 @@ import {RNCamera} from 'react-native-camera';
 import Config from "../../Config";
 import {Actions} from 'react-native-router-flux';
 import Spinner from 'react-native-loading-spinner-overlay';
-import ImageResizer from "react-native-image-resizer";
-import RNFS from "react-native-fs";
-import SearchDeviceItem from "../SearchDevice/SearchDeviceItem";
 import DeviceItem from "../Device/DeviceItem";
 import Colors from "../../Colors";
 
-export default class ManualScannerList extends Component {
+export default class StockInOutList extends Component {
 
     constructor() {
         super()
@@ -46,7 +43,8 @@ export default class ManualScannerList extends Component {
             customer_name: '',
             numberDeviceCurrent: 0,
             numberDeviceTotal: 0,
-            deviceList: []
+            deviceList: [],
+            stockInType: ''
         }
     }
 
@@ -55,6 +53,7 @@ export default class ManualScannerList extends Component {
             customer_id: this.props.customer_id,
             customer_name: this.props.customer_name,
             numberDeviceTotal: this.props.numberDeviceScan,
+            stockInType: this.props.stockInType,
         });
     }
 
@@ -131,22 +130,18 @@ export default class ManualScannerList extends Component {
         temp.push(device);
         var currentQuantity = this.state.numberDeviceCurrent;
         currentQuantity = currentQuantity + 1;
-        if(currentQuantity > this.state.numberDeviceTotal){
-            alert(Config.err_number_device_over);
-            return;
-        }
 
-        AsyncStorage.getItem('ORDER_DEVICE_OUT', (err, res) => {
+        AsyncStorage.getItem('LIST_DEVICE_OUT', (err, res) => {
             console.log(res);
-            if (!res) AsyncStorage.setItem('ORDER_DEVICE_OUT', [device]);
+            if (!res) AsyncStorage.setItem('LIST_DEVICE_OUT', [device]);
             else {
                 var items = JSON.parse(res);
                 items.push(device);
                 console.log("items : " + items);
 
-                AsyncStorage.setItem('ORDER_DEVICE_OUT', JSON.stringify(items));
+                AsyncStorage.setItem('LIST_DEVICE_OUT', JSON.stringify(items));
 
-                // AsyncStorage.getItem('ORDER_DEVICE_OUT', (err, res) => {
+                // AsyncStorage.getItem('LIST_DEVICE_OUT', (err, res) => {
                 //     console.log("res " + res);
                 // });
             }
@@ -162,7 +157,9 @@ export default class ManualScannerList extends Component {
     }
 
     _renderButton() {
-        if (this.state.numberDeviceCurrent < this.state.numberDeviceTotal) {
+
+
+        if (this.state.numberDeviceCurrent < 1) {
             return (
                 <CardItem>
                     <Left>
@@ -177,24 +174,6 @@ export default class ManualScannerList extends Component {
                         </TouchableOpacity>
                     </Left>
 
-                    {/*<TouchableOpacity onPress={this.takePicture.bind(this)}>*/}
-                    {/*<View style={{alignItems: 'center', justifyContent: 'center'}}>*/}
-                    {/*{this.state.numberDeviceCurrent == 0 ?*/}
-                    {/*<Icon name='ios-camera' style={styles.btnExport}/> :*/}
-                    {/*<Icon name='ios-skip-forward' style={styles.btnExport}/>}*/}
-                    {/*{this.state.numberDeviceCurrent == 0 ?*/}
-                    {/*<Text>{Config.btnScan}</Text> :*/}
-                    {/*<Text>{Config.btnScanContinue}</Text>}*/}
-
-                    {/*</View>*/}
-                    {/*</TouchableOpacity>*/}
-                    {/*<TouchableOpacity onPress={() => {*/}
-                    {/*this._getDeviceInfo('HN05059')*/}
-                    {/*}}>*/}
-                    {/*<View style={{alignItems: 'center', justifyContent: 'center'}}>*/}
-                    {/*<Text>test</Text>*/}
-                    {/*</View>*/}
-                    {/*</TouchableOpacity>*/}
                     <Right>
                         <TouchableOpacity onPress={() => Actions.stockOutMultipleManual()}>
                             <View style={{alignItems: 'center', justifyContent: 'center'}}>
@@ -224,13 +203,13 @@ export default class ManualScannerList extends Component {
                         this._actionCreateOrder()
                     }}>
                         <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                            <Icon name='ios-send' style={{color: 'green'}}/>
-                            <Text>{Config.btnOrderOut}</Text>
+                            <Icon name='ios-save' style={{color: 'green'}}/>
+                            <Text>{Config.btnSave}</Text>
                         </View>
                     </TouchableOpacity>
                     <Right>
                         <TouchableOpacity onPress={() => {
-                            Actions.stockOutMultipleManual()
+                            Actions.pop()
                         }}>
                             <View style={{alignItems: 'center', justifyContent: 'center'}}>
                                 <Icon name='ios-close-circle'/>
@@ -244,7 +223,7 @@ export default class ManualScannerList extends Component {
     }
 
     _actionCreateOrder() {
-        AsyncStorage.getItem('ORDER_DEVICE_OUT', (err, res) => {
+        AsyncStorage.getItem('LIST_DEVICE_OUT', (err, res) => {
             console.log("_____res " + res);
             if (res) {
                 var items = JSON.parse(res);
@@ -256,7 +235,7 @@ export default class ManualScannerList extends Component {
                 this._createOrder(lstDeviceId);
             }
         });
-        // AsyncStorage.setItem('ORDER_DEVICE_OUT', JSON.stringify([]));
+        // AsyncStorage.setItem('LIST_DEVICE_OUT', JSON.stringify([]));
     }
 
     _actionChangeStage(id, deviceCode) {
@@ -319,13 +298,6 @@ export default class ManualScannerList extends Component {
 
 
             // Connect to Odoo
-            // global.odooAPI.connect(function (err) {
-            //     if (err) {
-            //         console.log('--------------connect error');
-            //         this.setState({isLoading: false});
-            //         return console.log(err);
-            //     }
-            // });
             global.odooAPI.connect(this._getResConnect.bind(this));
 
             var params = {
@@ -373,15 +345,27 @@ export default class ManualScannerList extends Component {
 
 
     _billList() {
-        AsyncStorage.getItem('ORDER_DEVICE_OUT', (err, res) => {
+        AsyncStorage.getItem('LIST_DEVICE_OUT', (err, res) => {
             console.log("res " + res);
             Actions.bill({lstDevice: res});
         });
     }
 
     render() {
+        var left = (
+            <Left style={{flex: 1}}>
+                <Button onPress={() => Actions.pop()} transparent>
+                    <Icon name='ios-arrow-back'/>
+                </Button>
+            </Left>
+        );
+        var right = (
+            <Right style={{flex: 1}}>
+            </Right>
+        );
         return (
-            <View style={styles.container}>
+            <Container style={{backgroundColor: '#fdfdfd'}}>
+                <Navbar left={left} right={right} title={Config.stockOutListStage2}/>
                 <Spinner
                     //visibility of Overlay Loading Spinner
                     visible={this.state.isLoading}
@@ -404,20 +388,7 @@ export default class ManualScannerList extends Component {
                               onPress={() => this.search()}/>
                     </Item>
                 </View>
-                <ScrollView contentContainerStyle={{flexGrow: 1}}>
-                    <ActivityIndicator
-                        animating={this.state.isSearching}
-                        color={Config.mainColor}
-                        size="large"
-                    />
-                    {this._renderResult()}
-                </ScrollView>
                 <View style={styles.bottomBar}>
-                    <CardItem>
-                        <Icon name="ios-contact" style={styles.icon}/>
-                        <Text style={{fontWeight: '400'}}>{Config.orderCustomer} : </Text>
-                        <Text style={{fontWeight: 'bold', fontSize: 16}}> {this.state.customer_name} </Text>
-                    </CardItem>
                     <CardItem>
                         <Icon name="ios-calculator" style={styles.icon}/>
                         <Text style={{fontWeight: '400'}}>{Config.numberDeviceScanned} : </Text>
@@ -425,11 +396,11 @@ export default class ManualScannerList extends Component {
                             fontWeight: 'bold',
                             fontSize: 16,
                             color: Config.errorColor
-                        }}>  {this.state.numberDeviceCurrent}/{this.state.numberDeviceTotal} </Text>
+                        }}>  {this.state.numberDeviceCurrent} </Text>
                     </CardItem>
                     {this._renderButton()}
                 </View>
-            </View>
+            </Container>
         );
     }
 }
@@ -449,7 +420,7 @@ const styles = StyleSheet.create({
     },
 
     bottomBar: {
-        alignSelf: 'flex-end',
+        // alignSelf: 'flex-end',
         backgroundColor: "white",
         // flexDirection: 'row',
         // height: 80,
@@ -459,7 +430,7 @@ const styles = StyleSheet.create({
         color: Config.mainColor
     },
     topBar: {
-        alignSelf: 'flex-start',
+        // alignSelf: 'flex-start',
         backgroundColor: "white",
         // flexDirection: 'row',
         // height: 80,

@@ -13,7 +13,8 @@ import {
     TouchableOpacity,
     NativeModules,
     Dimensions,
-    Alert
+    Alert,
+    FlatList
 } from 'react-native';
 import {
     Container,
@@ -74,29 +75,45 @@ export default class Devices extends Component {
         this.search();
     }
 
-    _renderResult() {
-        let items = [];
-        for (var i = 0; i < this.state.products.length; i++) {
-            var item = this.state.products[i];
-            var key = new Date().valueOf();
-            console.log(item);
-            {/*<DeviceItem key={key + '_' + i} device={item}></DeviceItem>*/
-            }
-            items.push(
-                <View style={{
-                    flex: 1,
-                    width: '100%', color: Config.mainColor, fontSize: 16,
-                    borderBottomColor: Colors.navbarBackgroundColor, borderBottomWidth: 0.5,
-                    paddingLeft: 10,
-                    paddingTop: 10, paddingBottom: 10
-                }}>
-                    <DeviceItem key={key + '_' + i} device={item}></DeviceItem>
-                    {this._renderButton(item)}
-                </View>
-            );
-        }
-        return items;
+    // _renderResult() {
+    //     let items = [];
+    //     for (var i = 0; i < this.state.products.length; i++) {
+    //         var item = this.state.products[i];
+    //         var key = new Date().valueOf();
+    //         console.log(item);
+    //         {/*<DeviceItem key={key + '_' + i} device={item}></DeviceItem>*/
+    //         }
+    //         items.push(
+    //             <View style={{
+    //                 flex: 1,
+    //                 width: '100%', color: Config.mainColor, fontSize: 16,
+    //                 borderBottomColor: Colors.navbarBackgroundColor, borderBottomWidth: 0.5,
+    //                 paddingLeft: 10,
+    //                 paddingTop: 10, paddingBottom: 10
+    //             }}>
+    //                 <DeviceItem key={key + '_' + i} device={item}></DeviceItem>
+    //                 {this._renderButton(item)}
+    //             </View>
+    //         );
+    //     }
+    //     return items;
+    //
+    // }
 
+    _renderItemResult(item){
+        var key = new Date().valueOf();
+        return (
+            <View style={{
+                flex: 1,
+                width: '100%', color: Config.mainColor, fontSize: 16,
+                borderBottomColor: Colors.navbarBackgroundColor, borderBottomWidth: 0.5,
+                paddingLeft: 10,
+                paddingTop: 10, paddingBottom: 10
+            }}>
+                <DeviceItem key={key} device={item}></DeviceItem>
+                {this._renderButton(item)}
+            </View>
+        );
     }
 
     search() {
@@ -112,7 +129,7 @@ export default class Devices extends Component {
                 domain: [['code', 'like', this.state.searchText.toUpperCase()]],
                 fields: ['id', 'code', 'stage', 'warehouse', 'p_customer', 'description'],
                 order: 'id',
-                limit: 15,
+                limit: 100,
                 offset: 0,
             }; //params
             global.odooAPI.search_read('p.equipment', params, this._getData.bind(this)); //search_read
@@ -128,7 +145,7 @@ export default class Devices extends Component {
             alert(err);
             return console.log(err);
         }
-        console.log(products);
+        // console.log(products);
         console.log('__________________________');
         this.setState({products: products});
     }
@@ -421,7 +438,7 @@ export default class Devices extends Component {
                                     placeholder="Tìm kiếm bình..."
                                     // value={this.state.searchText}
                                     onChangeText={(text) => this.setState({searchText: text})}
-                                    // onSubmitEditing={() => this.search(this.state.searchText)}
+                                    onSubmitEditing={() => this.search(this.state.searchText)}
                                     // style={{marginTop: 9}}
                                 />
                                 <Icon name="ios-search" style={Config.mainColor}
@@ -432,7 +449,13 @@ export default class Devices extends Component {
                                 color={Config.mainColor}
                                 size="large"
                             />
-                            {this._renderResult()}
+                            {/*{this._renderResult()}*/}
+
+                            <FlatList
+                                style={{width: '100%'}}
+                                data={this.state.products}
+                                renderItem={({item}) => this._renderItemResult(item)}
+                            />
                         </View>
 
                     </Content>

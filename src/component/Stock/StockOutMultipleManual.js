@@ -251,7 +251,7 @@ export default class StockOutMultipleManual extends Component {
             this.setState({hasError: true, errorText: 'Cần chọn khách hàng xuất'});
             return;
         }
-        if (numberDeviceScan == null || numberDeviceScan == '') {
+        if (numberDeviceScan == null || numberDeviceScan == '' || numberDeviceScan == '0') {
             this.setState({hasError: true, errorText: 'Cần chọn số lượng thiết bị xuất cho khách'});
             return;
         }

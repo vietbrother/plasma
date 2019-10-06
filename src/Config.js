@@ -67,6 +67,7 @@ const Config = {
   btnOrderOut: 'Xuất hóa đơn',
   btnCancel: 'Hủy',
   btnStop: 'Dừng',
+  btnSave: 'Lưu',
   btnClose: 'Đóng',
 
   //success
@@ -77,6 +78,7 @@ const Config = {
   err_add : 'Lỗi khi thêm mới! Vui lòng thử lại sau',
   err_connect : 'Lỗi kết nối',
   err_order_add : 'Lỗi khi tạo đơn hàng',
+  err_number_device_over : 'Số lượng thiết bị cần nhập đã đủ',
 
   //stage
   stage0KhongXacDinh: '0',
@@ -136,6 +138,12 @@ const Config = {
   statisticCountStage3: "Bình tồn",
   statisticCountStage4: "Đang sử dụng",
   statisticCountAll: "Tổng số thiết bị",
+
+  //stock
+  stockInListStage1: "Nhập vỏ",
+  stockInListStage3: "Nhập khí",
+  stockOutListStage2: "Xuất vỏ",
+  stockOutListStage4: "Xuất khí",
 
 };
 

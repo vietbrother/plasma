@@ -13,7 +13,8 @@ import {
     TouchableOpacity,
     NativeModules,
     Dimensions,
-    Alert
+    Alert,
+    FlatList
 } from 'react-native';
 import {
     Container,
@@ -95,43 +96,6 @@ export default class Home extends Component {
         this.setState({componentKey: new Date(), searchText: ''});
     }
 
-    // async callApi() {
-    //     try {
-    //         // console.log("================================================" + Config.goolge_vision_key);
-    //         // const fetchData = await fetch(`https://vision.googleapis.com/v1/images:annotate?key=` + Config.goolge_vision_key, {
-    //         //     method: 'POST',
-    //         //     headers: {
-    //         //         'Accept': 'application/json',
-    //         //         // 'Authorization': 'Bearer ' + Config.goolge_vision_key,
-    //         //         'Content-Type': 'application/json',
-    //         //     },
-    //         //     body: JSON.stringify({
-    //         //         "requests": [
-    //         //             {
-    //         //                 "image": {
-    //         //                     "content": imgPath
-    //         //                 },
-    //         //                 "features": [
-    //         //                     {
-    //         //                         "type": "TEXT_DETECTION"
-    //         //                     }
-    //         //                 ]
-    //         //             }
-    //         //         ]
-    //         //     })
-    //         // });
-    //         // console.log('finish');
-    //         // console.log(JSON.stringify(fetchData));
-    //         console.log("Home-----------this.props.textDetect------------------" + this.props.textDetect);
-    //         if (this.props.textDetect != null) {
-    //             this.setState({isSearching: true, searchText: this.props.textDetect});
-    //             this.search();
-    //         }
-    //     } catch (err) {
-    //         console.log('error:' + err);
-    //     }
-    // }
-
     _renderImageCamera() {
         if (this.props.capturePhotoPath != null && this.props.capturePhotoPath != '') {
             return (
@@ -165,26 +129,42 @@ export default class Home extends Component {
         }
     }
 
-    _renderResult() {
-        let items = [];
-        for (var i = 0; i < this.state.products.length; i++) {
-            var item = this.state.products[i];
-            var key = new Date().valueOf();
-            items.push(
-                <View style={{
-                    flex: 1,
-                    width: '100%', color: Config.mainColor, fontSize: 16,
-                    borderBottomColor: Colors.navbarBackgroundColor, borderBottomWidth: 0.5,
-                    paddingLeft: 10,
-                    paddingTop: 10, paddingBottom: 10
-                }}>
-                    <DeviceItem key={key + '_' + i} device={item}></DeviceItem>
-                    {this._renderButton(item)}
-                </View>
-            );
-        }
-        return items;
+    // _renderResult() {
+    //     let items = [];
+    //     for (var i = 0; i < this.state.products.length; i++) {
+    //         var item = this.state.products[i];
+    //         var key = new Date().valueOf();
+    //         items.push(
+    //             <View style={{
+    //                 flex: 1,
+    //                 width: '100%', color: Config.mainColor, fontSize: 16,
+    //                 borderBottomColor: Colors.navbarBackgroundColor, borderBottomWidth: 0.5,
+    //                 paddingLeft: 10,
+    //                 paddingTop: 10, paddingBottom: 10
+    //             }}>
+    //                 <DeviceItem key={key + '_' + i} device={item}></DeviceItem>
+    //                 {this._renderButton(item)}
+    //             </View>
+    //         );
+    //     }
+    //     return items;
+    //
+    // }
 
+    _renderItemResult(item) {
+        var key = new Date().valueOf();
+        return (
+            <View style={{
+                flex: 1,
+                width: '100%', color: Config.mainColor, fontSize: 16,
+                borderBottomColor: Colors.navbarBackgroundColor, borderBottomWidth: 0.5,
+                paddingLeft: 10,
+                paddingTop: 10, paddingBottom: 10
+            }}>
+                <DeviceItem key={key} device={item}></DeviceItem>
+                {this._renderButton(item)}
+            </View>
+        );
     }
 
     _renderCodeProducts(code) {
@@ -237,24 +217,12 @@ export default class Home extends Component {
         }
     }
 
-    _isLoading(isSearching, codeDevice, data) {
-        this.setState({isSearching: true, searchText: codeDevice, products: data});
-    }
 
     search() {
         console.log('home-----------------search');
         this.setState({isSearching: true});
-        // this._isLoading(true, codeDevice).bind;
         let items = [];
         try {
-            // var odoo = new Odoo({
-            //     host: '103.94.16.226',
-            //     port: 8069,
-            //     database: 'plasmadb',
-            //     username: 'admin',
-            //     password: '1@'
-            // });
-
             // Connect to Odoo
             global.odooAPI.connect(this._resConnect.bind(this));
 
@@ -265,22 +233,19 @@ export default class Home extends Component {
                 domain: [['code', 'like', codeDevice]],
                 fields: ['id', 'code', 'stage', 'warehouse', 'p_customer', 'description'],
                 order: 'id',
-                limit: 15,
+                limit: 100,
                 offset: 0,
             }; //params
             var temp = [];
             global.odooAPI.search_read('p.equipment', params, this._getData.bind(this)); //search_read
-            // console.log('==========================================');
-            // console.log(temp);
-            // this.setState({isSearching: false, products: temp});
-            // this._isLoading(false, codeDevice, temp);
         } catch (e) {
             console.log(e);
             this.setState({isSearching: false});
-            // this._isLoading(false, codeDevice, []);
         }
     }
-    _resConnect(err){
+
+    _resConnect(err) {
+        this.setState({isSearching: false});
         if (err) {
             console.log('--------------connect error');
             alert(Config.err_connect);
@@ -289,11 +254,12 @@ export default class Home extends Component {
     }
 
     _getData(err, products) {
+        this.setState({isSearching: false});
         if (err) {
             alert(err);
             return console.log(err);
         }
-        console.log(products);
+        // console.log(products);
         console.log('__________________________');
         this.setState({isSearching: false, products: products});
     }
@@ -320,7 +286,7 @@ export default class Home extends Component {
         );
     }
 
-    _actionChangeStage(device){
+    _actionChangeStage(device) {
         this.setState({deviceSelected: device});
         var newStage = this._switchStage(device.stage);
         if (newStage == '4') {//chuyen trang thai tu binh ton sang xuat cho khach
@@ -385,7 +351,8 @@ export default class Home extends Component {
             this.setState({isLoading: false});
         }
     }
-    _getResConnect(err){
+
+    _getResConnect(err) {
         if (err) {
             console.log('--------------connect error');
             this.setState({isLoading: false});
@@ -428,6 +395,7 @@ export default class Home extends Component {
             return '0';
         }
     }
+
     _switchWarehouse(new_status) {
         if (new_status == '0') {
             return '0';
@@ -501,14 +469,15 @@ export default class Home extends Component {
             }
 
             // Connect to Odoo
-            global.odooAPI.connect(function (err) {
-                if (err) {
-                    console.log('--------------connect error');
-                    this.setState({isLoading: false});
-                    alert(Config.err_connect);
-                    return console.log(err);
-                }
-            });
+            // global.odooAPI.connect(function (err) {
+            //     if (err) {
+            //         console.log('--------------connect error');
+            //         this.setState({isLoading: false});
+            //         alert(Config.err_connect);
+            //         return console.log(err);
+            //     }
+            // });
+            global.odooAPI.connect(this._getResConnect.bind(this));
             var params = {
                 p_equipments: [(6, 0, device_id)],
                 code: orderCode,
@@ -563,7 +532,6 @@ export default class Home extends Component {
     }
 
 
-
     render() {
         var left = (
             <Left style={{flex: 1}}>
@@ -586,7 +554,7 @@ export default class Home extends Component {
         if (this.state.loading == false) {
             return (
                 <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref}
-                                // key={new Date().valueOf()}
+                    // key={new Date().valueOf()}
                                 key={this.state.componentKey}
                                 fetchData={'1'}
                                 sessionLoginKey={this.props.sessionLoginKey}>
@@ -634,12 +602,63 @@ export default class Home extends Component {
                                 {/*</TouchableOpacity>*/}
                                 {/*</Col>*/}
                                 {/*</Grid>*/}
-                                <TouchableOpacity onPress={() => Actions.stockOutMultipleManual()}>
-                                    <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                                        <Icon name='ios-switch' style={styles.btnScanStyle}/>
-                                        <Text> {Config.btnScanMultiple} </Text>
-                                    </View>
-                                </TouchableOpacity>
+
+                                <Grid style={{marginBottom: 15}}>
+                                    <Col>
+                                        <TouchableOpacity
+                                            onPress={() => Actions.stockInList({
+                                                stockInType: Config.stage1Vo,
+                                                title: Config.stockInListStage1
+                                            })}>
+                                            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                                <Icon name='md-log-in' style={styles.btnScanStyle}/>
+                                                <Text> {Config.stockInListStage1} </Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </Col>
+                                    <Col>
+                                        <TouchableOpacity
+                                            onPress={() => Actions.stockInList({
+                                                stockInType: Config.stage3BinhTon,
+                                                title: Config.stockInListStage3
+                                            })}>
+                                            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                                <Icon name='md-cloud-download' style={styles.btnScanStyle}/>
+                                                <Text> {Config.stockInListStage3} </Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </Col>
+                                </Grid>
+
+                                <Grid>
+                                    <Col>
+                                        <TouchableOpacity
+                                            onPress={() => Actions.stockInList({
+                                                stockInType: Config.stage2TaiNap,
+                                                title: Config.stockOutListStage2
+                                            })}>
+                                            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                                <Icon name='md-log-out' style={styles.btnScanStyle}/>
+                                                <Text> {Config.stockOutListStage2} </Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </Col>
+                                    <Col>
+                                        <TouchableOpacity onPress={() => Actions.stockOutMultipleManual()}>
+                                            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                                <Icon name='md-cloud-upload' style={styles.btnScanStyle}/>
+                                                <Text> {Config.stockOutListStage4} </Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </Col>
+                                </Grid>
+
+                                {/*<TouchableOpacity onPress={() => Actions.stockOutMultipleManual()}>*/}
+                                {/*<View style={{alignItems: 'center', justifyContent: 'center'}}>*/}
+                                {/*<Icon name='ios-switch' style={styles.btnScanStyle}/>*/}
+                                {/*<Text> {Config.btnScanMultiple} </Text>*/}
+                                {/*</View>*/}
+                                {/*</TouchableOpacity>*/}
                             </View>
 
                             <View style={{
@@ -654,7 +673,7 @@ export default class Home extends Component {
                                         placeholder="Nhập mã bình..."
                                         value={this.state.searchText}
                                         onChangeText={(text) => this.setState({searchText: text})}
-                                        // onSubmitEditing={() => this.search(this.state.searchText)}
+                                        onSubmitEditing={() => this.search()}
                                         // style={{marginTop: 9}}
                                     />
                                     <Icon name="ios-search" style={Config.mainColor}
@@ -667,13 +686,18 @@ export default class Home extends Component {
                                 {/*/>*/}
                                 <Spinner
                                     //visibility of Overlay Loading Spinner
-                                    visible={this.state.isLoading}
+                                    visible={this.state.isSearching}
                                     //Text with the Spinner
                                     //textContent={'Đang đăng nhập ...'}
                                     //Text style of the Spinner Text
                                     textStyle={styles.spinnerTextStyle}
                                 />
-                                {this._renderResult()}
+                                {/*{this._renderResult()}*/}
+                                <FlatList
+                                    style={{width: '100%'}}
+                                    data={this.state.products}
+                                    renderItem={({item}) => this._renderItemResult(item)}
+                                />
                             </View>
 
                         </Content>

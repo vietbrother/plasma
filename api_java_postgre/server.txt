@@ -1,0 +1,14 @@
+103.94.16.226
+User: administrator
+Pass: bdp.vv01ex.clba42
+
+
+thông tin DB;
+
+
+db_port = 5432
+db_user = plasmausr
+
+db_password = plasmapwd
+
+tên DB la`: plasmadb

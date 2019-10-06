@@ -27,156 +27,158 @@ import java.util.List;
 @RestController
 public class VisionController {
 
-	@Autowired
-	private ResourceLoader resourceLoader;
+    @Autowired
+    private ResourceLoader resourceLoader;
 
-	@Autowired
-	private CloudVisionTemplate cloudVisionTemplate;
+    @Autowired
+    private CloudVisionTemplate cloudVisionTemplate;
 
-	@RequestMapping("/getLabelDetection")
-	public String getLabelDetection() {
+    @RequestMapping("/getLabelDetection")
+    public String getLabelDetection() {
 
-		Resource imageResource = this.resourceLoader.getResource("file:src/main/resources/cat.jpg");
-		AnnotateImageResponse response = this.cloudVisionTemplate.analyzeImage(imageResource,
-				Feature.Type.LABEL_DETECTION);
+        Resource imageResource = this.resourceLoader.getResource("file:src/main/resources/cat.jpg");
+        AnnotateImageResponse response = this.cloudVisionTemplate.analyzeImage(imageResource,
+                Feature.Type.LABEL_DETECTION);
 
-		return response.getLabelAnnotationsList().toString();
-	}
+        return response.getLabelAnnotationsList().toString();
+    }
 
-	@RequestMapping(value = "/getTextDetection", method = RequestMethod.POST, produces="application/json")
-	public String getTextDetection(@RequestParam("image") String imageStr) {
-		String currDir = new File("").getAbsolutePath();
-		System.out.println(currDir);
-		System.out.println("=============================================================");
-		String dirPath = "";
-		String fileName = System.nanoTime() + ".png";
-		String fullPath = "";
-		try {
-			byte[] data = Base64.decodeBase64(imageStr);
-			File dir = new File(currDir + "/temp/");
-			if (!dir.exists())
-				dir.mkdirs();
-			fullPath = dir + "/" + fileName;
-			FileOutputStream fos = new FileOutputStream(new File(fullPath));
-			fos.write(data);
-			fos.close();
-			System.out.println(fullPath + "=============================================================");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+    @RequestMapping(value = "/getTextDetection", method = RequestMethod.POST, produces = "application/json")
+    public String getTextDetection(@RequestParam("image") String imageStr) {
+        String currDir = new File("").getAbsolutePath();
+        System.out.println(currDir);
+        System.out.println("=============================================================");
+        String dirPath = "";
+        String fileName = System.nanoTime() + ".png";
+        String fullPath = "";
+        try {
+            byte[] data = Base64.decodeBase64(imageStr);
+            File dir = new File(currDir + "/temp/");
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            fullPath = dir + "/" + fileName;
+            FileOutputStream fos = new FileOutputStream(new File(fullPath));
+            fos.write(data);
+            fos.close();
+            System.out.println(fullPath + "=============================================================");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-		try {
-			Resource imageResource = this.resourceLoader.getResource("file:" + fullPath);
-			AnnotateImageResponse response1 = this.cloudVisionTemplate.analyzeImage(imageResource,
-					Feature.Type.TEXT_DETECTION);
-			Gson gson = new Gson();
-			String json = gson.toJson(response1.getTextAnnotationsList());
-			System.out.println(json);
-			return json;
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-			return e.getMessage();
-		}
+        try {
+            Resource imageResource = this.resourceLoader.getResource("file:" + fullPath);
+            AnnotateImageResponse response1 = this.cloudVisionTemplate.analyzeImage(imageResource,
+                    Feature.Type.TEXT_DETECTION);
+            Gson gson = new Gson();
+            String json = gson.toJson(response1.getTextAnnotationsList());
+            System.out.println(json);
+            return json;
 
-	}
-	
-	@RequestMapping(value = "/getTextDocumentDetection", method = RequestMethod.POST, produces="application/json")
-	public String getTextDocumentDetection(@RequestParam("image") String imageStr) {
-		String currDir = new File("").getAbsolutePath();
-		System.out.println(currDir);
-		System.out.println("getTextDocumentDetection=============================================================");
-		String dirPath = "";
-		String fileName = System.nanoTime() + ".png";
-		String fullPath = "";
-		try {
-			byte[] data = Base64.decodeBase64(imageStr);
-			File dir = new File(currDir + "/temp/");
-			if (!dir.exists())
-				dir.mkdirs();
-			fullPath = dir + "/" + fileName;
-			FileOutputStream fos = new FileOutputStream(new File(fullPath));
-			fos.write(data);
-			fos.close();
-			System.out.println(fullPath + "=============================================================");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            return e.getMessage();
+        }
 
-		try {
-			Resource imageResource = this.resourceLoader.getResource("file:" + fullPath);
-			AnnotateImageResponse response = this.cloudVisionTemplate.analyzeImage(imageResource,
-					Feature.Type.DOCUMENT_TEXT_DETECTION);
-			Gson gson = new Gson();
-			String json = gson.toJson(response.getTextAnnotationsList());
-			System.out.println(json);
-			return json;
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-			return e.getMessage();
-		}
+    }
 
-	}
+    @RequestMapping(value = "/getTextDocumentDetection", method = RequestMethod.POST, produces = "application/json")
+    public String getTextDocumentDetection(@RequestParam("image") String imageStr) {
+        String currDir = new File("").getAbsolutePath();
+        System.out.println(currDir);
+        System.out.println("getTextDocumentDetection=============================================================");
+        String dirPath = "";
+        String fileName = System.nanoTime() + ".png";
+        String fullPath = "";
+        try {
+            byte[] data = Base64.decodeBase64(imageStr);
+            File dir = new File(currDir + "/temp/");
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            fullPath = dir + "/" + fileName;
+            FileOutputStream fos = new FileOutputStream(new File(fullPath));
+            fos.write(data);
+            fos.close();
+            System.out.println(fullPath + "=============================================================");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-	@RequestMapping("/getLandmarkDetection")
-	public String getLandmarkDetection() {
+        try {
+            Resource imageResource = this.resourceLoader.getResource("file:" + fullPath);
+            AnnotateImageResponse response = this.cloudVisionTemplate.analyzeImage(imageResource,
+                    Feature.Type.DOCUMENT_TEXT_DETECTION);
+            Gson gson = new Gson();
+            String json = gson.toJson(response.getTextAnnotationsList());
+            System.out.println(json);
+            return json;
 
-		Resource imageResource = this.resourceLoader.getResource("file:src/main/resources/landmark.jpeg");
-		AnnotateImageResponse response = this.cloudVisionTemplate.analyzeImage(imageResource,
-				Feature.Type.LANDMARK_DETECTION);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            return e.getMessage();
+        }
 
-		return response.getLandmarkAnnotationsList().toString();
-	}
+    }
 
-	@RequestMapping("/getFaceDetection")
-	public String getFaceDetection() throws IOException {
+    @RequestMapping("/getLandmarkDetection")
+    public String getLandmarkDetection() {
 
-		Resource imageResource = this.resourceLoader.getResource("file:src/main/resources/faces.jpeg");
-		Resource outputImageResource = this.resourceLoader.getResource("file:src/main/resources/output.jpg");
-		AnnotateImageResponse response = this.cloudVisionTemplate.analyzeImage(imageResource,
-				Feature.Type.FACE_DETECTION);
+        Resource imageResource = this.resourceLoader.getResource("file:src/main/resources/landmark.jpeg");
+        AnnotateImageResponse response = this.cloudVisionTemplate.analyzeImage(imageResource,
+                Feature.Type.LANDMARK_DETECTION);
 
-		writeWithFaces(imageResource.getFile().toPath(), outputImageResource.getFile().toPath(),
-				response.getFaceAnnotationsList());
+        return response.getLandmarkAnnotationsList().toString();
+    }
 
-		return response.getFaceAnnotationsList().toString();
-	}
+    @RequestMapping("/getFaceDetection")
+    public String getFaceDetection() throws IOException {
 
-	/**
-	 * Reads image {@code inputPath} and writes {@code outputPath} with
-	 * {@code faces} outlined.
-	 */
-	private static void writeWithFaces(Path inputPath, Path outputPath, List<FaceAnnotation> faces) throws IOException {
-		BufferedImage img = ImageIO.read(inputPath.toFile());
-		annotateWithFaces(img, faces);
-		ImageIO.write(img, "jpg", outputPath.toFile());
-	}
+        Resource imageResource = this.resourceLoader.getResource("file:src/main/resources/faces.jpeg");
+        Resource outputImageResource = this.resourceLoader.getResource("file:src/main/resources/output.jpg");
+        AnnotateImageResponse response = this.cloudVisionTemplate.analyzeImage(imageResource,
+                Feature.Type.FACE_DETECTION);
 
-	/**
-	 * Annotates an image {@code img} with a polygon around each face in
-	 * {@code faces}.
-	 */
-	public static void annotateWithFaces(BufferedImage img, List<FaceAnnotation> faces) {
-		for (FaceAnnotation face : faces) {
-			annotateWithFace(img, face);
-		}
-	}
+        writeWithFaces(imageResource.getFile().toPath(), outputImageResource.getFile().toPath(),
+                response.getFaceAnnotationsList());
 
-	/**
-	 * Annotates an image {@code img} with a polygon defined by {@code face}.
-	 */
-	private static void annotateWithFace(BufferedImage img, FaceAnnotation face) {
-		Graphics2D gfx = img.createGraphics();
-		Polygon poly = new Polygon();
-		for (Vertex vertex : face.getFdBoundingPoly().getVerticesList()) {
-			poly.addPoint(vertex.getX(), vertex.getY());
-		}
-		gfx.setStroke(new BasicStroke(5));
-		gfx.setColor(new Color(0x00ff00));
-		gfx.draw(poly);
-	}
+        return response.getFaceAnnotationsList().toString();
+    }
+
+    /**
+     * Reads image {@code inputPath} and writes {@code outputPath} with
+     * {@code faces} outlined.
+     */
+    private static void writeWithFaces(Path inputPath, Path outputPath, List<FaceAnnotation> faces) throws IOException {
+        BufferedImage img = ImageIO.read(inputPath.toFile());
+        annotateWithFaces(img, faces);
+        ImageIO.write(img, "jpg", outputPath.toFile());
+    }
+
+    /**
+     * Annotates an image {@code img} with a polygon around each face in
+     * {@code faces}.
+     */
+    public static void annotateWithFaces(BufferedImage img, List<FaceAnnotation> faces) {
+        for (FaceAnnotation face : faces) {
+            annotateWithFace(img, face);
+        }
+    }
+
+    /**
+     * Annotates an image {@code img} with a polygon defined by {@code face}.
+     */
+    private static void annotateWithFace(BufferedImage img, FaceAnnotation face) {
+        Graphics2D gfx = img.createGraphics();
+        Polygon poly = new Polygon();
+        for (Vertex vertex : face.getFdBoundingPoly().getVerticesList()) {
+            poly.addPoint(vertex.getX(), vertex.getY());
+        }
+        gfx.setStroke(new BasicStroke(5));
+        gfx.setColor(new Color(0x00ff00));
+        gfx.draw(poly);
+    }
 
 }

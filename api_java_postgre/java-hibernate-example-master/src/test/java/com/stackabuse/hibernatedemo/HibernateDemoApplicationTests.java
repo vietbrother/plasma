@@ -1,4 +1,4 @@
-//package com.mydeveloperplanet.myspringcloudvisionplanet;
+//package com.stackabuse.hibernatedemo;
 //
 //import org.junit.Test;
 //import org.junit.runner.RunWith;
@@ -7,7 +7,7 @@
 //
 //@RunWith(SpringRunner.class)
 //@SpringBootTest
-//public class MySpringCloudVisionPlanetApplicationTests {
+//public class HibernateDemoApplicationTests {
 //
 //	@Test
 //	public void contextLoads() {
