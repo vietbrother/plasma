@@ -1,12 +1,8 @@
 package com.mydeveloperplanet.myspringcloudvisionplanet;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -34,9 +30,12 @@ public class EquipmentController {
                 if (equip == null) {
                     equip = new Equipment();
                 }
+                equip.setCode(code);
                 equip.setStage(Integer.valueOf(stage));
                 equip.setWarehouse(getWareHouse(stage));
-                equip.setP_customer(customerId == null || customerId == "" ? null : Integer.valueOf(customerId));
+                if (customerId != null && !"".equals(customerId)) {
+                    equip.setP_customer(Integer.valueOf(customerId));
+                }
                 equipmentRepository.save(equip);
             }
             res = "ok";

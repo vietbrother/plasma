@@ -606,10 +606,13 @@ export default class Home extends Component {
                                 <Grid style={{marginBottom: 15}}>
                                     <Col>
                                         <TouchableOpacity
-                                            onPress={() => Actions.stockInList({
-                                                stockInType: Config.stage1Vo,
-                                                title: Config.stockInListStage1
-                                            })}>
+                                            onPress={() => {
+                                                AsyncStorage.setItem('LIST_DEVICE_IN', JSON.stringify([]));
+                                                Actions.stockInList({
+                                                    stockInType: Config.stage1Vo,
+                                                    title: Config.stockInListStage1
+                                                });
+                                            }}>
                                             <View style={{alignItems: 'center', justifyContent: 'center'}}>
                                                 <Icon name='md-log-in' style={styles.btnScanStyle}/>
                                                 <Text> {Config.stockInListStage1} </Text>
@@ -618,10 +621,13 @@ export default class Home extends Component {
                                     </Col>
                                     <Col>
                                         <TouchableOpacity
-                                            onPress={() => Actions.stockInList({
-                                                stockInType: Config.stage3BinhTon,
-                                                title: Config.stockInListStage3
-                                            })}>
+                                            onPress={() => {
+                                                AsyncStorage.setItem('LIST_DEVICE_IN', JSON.stringify([]));
+                                                Actions.stockInList({
+                                                    stockInType: Config.stage3BinhTon,
+                                                    title: Config.stockInListStage3
+                                                });
+                                            }}>
                                             <View style={{alignItems: 'center', justifyContent: 'center'}}>
                                                 <Icon name='md-cloud-download' style={styles.btnScanStyle}/>
                                                 <Text> {Config.stockInListStage3} </Text>
@@ -633,10 +639,13 @@ export default class Home extends Component {
                                 <Grid>
                                     <Col>
                                         <TouchableOpacity
-                                            onPress={() => Actions.stockInList({
-                                                stockInType: Config.stage2TaiNap,
-                                                title: Config.stockOutListStage2
-                                            })}>
+                                            onPress={() => {
+                                                AsyncStorage.setItem('LIST_DEVICE_IN', JSON.stringify([]));
+                                                Actions.stockInList({
+                                                    stockInType: Config.stage2TaiNap,
+                                                    title: Config.stockOutListStage2
+                                                });
+                                            }}>
                                             <View style={{alignItems: 'center', justifyContent: 'center'}}>
                                                 <Icon name='md-log-out' style={styles.btnScanStyle}/>
                                                 <Text> {Config.stockOutListStage2} </Text>
@@ -645,6 +654,10 @@ export default class Home extends Component {
                                     </Col>
                                     <Col>
                                         <TouchableOpacity onPress={() => Actions.stockOutMultipleManual()}>
+                                            onPress={() => {
+                                            AsyncStorage.setItem('LIST_DEVICE_IN', JSON.stringify([]));
+                                            Actions.stockOutMultipleManual()
+                                        }}>
                                             <View style={{alignItems: 'center', justifyContent: 'center'}}>
                                                 <Icon name='md-cloud-upload' style={styles.btnScanStyle}/>
                                                 <Text> {Config.stockOutListStage4} </Text>
@@ -680,9 +693,9 @@ export default class Home extends Component {
                                           onPress={() => this.search()}/>
                                 </Item>
                                 {/*<ActivityIndicator*/}
-                                    {/*animating={this.state.isSearching}*/}
-                                    {/*color={Config.mainColor}*/}
-                                    {/*size="large"*/}
+                                {/*animating={this.state.isSearching}*/}
+                                {/*color={Config.mainColor}*/}
+                                {/*size="large"*/}
                                 {/*/>*/}
                                 <Spinner
                                     //visibility of Overlay Loading Spinner

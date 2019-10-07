@@ -54,6 +54,7 @@ import Statistic from "./component/Statistic/Statistic";
 import StockOutMultipleManual from "./component/Stock/StockOutMultipleManual";
 import ManualScannerList from "./component/Manual/ManualScannerList";
 import StockInList from "./component/Stock/StockInList";
+import StockInOutList from "./component/Stock/StockInOutList";
 
 export default class Main extends Component {
 
@@ -147,6 +148,7 @@ export default class Main extends Component {
 
             <Scene key="manualScannerList" component={ManualScannerList} hideNavBar />
             <Scene key="stockInList" component={StockInList} hideNavBar />
+            <Scene key="stockInOutList" component={StockInOutList} hideNavBar />
           </Scene>
         </Router>
       </Root>

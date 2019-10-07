@@ -268,10 +268,18 @@ export default class StockOutMultipleManual extends Component {
             }
             console.log(customer_name);
             AsyncStorage.setItem(Config.keyStoreOrderDeviceOut, JSON.stringify([]));
-            Actions.manualScannerList({
+            // Actions.manualScannerList({
+            //     customer_id: customer_id,
+            //     customer_name: customer_name,
+            //     numberDeviceScan: numberDeviceScan
+            // });
+
+            Actions.stockInOutList({
                 customer_id: customer_id,
                 customer_name: customer_name,
-                numberDeviceScan: numberDeviceScan
+                numberDeviceScan: numberDeviceScan,
+                stockInType: Config.stage4BinhDangSuDung,
+                title: Config.stockOutListStage4
             });
         } catch (error) {
             this.setState({isLoading: false});

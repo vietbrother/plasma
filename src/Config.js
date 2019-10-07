@@ -29,6 +29,8 @@ const Config = {
   goolge_vision_url : 'https://vision.googleapis.com/v1/images:annotate?key=',
   goolge_vision_key : 'AIzaSyBXBryO7MPVvhhneyQkKwW8CzfecAmpSSo', //thuclt
 
+  postgre_api: 'http://103.94.16.226:8086/api/equipment/save',
+
   imageHeight: 640,
   imageWidth: 400,
   // imageWidth: 800,
@@ -78,7 +80,11 @@ const Config = {
   err_add : 'Lỗi khi thêm mới! Vui lòng thử lại sau',
   err_connect : 'Lỗi kết nối',
   err_order_add : 'Lỗi khi tạo đơn hàng',
-  err_number_device_over : 'Số lượng thiết bị cần nhập đã đủ',
+  err_number_device_over : 'Số lượng bình cần nhập đã đủ',
+  err_number_device_empty : 'Chưa nhập bình',
+  err_device_save : 'Lỗi khi lưu thông tin bình',
+  err_device_code_required : 'Chưa nhập mã bình',
+  err_device_code_not_valid : 'Mã bình phải có 6 hoặc 7 ký tự',
 
   //stage
   stage0KhongXacDinh: '0',

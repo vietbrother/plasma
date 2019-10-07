@@ -1,11 +1,13 @@
 package com.mydeveloperplanet.myspringcloudvisionplanet;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -23,21 +25,24 @@ public class Equipment {
     /**
      * The attributes of the phone
      */
-    @Id
+    //@Id
 //    @GeneratedValue(strategy = GenerationType.AUTO)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "p_equipment_id_seq")
+    //@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "p_equipment_id_seq")
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ")
+    @SequenceGenerator(name = "SEQ", sequenceName = "p_equipment_id_seq")
     private Integer id;    // Each phone will be given an auto-generated unique identifier when stored
 
-    @Column(name = "code", nullable = false)
+    @Column(name = "code")
     private String code;    // We will also save the name of the phone
 
-    @Column(name = "stage", nullable = false)
+    @Column(name = "stage")
     private Integer stage;    // We will also save the operating system running the phone
 
-    @Column(name = "warehouse", nullable = false)
+    @Column(name = "warehouse")
     private Integer warehouse;    // We will also save the operating system running the phone
 
-    @Column(name = "p_customer", nullable = false)
+    @Column(name = "p_customer")
     private Integer p_customer;    // We will also save the operating system running the phone
 
     public Integer getId() {
