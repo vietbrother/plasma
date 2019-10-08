@@ -70,7 +70,7 @@ export default class OrderItem extends Component {
             <View style={{
                 flex: 1,
                 width: '100%', color: Config.mainColor, fontSize: 16,
-                borderBottomColor: Colors.navbarBackgroundColor, borderBottomWidth: 1,
+                borderBottomColor: Colors.navbarBackgroundColor, borderBottomWidth: 0.5,
                 paddingLeft: 10,
                 paddingTop: 20, paddingBottom: 20
             }}>

@@ -29,8 +29,14 @@ public class Equipment {
 //    @GeneratedValue(strategy = GenerationType.AUTO)
     //@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "p_equipment_id_seq")
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ")
-    @SequenceGenerator(name = "SEQ", sequenceName = "p_equipment_id_seq")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "p_equipment_id_seq")
+//    @SequenceGenerator(name = "p_equipment_id_seq", sequenceName = "p_equipment_id_seq")
+    @SequenceGenerator(name = "p_equipment_id_seq",
+            sequenceName = "p_equipment_id_seq",
+            allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "p_equipment_id_seq")
+    @Column(name = "id", updatable = false)
     private Integer id;    // Each phone will be given an auto-generated unique identifier when stored
 
     @Column(name = "code")
@@ -83,6 +89,11 @@ public class Equipment {
 
     public void setP_customer(Integer p_customer) {
         this.p_customer = p_customer;
+    }
+
+    @Override
+    public String toString() {
+        return "Equipment{" + "id=" + id + ", code=" + code + ", stage=" + stage + ", warehouse=" + warehouse + ", p_customer=" + p_customer + '}';
     }
 
 }

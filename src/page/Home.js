@@ -607,14 +607,14 @@ export default class Home extends Component {
                                     <Col>
                                         <TouchableOpacity
                                             onPress={() => {
-                                                AsyncStorage.setItem('LIST_DEVICE_IN', JSON.stringify([]));
-                                                Actions.stockInList({
+                                                AsyncStorage.setItem('LIST_DEVICE_IN_OUT', JSON.stringify([]));
+                                                Actions.stockInOutList({
                                                     stockInType: Config.stage1Vo,
                                                     title: Config.stockInListStage1
                                                 });
                                             }}>
                                             <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                                                <Icon name='md-log-in' style={styles.btnScanStyle}/>
+                                                <Icon name='md-log-in' style={styles.btnStage1}/>
                                                 <Text> {Config.stockInListStage1} </Text>
                                             </View>
                                         </TouchableOpacity>
@@ -622,14 +622,14 @@ export default class Home extends Component {
                                     <Col>
                                         <TouchableOpacity
                                             onPress={() => {
-                                                AsyncStorage.setItem('LIST_DEVICE_IN', JSON.stringify([]));
-                                                Actions.stockInList({
+                                                AsyncStorage.setItem('LIST_DEVICE_IN_OUT', JSON.stringify([]));
+                                                Actions.stockInOutList({
                                                     stockInType: Config.stage3BinhTon,
                                                     title: Config.stockInListStage3
                                                 });
                                             }}>
                                             <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                                                <Icon name='md-cloud-download' style={styles.btnScanStyle}/>
+                                                <Icon name='md-cloud-download' style={styles.btnStage3}/>
                                                 <Text> {Config.stockInListStage3} </Text>
                                             </View>
                                         </TouchableOpacity>
@@ -640,26 +640,27 @@ export default class Home extends Component {
                                     <Col>
                                         <TouchableOpacity
                                             onPress={() => {
-                                                AsyncStorage.setItem('LIST_DEVICE_IN', JSON.stringify([]));
-                                                Actions.stockInList({
+                                                AsyncStorage.setItem('LIST_DEVICE_IN_OUT', JSON.stringify([]));
+                                                Actions.stockInOutList({
                                                     stockInType: Config.stage2TaiNap,
                                                     title: Config.stockOutListStage2
                                                 });
                                             }}>
                                             <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                                                <Icon name='md-log-out' style={styles.btnScanStyle}/>
+                                                <Icon name='md-log-out' style={styles.btnStage2}/>
                                                 <Text> {Config.stockOutListStage2} </Text>
                                             </View>
                                         </TouchableOpacity>
                                     </Col>
                                     <Col>
-                                        <TouchableOpacity onPress={() => Actions.stockOutMultipleManual()}>
+                                        <TouchableOpacity
+                                            // onPress={() => Actions.stockOutMultipleManual()}>
                                             onPress={() => {
-                                            AsyncStorage.setItem('LIST_DEVICE_IN', JSON.stringify([]));
+                                            AsyncStorage.setItem('LIST_DEVICE_IN_OUT', JSON.stringify([]));
                                             Actions.stockOutMultipleManual()
                                         }}>
                                             <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                                                <Icon name='md-cloud-upload' style={styles.btnScanStyle}/>
+                                                <Icon name='md-cloud-upload' style={styles.btnStage4}/>
                                                 <Text> {Config.stockOutListStage4} </Text>
                                             </View>
                                         </TouchableOpacity>
@@ -814,7 +815,7 @@ const styles = StyleSheet.create({
         paddingBottom: 20
     },
     btnScanStyle: {
-        color: 'green', fontSize: 35
+        color: 'green', fontSize: 40
     },
     image: {
         width: 120,
@@ -872,12 +873,29 @@ const styles = StyleSheet.create({
     stage4: {
         color: '#44bc37'
     },
+    btnStage1: {
+        color: Config.colorThin,
+        fontSize: 40
+    },
+    btnStage2: {
+        color: '#ff00ff',
+        fontSize: 40
+    },
+    btnStage3: {
+        color: '#c40521',
+        fontSize: 40
+    },
+    btnStage4: {
+        color: '#44bc37',
+        fontSize: 40
+    },
     buttonChangeState: {
         backgroundColor: 'white',
         borderRadius: 4,
         borderWidth: 0.5,
         borderColor: Config.mainColor
-    }
+    },
+
 });
 
 const _styles = {

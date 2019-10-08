@@ -1,10 +1,12 @@
 package com.mydeveloperplanet.myspringcloudvisionplanet;
 
+import com.google.gson.Gson;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+//import com.google.gson.Gson;
 /**
  * The type Phone controller.
  *
@@ -22,29 +24,35 @@ public class EquipmentController {
     public String updateEquipment(@RequestParam("lstCodeRequest") String lstCodeRequest,
             @RequestParam("stage") String stage, @RequestParam("customerId") String customerId) {
         String res = "fail";
+        String lstId = "";
         try {
             List<String> lstCode = Arrays.asList(lstCodeRequest.split(","));
             List<Equipment> lstEquip = equipmentRepository.findEquimentByListCode(lstCode);
+            System.out.println("lstCode " + lstCodeRequest);
+            System.out.println("lstEquip " + lstEquip.size());
             for (String code : lstCode) {
                 Equipment equip = checkExistCode(code, lstEquip);
                 if (equip == null) {
                     equip = new Equipment();
+                    equip.setCode(code);
                 }
-                equip.setCode(code);
                 equip.setStage(Integer.valueOf(stage));
                 equip.setWarehouse(getWareHouse(stage));
                 if (customerId != null && !"".equals(customerId)) {
                     equip.setP_customer(Integer.valueOf(customerId));
                 }
-                equipmentRepository.save(equip);
+                Equipment ressult = equipmentRepository.save(equip);
+                lstId += ressult.getId() + ";";
             }
             res = "ok";
         } catch (Exception e) {
             e.printStackTrace();
             res = e.getMessage();
         }
-
-        return res;
+        Gson gson = new Gson();
+        String json = gson.toJson(new ResponseObj(res, lstId));
+        System.out.println("json " + json);
+        return json;
     }
 
     public int getWareHouse(String stage) {

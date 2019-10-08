@@ -4,7 +4,7 @@
 
 // React native and others libraries imports
 import React, {Component} from 'react';
-import {Image, Dimensions, TouchableWithoutFeedback, AsyncStorage} from 'react-native';
+import {Image, Dimensions, TouchableWithoutFeedback, AsyncStorage, FlatList} from 'react-native';
 import {
     View,
     Container,
@@ -33,6 +33,7 @@ import Text from '../../component/Text';
 import Navbar from '../../component/Navbar';
 import Spinner from 'react-native-loading-spinner-overlay';
 import DeviceItem from "../Device/DeviceItem";
+import Colors from "../../Colors";
 
 
 export default class OrderDetail extends Component {
@@ -112,25 +113,39 @@ export default class OrderDetail extends Component {
         this.setState({isLoading: false, deviceList: products});
     }
 
-    _renderListDevice() {
-        let items = [];
-        if (this.state.deviceList.length > 0) {
-            for (var i = 0; i < this.state.deviceList.length; i++) {
-                var item = this.state.deviceList[i];
-                var key = new Date().valueOf();
-                console.log(item);
-                items.push(
-                    <DeviceItem key={key + '_' + i} device={item}></DeviceItem>
-                );
-            }
-        } else {
-            items.push(
-                <Text>Không có thiết bị</Text>
-            );
-        }
-
-        return items;
-
+    // _renderListDevice() {
+    //     let items = [];
+    //     if (this.state.deviceList.length > 0) {
+    //         for (var i = 0; i < this.state.deviceList.length; i++) {
+    //             var item = this.state.deviceList[i];
+    //             var key = new Date().valueOf();
+    //             console.log(item);
+    //             items.push(
+    //                 <DeviceItem key={key + '_' + i} device={item}></DeviceItem>
+    //             );
+    //         }
+    //     } else {
+    //         items.push(
+    //             <Text>Không có thiết bị</Text>
+    //         );
+    //     }
+    //
+    //     return items;
+    //
+    // }
+    _renderItemResult(item) {
+        var key = new Date().valueOf();
+        return (
+            <View style={{
+                flex: 1,
+                width: '100%', color: Config.mainColor, fontSize: 16,
+                borderBottomColor: Colors.navbarBackgroundColor, borderBottomWidth: 0.5,
+                paddingLeft: 10,
+                paddingTop: 20, paddingBottom: 20
+            }}>
+                <DeviceItem key={key} device={item}></DeviceItem>
+            </View>
+        );
     }
 
     render() {
@@ -210,7 +225,12 @@ export default class OrderDetail extends Component {
                             paddingRight: 10,
                             backgroundColor: 'white'
                         }}>
-                            {this._renderListDevice()}
+                            {/*{this._renderListDevice()}*/}
+                            <FlatList
+                                style={{width: '100%'}}
+                                data={this.state.deviceList}
+                                renderItem={({item}) => this._renderItemResult(item)}
+                            />
                         </View>
 
                         <CardItem>

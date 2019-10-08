@@ -85,6 +85,7 @@ const Config = {
   err_device_save : 'Lỗi khi lưu thông tin bình',
   err_device_code_required : 'Chưa nhập mã bình',
   err_device_code_not_valid : 'Mã bình phải có 6 hoặc 7 ký tự',
+  err_device_code_exist : 'Mã bình đã được nhập',
 
   //stage
   stage0KhongXacDinh: '0',
@@ -114,6 +115,7 @@ const Config = {
   orderListDevice: 'Danh sách thiết bị',
   orderNumberDevice: 'Số lượng thiết bị cần quét',
   numberDeviceScanned: 'Số lượng thiết bị đã quét',
+  numberDeviceInputed: 'Số lượng thiết bị đã nhập',
 
   //customer
   customerList: 'Khách hàng',

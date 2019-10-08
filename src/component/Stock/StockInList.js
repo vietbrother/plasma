@@ -205,7 +205,7 @@ export default class StockInList extends Component {
                         this._updateEquipmentList()
                     }}>
                         <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                            <Icon name='ios-save' style={{color: 'green'}}/>
+                            <Icon name='save' style={{color: 'green'}}/>
                             <Text>{Config.btnSave}</Text>
                         </View>
                     </TouchableOpacity>

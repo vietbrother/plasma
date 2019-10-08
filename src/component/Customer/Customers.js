@@ -12,7 +12,7 @@ import {
     StyleSheet,
     TouchableOpacity,
     NativeModules,
-    Dimensions,
+    Dimensions, FlatList
 } from 'react-native';
 import {
     Container,
@@ -71,22 +71,30 @@ export default class Customers extends Component {
     componentWillMount(): void {
         this.search();
     }
+
     componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
         this.setState({componentKey: new Date(), searchText: ''});
     }
 
 
-    _renderResult() {
-        let items = [];
-        for (var i = 0; i < this.state.customers.length; i++) {
-            var item = this.state.customers[i];
-            var key = new Date().valueOf();
-            items.push(
-                <CustomerItem key={key+'_'+i} customer={item}></CustomerItem>
-            );
-        }
-        return items;
+    // _renderResult() {
+    //     let items = [];
+    //     for (var i = 0; i < this.state.customers.length; i++) {
+    //         var item = this.state.customers[i];
+    //         var key = new Date().valueOf();
+    //         items.push(
+    //             <CustomerItem key={key + '_' + i} customer={item}></CustomerItem>
+    //         );
+    //     }
+    //     return items;
+    //
+    // }
 
+    _renderItemResult(item) {
+        var key = new Date().valueOf();
+        return (
+            <CustomerItem key={key} customer={item}></CustomerItem>
+        );
     }
 
     search() {
@@ -113,6 +121,7 @@ export default class Customers extends Component {
             this.setState({isSearching: false});
         }
     }
+
     _getResConnect(err) {
         if (err) {
             console.log('--------------connect error');
@@ -155,8 +164,8 @@ export default class Customers extends Component {
         return (
             <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref}
                             key={this.state.componentKey}
-                            // key={new Date().valueOf()}
-                            // fetchData={'1'}
+                // key={new Date().valueOf()}
+                // fetchData={'1'}
                             sessionLoginKey={this.props.sessionLoginKey}>
                 <Container>
                     <Navbar left={left} right={right} title={Config.customerList}/>
@@ -186,7 +195,12 @@ export default class Customers extends Component {
                                 size="large"
                             />
 
-                            {this._renderResult()}
+                            {/*{this._renderResult()}*/}
+                            <FlatList
+                                style={{width: '100%'}}
+                                data={this.state.customers}
+                                renderItem={({item}) => this._renderItemResult(item)}
+                            />
                         </View>
 
                     </Content>

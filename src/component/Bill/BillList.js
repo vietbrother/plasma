@@ -4,7 +4,7 @@
 
 // React native and others libraries imports
 import React, {Component} from 'react';
-import {Alert, AsyncStorage} from 'react-native';
+import {Alert, AsyncStorage, FlatList} from 'react-native';
 import {
     Container,
     Content,
@@ -30,7 +30,7 @@ import Config from '../../Config';
 import Text from '../../component/Text';
 import Navbar from '../../component/Navbar';
 
-export default class Bill extends Component {
+export default class BillList extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -106,11 +106,11 @@ export default class Bill extends Component {
                 <ListItem
                     key={i}
                     last={this.state.cartItems.length === i + 1}
-                    onPress={() => this.itemClicked(item)}
+                    // onPress={() => this.itemClicked(item)}
                 >
                     <Body style={{paddingLeft: 10}}>
                     <Text style={{fontSize: 16, color: Config.mainColor}}>
-                        {item.code}
+                        {item}
                     </Text>
                     </Body>
                     {/*<Right>*/}

@@ -53,7 +53,7 @@ export default class StockInOutList extends Component {
 
     componentDidMount(): void {
         this.setState({
-            customer_id: this.props.customer_id,
+            customer_id: this.props.customer_id == null || this.props.customer_id == undefined ? '' : this.props.customer_id,
             customer_name: this.props.customer_name,
             numberDeviceTotal: this.props.numberDeviceScan,
             stockInType: this.props.stockInType,
@@ -62,7 +62,7 @@ export default class StockInOutList extends Component {
     }
 
     _renderCustomerName() {
-        if (this.state.customer_name != null || this.state.customer_name != "") {
+        if (this.state.customer_name != null && this.state.customer_name != '' && this.state.customer_name != undefined) {
             return (
                 <CardItem>
                     <Icon name="ios-contact" style={styles.icon}/>
@@ -73,75 +73,168 @@ export default class StockInOutList extends Component {
         }
     }
 
-    _renderButton() {
-        if (this.state.numberDeviceCurrent < 1) {
+    _renderNumberDevice() {
+        if (this.state.stockInType == Config.stage4BinhDangSuDung) {
             return (
                 <CardItem>
-                    <Left>
-                        {/*<TouchableOpacity onPress={() => Actions.bill()}>*/}
-                        <TouchableOpacity onPress={() => {
-                            this._billList()
-                        }}>
-                            <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                                <Icon name='ios-paper' style={styles.btnExport}/>
-                                <Text>{Config.deviceListTitle}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </Left>
-
-                    <Right>
-                        <TouchableOpacity onPress={() => this._cancel()}>
-                            <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                                <Icon name='ios-close-circle'/>
-                                <Text>{Config.btnCancel}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </Right>
-
+                    <Icon name="ios-calculator" style={styles.icon}/>
+                    <Text style={{fontWeight: '400'}}>{Config.numberDeviceScanned} : </Text>
+                    <Text style={{
+                        fontWeight: 'bold',
+                        fontSize: 16,
+                        color: Config.errorColor
+                    }}>  {this.state.numberDeviceCurrent}/{this.state.numberDeviceTotal} </Text>
                 </CardItem>
-
             );
         } else {
             return (
                 <CardItem>
-                    <Left>
-                        <TouchableOpacity onPress={() => {
-                            this._billList()
-                        }}>
-                            <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                                <Icon name='ios-paper' style={styles.btnExport}/>
-                                <Text>{Config.deviceListTitle}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </Left>
-                    <TouchableOpacity onPress={() => {
-                        this._updateEquipmentList()
-                    }}>
-                        <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                            <Icon name='ios-save' style={{color: 'green'}}/>
-                            <Text>{Config.btnSave}</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <Right>
-                        <TouchableOpacity onPress={() => {
-                            this._cancel()
-                        }}>
-                            <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                                <Icon name='ios-close-circle'/>
-                                <Text>{Config.btnCancel}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </Right>
+                    <Icon name="ios-calculator" style={styles.icon}/>
+                    <Text style={{fontWeight: '400'}}>{Config.numberDeviceInputed} : </Text>
+                    <Text style={{
+                        fontWeight: 'bold',
+                        fontSize: 16,
+                        color: Config.errorColor
+                    }}>  {this.state.numberDeviceCurrent} </Text>
                 </CardItem>
             );
         }
+    }
+
+    _renderButton() {
+        if (this.state.stockInType == Config.stage4BinhDangSuDung) {
+            if (this.state.numberDeviceCurrent < this.state.numberDeviceTotal) {
+                return (
+                    <CardItem>
+                        <Left>
+                            {/*<TouchableOpacity onPress={() => Actions.bill()}>*/}
+                            <TouchableOpacity onPress={() => {
+                                this._billList()
+                            }}>
+                                <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                    <Icon name='ios-paper' style={styles.btnExport}/>
+                                    <Text>{Config.deviceListTitle}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </Left>
+
+                        <Right>
+                            <TouchableOpacity onPress={() => this._cancel()}>
+                                <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                    <Icon name='ios-close-circle'/>
+                                    <Text>{Config.btnCancel}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </Right>
+
+                    </CardItem>
+
+                );
+            } else {
+                return (
+                    <CardItem>
+                        <Left>
+                            <TouchableOpacity onPress={() => {
+                                this._billList()
+                            }}>
+                                <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                    <Icon name='ios-paper' style={styles.btnExport}/>
+                                    <Text>{Config.deviceListTitle}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </Left>
+                        <TouchableOpacity onPress={() => {
+                            this._updateEquipmentList()
+                        }}>
+                            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                <Icon name='ios-send' style={{color: 'green'}}/>
+                                <Text>{Config.btnSave}</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <Right>
+                            <TouchableOpacity onPress={() => {
+                                this._cancel()
+                            }}>
+                                <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                    <Icon name='ios-close-circle'/>
+                                    <Text>{Config.btnCancel}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </Right>
+                    </CardItem>
+                );
+            }
+        } else {
+            if (this.state.numberDeviceCurrent < 1) {
+                return (
+                    <CardItem>
+                        <Left>
+                            {/*<TouchableOpacity onPress={() => Actions.bill()}>*/}
+                            <TouchableOpacity onPress={() => {
+                                this._billList()
+                            }}>
+                                <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                    <Icon name='ios-paper' style={styles.btnExport}/>
+                                    <Text>{Config.deviceListTitle}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </Left>
+
+                        <Right>
+                            <TouchableOpacity onPress={() => this._cancel()}>
+                                <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                    <Icon name='ios-close-circle'/>
+                                    <Text>{Config.btnCancel}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </Right>
+
+                    </CardItem>
+
+                );
+            } else {
+                return (
+                    <CardItem>
+                        <Left>
+                            <TouchableOpacity onPress={() => {
+                                this._billList()
+                            }}>
+                                <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                    <Icon name='ios-paper' style={styles.btnExport}/>
+                                    <Text>{Config.deviceListTitle}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </Left>
+                        <TouchableOpacity onPress={() => {
+                            this._updateEquipmentList()
+                        }}>
+                            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                <Icon name='ios-send' style={{color: 'green'}}/>
+                                <Text>{Config.btnSave}</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <Right>
+                            <TouchableOpacity onPress={() => {
+                                this._cancel()
+                            }}>
+                                <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                    <Icon name='ios-close-circle'/>
+                                    <Text>{Config.btnCancel}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </Right>
+                    </CardItem>
+                );
+            }
+        }
+
     }
 
 
     _billList() {
         AsyncStorage.getItem('LIST_DEVICE_IN_OUT', (err, res) => {
             console.log("res " + res);
-            Actions.bill({lstDevice: res});
+            Actions.billList({lstDevice: res});
         });
     }
 
@@ -159,11 +252,21 @@ export default class StockInOutList extends Component {
         var currentQuantity = this.state.numberDeviceCurrent;
         currentQuantity = currentQuantity + 1;
 
+        if (this.state.numberDeviceTotal != undefined && this.state.numberDeviceTotal != null
+            && currentQuantity > this.state.numberDeviceTotal) {
+            alert(Config.err_number_device_over);
+            return;
+        }
+
         AsyncStorage.getItem('LIST_DEVICE_IN_OUT', (err, res) => {
             console.log(res);
             if (!res) AsyncStorage.setItem('LIST_DEVICE_IN_OUT', [device]);
             else {
                 var items = JSON.parse(res);
+                if (items.includes(device)) {
+                    alert(Config.err_device_code_exist);
+                    return;
+                }
                 items.push(device);
                 console.log("items : " + items);
 
@@ -192,52 +295,69 @@ export default class StockInOutList extends Component {
             else {
                 var items = JSON.parse(res);
                 console.log("items : " + items.toString());
-                try {
-                    let response = fetch(Config.postgre_api, {
-                        method: 'POST',
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            lstCodeRequest: items.toString(),
-                            stage: this.state.stockInType,
-                            customerId: ''
-                        })
-                    });
-                    var responseObj = response.json();
-                    if (responseObj == 'ok') {
-                        this._createOrderWithDeviceCode(items)
-                    } else {
-                        this.setState({isLoading: false});
-                    }
-                } catch (e) {
-                    console.log(e);
-                    alert(Config.err_device_save);
-                    this.setState({isLoading: false});
-                }
+                this._fetchApi(items);
             }
         });
     }
 
-    _createOrderWithDeviceCode(lstDeviceCode) {
+    async _fetchApi(items) {
         try {
-            console.log(lstDeviceCode);
+            let formdata = new FormData();
+            formdata.append('lstCodeRequest', items.toString());
+            formdata.append('stage', this.state.stockInType);
+            formdata.append('customerId', this.state.customer_id);
+
+            //var fetchData = await fetch(`http://103.94.16.226:8086/api/equipment/save`, {
+            var fetchData = await fetch(Config.postgre_api, {
+                method: 'POST',
+                body: formdata
+            });
+            console.log('========================');
+            var responseObj = await fetchData.json();
+            console.log(responseObj);
+            if (responseObj.errorCode == 'ok') {
+                var arrId = responseObj.lstId;
+                if (arrId == null || arrId == '' || arrId == undefined || arrId.length < 1) {
+                    alert(Config.err_device_save);
+                    this.setState({isLoading: false});
+                    return;
+                }
+                arrId = arrId.substring(0, arrId.length - 1);
+                arrId = arrId.split(";");
+
+                var arrIdNumber = arrId.map(function (item) {
+                    return parseInt(item, 10);
+                });
+                this._createOrderWithDeviceCode(arrIdNumber);
+            } else {
+                alert(Config.err_device_save);
+                this.setState({isLoading: false});
+            }
+        } catch (e) {
+            console.log(e);
+            alert(Config.err_device_save);
+            this.setState({isLoading: false});
+        }
+    }
+
+    _createOrderWithDeviceCode(lstDeviceId) {
+        try {
+            console.log(lstDeviceId);
             var dateTime = new Date().toISOString();
             var dateStr = dateTime.split('T')[0].replace(/-/g, '').replace(/:/g, '')
             var dateTimeStr = dateTime.split('.')[0].replace('T', '').replace(/-/g, '').replace(/:/g, '');
 
             var orderCustomerId = this.state.customer_id;
             var orderType = this.state.stockInType;
-            var device_code = lstDeviceCode;
+            var device_code = lstDeviceId;
             var orderCode = dateTimeStr + '_Khong_xac_dinh';
             if (this.state.stockInType == '1') {
                 orderCode = dateTimeStr + '_Nhap_vo';
-            } else if (status == '2') {
+            } else if (this.state.stockInType == '2') {
                 orderCode = dateTimeStr + '_Xuat_vo';
-            } else if (status == '3') {
+            } else if (this.state.stockInType == '3') {
                 orderCode = dateTimeStr + '_Nhap_khi';
-            } else if (status == '4') {
+            } else if (this.state.stockInType == '4') {
                 orderCode = dateTimeStr + '_Xuat_khi';
             }
             //TYPE = [(0, 'Không xác định'), (1, 'Thu hồi'), (2, 'Xuất tái nạp'), (3, 'Nhập kho'), (4, 'Xuất cho khách')]
@@ -267,6 +387,16 @@ export default class StockInOutList extends Component {
             this.setState({isLoading: false});
         }
     }
+
+    _getResConnect(err) {
+        if (err) {
+            console.log('--------------connect error');
+            this.setState({isLoading: false});
+            alert(Config.err_connect);
+            return console.log(err);
+        }
+    }
+
 
     _getResCreateOrder(err, response) {
         this.setState({isLoading: false});
@@ -336,15 +466,16 @@ export default class StockInOutList extends Component {
                 </View>
                 <View style={styles.bottomBar}>
                     {this._renderCustomerName()}
-                    <CardItem>
-                        <Icon name="ios-calculator" style={styles.icon}/>
-                        <Text style={{fontWeight: '400'}}>{Config.numberDeviceScanned} : </Text>
-                        <Text style={{
-                            fontWeight: 'bold',
-                            fontSize: 16,
-                            color: Config.errorColor
-                        }}>  {this.state.numberDeviceCurrent} </Text>
-                    </CardItem>
+                    {this._renderNumberDevice()}
+                    {/*<CardItem>*/}
+                    {/*<Icon name="ios-calculator" style={styles.icon}/>*/}
+                    {/*<Text style={{fontWeight: '400'}}>{Config.numberDeviceInputed} : </Text>*/}
+                    {/*<Text style={{*/}
+                    {/*fontWeight: 'bold',*/}
+                    {/*fontSize: 16,*/}
+                    {/*color: Config.errorColor*/}
+                    {/*}}>  {this.state.numberDeviceCurrent} </Text>*/}
+                    {/*</CardItem>*/}
                     {this._renderButton()}
                 </View>
             </Container>

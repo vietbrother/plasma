@@ -55,6 +55,7 @@ import StockOutMultipleManual from "./component/Stock/StockOutMultipleManual";
 import ManualScannerList from "./component/Manual/ManualScannerList";
 import StockInList from "./component/Stock/StockInList";
 import StockInOutList from "./component/Stock/StockInOutList";
+import BillList from "./component/Bill/BillList";
 
 export default class Main extends Component {
 
@@ -149,6 +150,7 @@ export default class Main extends Component {
             <Scene key="manualScannerList" component={ManualScannerList} hideNavBar />
             <Scene key="stockInList" component={StockInList} hideNavBar />
             <Scene key="stockInOutList" component={StockInOutList} hideNavBar />
+            <Scene key="billList" component={BillList} hideNavBar />
           </Scene>
         </Router>
       </Root>

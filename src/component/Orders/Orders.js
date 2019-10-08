@@ -12,7 +12,7 @@ import {
     StyleSheet,
     TouchableOpacity,
     NativeModules,
-    Dimensions,
+    Dimensions, FlatList,
 } from 'react-native';
 import {
     Container,
@@ -71,18 +71,25 @@ export default class Orders extends Component {
         this.search();
     }
 
-    _renderResult() {
-        let items = [];
-        for (var i = 0; i < this.state.orders.length; i++) {
-            var item = this.state.orders[i];
-            var key = new Date().valueOf();
-            console.log(item);
-            items.push(
-                <OrderItem key={key + '_' + i} order={item}></OrderItem>
-            );
-        }
-        return items;
+    // _renderResult() {
+    //     let items = [];
+    //     for (var i = 0; i < this.state.orders.length; i++) {
+    //         var item = this.state.orders[i];
+    //         var key = new Date().valueOf();
+    //         console.log(item);
+    //         items.push(
+    //             <OrderItem key={key + '_' + i} order={item}></OrderItem>
+    //         );
+    //     }
+    //     return items;
+    //
+    // }
 
+    _renderItemResult(item){
+        var key = new Date().valueOf();
+        return (
+            <OrderItem key={key} order={item}></OrderItem>
+        );
     }
 
 
@@ -179,7 +186,12 @@ export default class Orders extends Component {
                                 color={Config.mainColor}
                                 size="large"
                             />
-                            {this._renderResult()}
+                            {/*{this._renderResult()}*/}
+                            <FlatList
+                                style={{width: '100%'}}
+                                data={this.state.orders}
+                                renderItem={({item}) => this._renderItemResult(item)}
+                            />
                         </View>
 
                     </Content>
