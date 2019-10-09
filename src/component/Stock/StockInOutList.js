@@ -276,6 +276,7 @@ export default class StockInOutList extends Component {
                 //     console.log("res " + res);
                 // });
             }
+            this.setState({searchText: ''});
             Toast.show({
                 text: 'Đã thêm binh ' + device,
                 position: 'bottom',
@@ -453,7 +454,7 @@ export default class StockInOutList extends Component {
                     <Item style={{marginLeft: 5, marginRight: 5}}>
                         <Input
                             placeholder="Nhập mã bình..."
-                            // value={this.state.searchText}
+                            value={this.state.searchText}
                             onChangeText={(text) => this.setState({searchText: text})}
                             // onSubmitEditing={() => this.search()}
                             onSubmitEditing={() => this._addDeviceCodeToList()}
