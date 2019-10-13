@@ -404,6 +404,7 @@ export default class Statistic extends Component {
         return (
             <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref}
                 // key={new Date().valueOf()}
+                key={this.state.componentKey}
                 // fetchData={'1'}
                 //             sessionLoginKey={this.props.sessionLoginKey}
             >

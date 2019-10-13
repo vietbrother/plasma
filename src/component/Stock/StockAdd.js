@@ -145,11 +145,11 @@ export default class StockAdd extends Component {
                                 selectedValue={this.state.stateName}
                                 onValueChange={this.onValueChangeStateName.bind(this)}
                             >
-                                <Picker.Item label="Không xác định" value="0"/>
-                                <Picker.Item label="Vỏ" value="1"/>
-                                <Picker.Item label="Tái nạp" value="2"/>
-                                <Picker.Item label="Bình tồn" value="3"/>
-                                <Picker.Item label="Bình đang sử dụng" value="4"/>
+                                <Picker.Item label={Config.stageName0KhongXacDinh} value="0"/>
+                                <Picker.Item label={Config.stageName1Vo} value="1"/>
+                                <Picker.Item label={Config.stageName2} value="2"/>
+                                <Picker.Item label={Config.stageName3BinhTon} value="3"/>
+                                <Picker.Item label={Config.stageName4BinhDangSuDung} value="4"/>
                             </Picker>
                             </Body>
                         </CardItem>

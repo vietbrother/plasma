@@ -45,7 +45,7 @@ const Config = {
   //title
   titleCompany : 'Plasma',
   titleCompanySub : 'MED',
-  titleHome : 'Trang chủ',
+  titleHome : 'Màn hình chính',
   titleMngtDevices : 'Quản lý thiết bị',
   titleMngtOrders : 'Đơn hàng',
   titleMngtCustomers : 'Khách hàng',
@@ -94,6 +94,12 @@ const Config = {
   stage3BinhTon: '3',
   stage4BinhDangSuDung: '4',
 
+  //stage
+  stageName0KhongXacDinh: 'Không xác định',
+  stageName1Vo: 'Vỏ',
+  stageName2TaiNap: 'Đang chuyển nạp',
+  stageName3BinhTon: 'Khí Argonmed',
+  stageName4BinhDangSuDung: 'Xuất khí Argonmed',
 
   //warehouse - kho
   warehouseKhongXacDinh: '0',
@@ -142,9 +148,9 @@ const Config = {
   //statistic
   statisticTitle: "Thống kê",
   statisticCountStage1: "Vỏ",
-  statisticCountStage2: "Tái nạp",
-  statisticCountStage3: "Bình tồn",
-  statisticCountStage4: "Đang sử dụng",
+  statisticCountStage2: "Đang chuyển nạp",
+  statisticCountStage3: "Khí Argonmed",
+  statisticCountStage4: "Xuất khí Argonmed",
   statisticCountAll: "Tổng số thiết bị",
 
   //stock

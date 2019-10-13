@@ -177,27 +177,27 @@ export default class Home extends Component {
             return (<Text style={{color: '#ffa505'}}>
                 <Icon name="ios-help-circle-outline"
                       style={{fontSize: 13, color: '#ffa505'}}/>
-                Không xác định</Text>);
+                {Config.stageName0KhongXacDinh}</Text>);
         } else if (status == '4') {
             return (<Text style={{color: '#44bc37'}}>
                 <Icon name="ios-checkmark-circle"
                       style={{fontSize: 13, color: '#44bc37'}}/>
-                Bình đang sử dụng </Text>);
+                {Config.stageName4BinhDangSuDung} </Text>);
         } else if (status == '1') {
             return (<Text style={{color: Config.colorThin}}>
                 <Icon name="ios-battery-dead"
                       style={{fontSize: 13, color: Config.colorThin}}/>
-                Vỏ </Text>);
+                {Config.stageName1Vo} </Text>);
         } else if (status == '2') {
             return (<Text style={{color: '#ff00ff'}}>
                 <Icon name="ios-refresh-circle"
                       style={{fontSize: 13, color: '#ff00ff'}}/>
-                Tái nạp </Text>);
+                {Config.stageName2TaiNap} </Text>);
         } else if (status == '3') {
             return (<Text style={{color: '#c40521'}}>
                 <Icon name="ios-warning"
                       style={{fontSize: 13, color: '#c40521'}}/>
-                Bình tồn </Text>);
+                {Config.stageName3BinhTon} </Text>);
         } else {
             return (<Text style={{color: '#26619c'}}>{status}</Text>);
         }
@@ -205,7 +205,7 @@ export default class Home extends Component {
 
     _renderWarehouse(warehouse) {
         if (warehouse == '0') {
-            return (<Text style={{color: Config.mainColor}}> Không xác định</Text>);
+            return (<Text style={{color: Config.mainColor}}> {Config.stageName0KhongXacDinh}</Text>);
         } else if (warehouse == '1') {
             return (<Text style={{color: Config.mainColor}}> Kho công ty</Text>);
         } else if (warehouse == '2') {
@@ -412,15 +412,15 @@ export default class Home extends Component {
 
     _renderStatusName(status) {
         if (status == '0') {
-            return 'Không xác định';
+            return Config.stageName0KhongXacDinh;
         } else if (status == '4') {
-            return 'Bình đang sử dụng';
+            return Config.stageName4BinhDangSuDung;
         } else if (status == '1') {
-            return 'Vỏ';
+            return Config.stageName1Vo;
         } else if (status == '2') {
-            return 'Tái nạp';
+            return Config.stageName2TaiNap;
         } else if (status == '3') {
-            return 'Bình tồn';
+            return Config.stageName3BinhTon;
         } else {
             return {status};
         }

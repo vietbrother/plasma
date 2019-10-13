@@ -152,19 +152,19 @@ export default class FlowItem extends Component {
 
     _renderStatus(status) {
         if (status == '0') {
-            return (<Text style={{color: '#ffa505'}}> Không xác định <Icon name="ios-help-circle-outline"
+            return (<Text style={{color: '#ffa505'}}> {Config.stageName0KhongXacDinh} <Icon name="ios-help-circle-outline"
                                                                            style={styles.icon}/></Text>);
         } else if (status == '4') {
-            return (<Text style={{color: '#44bc37'}}> Bình đang sử dụng <Icon name="ios-checkmark-circle"
+            return (<Text style={{color: '#44bc37'}}> {Config.stageName4BinhDangSuDung} <Icon name="ios-checkmark-circle"
                                                                               style={styles.icon}/> </Text>);
         } else if (status == '1') {
-            return (<Text style={{color: Config.colorThin}}> Vỏ <Icon name="ios-battery-dead" style={styles.icon}/>
+            return (<Text style={{color: Config.colorThin}}> {Config.stageName1Vo} <Icon name="ios-battery-dead" style={styles.icon}/>
             </Text>);
         } else if (status == '2') {
-            return (<Text style={{color: '#ff00ff'}}> Tái nạp <Icon name="ios-refresh-circle" style={styles.icon}/>
+            return (<Text style={{color: '#ff00ff'}}> {Config.stageName2TaiNap} <Icon name="ios-refresh-circle" style={styles.icon}/>
             </Text>);
         } else if (status == '3') {
-            return (<Text style={{color: '#c40521'}}> Bình tồn <Icon name="ios-warning" style={styles.icon}/></Text>);
+            return (<Text style={{color: '#c40521'}}> {Config.stageName3BinhTon} <Icon name="ios-warning" style={styles.icon}/></Text>);
         } else {
             return (<Text style={{color: '#26619c'}}>{status}</Text>);
         }

@@ -308,15 +308,15 @@ export default class CameraScanner extends Component {
 
     _renderStatus(status) {
         if (status == '0') {
-            return 'Không xác định';
+            return Config.stageName0KhongXacDinh;
         } else if (status == '4') {
-            return 'Bình đang sử dụng';
+            return Config.stageName4BinhDangSuDung;
         } else if (status == '1') {
-            return 'Vỏ';
+            return Config.stageName1Vo;
         } else if (status == '2') {
-            return 'Tái nạp';
+            return Config.stageName2TaiNap;
         } else if (status == '3') {
-            return 'Bình tồn';
+            return Config.stageName3BinhTon;
         } else {
             return {status};
         }
